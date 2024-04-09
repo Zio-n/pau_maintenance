@@ -43,7 +43,8 @@ INSTALLED_APPS = [
     'maintenance_system',
     'tailwind',
     'theme',
-    'django_browser_reload'
+    'django_browser_reload',
+    'widget_tweaks'
 ]
 
 MIDDLEWARE = [
