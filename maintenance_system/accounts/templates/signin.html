@@ -8,7 +8,7 @@
         <h1 class="block text-2xl font-bold text-gray-800 dark:text-white">Sign in</h1>
         <p class="mt-2 text-sm text-gray-600 dark:text-gray-400">
           Don't have an account yet?
-          <a class="text-blue-600 decoration-2 hover:underline font-medium" href="../examples/html/signup.html">
+          <a class="text-blue-600 decoration-2 hover:underline font-medium" href="{% url 'signup' %}">
             Sign up here
           </a>
         </p>
@@ -17,16 +17,18 @@
       <div class="mt-5">
         
   
-        <div class="py-3 flex items-center text-xs text-gray-400 uppercase before:flex-1 before:border-t before:border-gray-200 before:me-6 after:flex-1 after:border-t after:border-gray-200 after:ms-6 dark:text-gray-500 dark:before:border-gray-600 dark:after:border-gray-600">Or</div>
+        <!-- <div class="py-3 flex items-center text-xs text-gray-400 uppercase before:flex-1 before:border-t before:border-gray-200 before:me-6 after:flex-1 after:border-t after:border-gray-200 after:ms-6 dark:text-gray-500 dark:before:border-gray-600 dark:after:border-gray-600">Or</div> -->
   
         <!-- Form -->
-        <form>
+        <form method="post">
+          {% csrf_token %}
           <div class="grid gap-y-4">
             <!-- Form Group -->
             <div>
               <label for="email" class="block text-sm mb-2 dark:text-white">Email address</label>
               <div class="relative">
-                <input type="email" id="email" name="email" class="py-3 px-4 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400 dark:focus:ring-gray-600" required aria-describedby="email-error">
+                <!-- <input type="email" id="email" name="email" class="py-3 px-4 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400 dark:focus:ring-gray-600" required aria-describedby="email-error"> -->
+                {% render_field form.email|attr:"aria-describedby:email-error" class="form-control required py-3 px-4 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400 dark:focus:ring-gray-600" type="email" name="email"  %}
                 <div class="hidden absolute inset-y-0 end-0 pointer-events-none pe-3">
                   <svg class="size-5 text-red-500" width="16" height="16" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true">
                     <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8 4a.905.905 0 0 0-.9.995l.35 3.507a.552.552 0 0 0 1.1 0l.35-3.507A.905.905 0 0 0 8 4zm.002 6a1 1 0 1 0 0 2 1 1 0 0 0 0-2z"/>
@@ -41,10 +43,11 @@
             <div>
               <div class="flex justify-between items-center">
                 <label for="password" class="block text-sm mb-2 dark:text-white">Password</label>
-                <a class="text-sm text-blue-600 decoration-2 hover:underline font-medium" href="../examples/html/recover-account.html">Forgot password?</a>
+                <a class="text-sm text-blue-600 decoration-2 hover:underline font-medium" href="{% url 'forgot_password' %}">Forgot password?</a>
               </div>
               <div class="relative">
-                <input type="password" id="password" name="password" class="py-3 px-4 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400 dark:focus:ring-gray-600" required aria-describedby="password-error">
+                <!-- <input type="password" id="password" name="password" class="py-3 px-4 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400 dark:focus:ring-gray-600" required aria-describedby="password-error"> -->
+                {% render_field form.password|attr:"aria-describedby:password-error" class="form-control required py-3 px-4 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400 dark:focus:ring-gray-600" type="password" name="password"  %}
                 <div class="hidden absolute inset-y-0 end-0 pointer-events-none pe-3">
                   <svg class="size-5 text-red-500" width="16" height="16" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true">
                     <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8 4a.905.905 0 0 0-.9.995l.35 3.507a.552.552 0 0 0 1.1 0l.35-3.507A.905.905 0 0 0 8 4zm.002 6a1 1 0 1 0 0 2 1 1 0 0 0 0-2z"/>
