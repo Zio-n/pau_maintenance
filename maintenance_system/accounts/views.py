@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from .forms import UserForm
+from .forms import UserForm, SignUserForm
 from django.views.decorators.csrf import csrf_protect
 from django.contrib import messages
 from django.contrib.auth import authenticate, login
@@ -16,7 +16,7 @@ def signup(request):
         if form.is_valid():
             user = form.save(commit=False)  # Don't save yet
             user.is_active = False  # Set is_active to False for admin review
-            user.set_password(user.password)
+            user.set_password(form.cleaned_data['password'])
             user.save()
             return redirect('signup_success')
         else:
@@ -33,26 +33,29 @@ def signup(request):
 def signup_success(request):
     return render(request,'signup_success.html')
 
-@csrf_protect
+
 def signin(request):
     if request.method == 'POST':
-        form = UserForm(request.POST)
+        form = SignUserForm(request.POST)
         if form.is_valid():
             email = form.cleaned_data['email']
             password = form.cleaned_data['password']
             user = authenticate(request, email=email, password=password)
             if user is not None:
-                login(request, user)
-                # Redirect to a success page.
-                return redirect('dashboard')  # Change 'home' to your desired redirect URL
+                if user.is_active:
+                    login(request, user)
+                    # Redirect to a success page.
+                    return redirect('dashboard')  # Change 'home' to your desired redirect URL
             else:
                 messages.error(request, 'Invalid email or password.')
+                return redirect(request.path)
     else:
-        form = UserForm()
+        form = SignUserForm()
     context = {
         'form': form,
     }
     return render(request, 'signin.html', context)
+
 
 def forgot_password(request):
     return render(request,'forgot_password.html')

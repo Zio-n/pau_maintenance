@@ -31,3 +31,12 @@ class UserForm(forms.ModelForm):
             )
 
         return cleaned_data
+    
+class SignUserForm(forms.Form):
+    email = forms.EmailField()
+    password = forms.CharField(widget=forms.PasswordInput())
+    # class Meta:
+        # model = User
+        # fields = ('email', 'password')
+        # labels = {}
+        # widgets = {}
