@@ -3,11 +3,18 @@ from .forms import UserForm, SignUserForm
 from django.views.decorators.csrf import csrf_protect
 from django.contrib import messages
 from django.contrib.auth import authenticate, login
+from .models import User
 
 
 # Create your views here.
 def manage_accounts(request):
-    return render(request, 'manage_accounts/manage_account.html')
+    inactive_users = User.objects.filter(is_active=False)
+    
+    context = {
+        'inactive_users': inactive_users,
+    }
+
+    return render(request, 'manage_accounts/manage_account.html', context)
 
 
 def signup(request):

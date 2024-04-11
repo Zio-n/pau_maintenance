@@ -60,7 +60,8 @@
         </div>
     </div>
     <div id="bar-with-underline-2" class="hidden" role="tabpanel" aria-labelledby="bar-with-underline-item-2">
-        <div class="ml-4 mr-4 group flex flex-col bg-white border shadow-sm rounded-xl transition dark:bg-slate-900 dark:border-gray-800 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600 max-h-[400px] overflow-y-auto
+      {% for inactive_user in inactive_users %}  
+      <div class="mb-4 ml-4 mr-4 group flex flex-col bg-white border shadow-sm rounded-xl transition dark:bg-slate-900 dark:border-gray-800 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600 max-h-[400px] overflow-y-auto
         [&::-webkit-scrollbar]:w-2
         [&::-webkit-scrollbar-track]:rounded-full
         [&::-webkit-scrollbar-track]:bg-gray-100
@@ -72,23 +73,24 @@
             <div class="flex justify-between items-center">
               <div>
                 <h3 id="lead_name_interaction" class="font-semibold text-gray-800 dark:text-gray-200">
-                  user_email
+                  {{ inactive_user.email }}
                 </h3>
               </div>
              
               
               <div class="flex flex-col sm:inline-flex sm:flex-row rounded-sm shadow-sm">
                 <button type="button" class="mr-4 py-3 px-4 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none">
-                    Approve
+                    Send Approval
                   </button>
-                  <button type="button" class="py-3 px-4 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-red-500 text-red-500 hover:border-red-400 hover:text-red-400 disabled:opacity-50 disabled:pointer-events-none">
+                  <!-- <button type="button" class="py-3 px-4 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-red-500 text-red-500 hover:border-red-400 hover:text-red-400 disabled:opacity-50 disabled:pointer-events-none">
                     Decline
-                  </button>
+                  </button> -->
               </div>
         
             </div>
           </div>
         </div>
+      {% endfor %}
     </div>
   </div>
 {% endblock managecontent %}
