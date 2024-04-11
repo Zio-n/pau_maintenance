@@ -17,10 +17,12 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import include, path
 from accounts.views import dashboard
+from shift_schedule.views import shift_schedule
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path("__reload__/", include("django_browser_reload.urls")),
     path('user/', include("accounts.urls")),
+    path('shifts/', shift_schedule, name="shift_schedule"),
     path('dashboard/', dashboard, name='dashboard')
 ]
