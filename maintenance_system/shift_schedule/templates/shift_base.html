@@ -58,7 +58,19 @@
 {% block shiftcontent %}
 {% endblock shiftcontent %}
   
+<script>
+     flatpickr("#start-time", {
+        enableTime: true,
+        noCalendar: true,
+        dateFormat: "H:i",
+    });
 
+    flatpickr("#end-time", {
+        enableTime: true,
+        noCalendar: true,
+        dateFormat: "H:i",
+    });
+</script>
   <script src="{% static 'node_modules/preline/dist/preline.js' %}"></script>
 </body>
 
