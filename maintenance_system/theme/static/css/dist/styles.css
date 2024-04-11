@@ -3903,6 +3903,10 @@ select {
   padding-right: 0.25rem;
 }
 
+.ps-3 {
+  padding-inline-start: 0.75rem;
+}
+
 .text-left {
   text-align: left;
 }
@@ -4175,6 +4179,16 @@ select {
 .text-indigo-600 {
   --tw-text-opacity: 1;
   color: rgb(79 70 229 / var(--tw-text-opacity));
+}
+
+.text-black {
+  --tw-text-opacity: 1;
+  color: rgb(0 0 0 / var(--tw-text-opacity));
+}
+
+.text-emerald-50 {
+  --tw-text-opacity: 1;
+  color: rgb(236 253 245 / var(--tw-text-opacity));
 }
 
 .underline {
@@ -6415,6 +6429,12 @@ select {
   text-decoration-line: underline;
 }
 
+.hover\:shadow-md:hover {
+  --tw-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  --tw-shadow-colored: 0 4px 6px -1px var(--tw-shadow-color), 0 2px 4px -2px var(--tw-shadow-color);
+  box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+}
+
 .before\:hover\:text-center:hover::before {
   content: var(--tw-content);
   text-align: center;
@@ -6745,6 +6765,11 @@ select {
   color: rgb(79 70 229 / var(--tw-text-opacity));
 }
 
+.group:hover .group-hover\:text-blue-600 {
+  --tw-text-opacity: 1;
+  color: rgb(37 99 235 / var(--tw-text-opacity));
+}
+
 .peer:focus ~ .peer-focus\:-translate-y-1 {
   --tw-translate-y: -0.25rem;
   transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
@@ -6799,6 +6824,11 @@ select {
 }
 
 .peer:not(:placeholder-shown) ~ .peer-\[\:not\(\:placeholder-shown\)\]\:text-gray-500 {
+  --tw-text-opacity: 1;
+  color: rgb(107 114 128 / var(--tw-text-opacity));
+}
+
+.peer:not(:add-shown) ~ .peer-\[\:not\(\:add-shown\)\]\:text-gray-500 {
   --tw-text-opacity: 1;
   color: rgb(107 114 128 / var(--tw-text-opacity));
 }
@@ -7733,6 +7763,11 @@ select {
 .group:hover .dark\:group-hover\:text-blue-600:is(.dark *) {
   --tw-text-opacity: 1;
   color: rgb(37 99 235 / var(--tw-text-opacity));
+}
+
+.group:hover .dark\:group-hover\:text-gray-400:is(.dark *) {
+  --tw-text-opacity: 1;
+  color: rgb(156 163 175 / var(--tw-text-opacity));
 }
 
 .group:focus .dark\:group-focus\:bg-neutral-700:is(.dark *) {
