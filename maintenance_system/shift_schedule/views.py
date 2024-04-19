@@ -2,46 +2,34 @@ from django.shortcuts import render, redirect
 from accounts.models import User
 from  .forms import ShiftScheduleForm
 from django.contrib import messages
+from .models import ShiftSchedule
 
 # Create your views here.
 def shift_schedule(request):
     if request.method == 'POST':
-        form = ShiftScheduleForm(request.POST)
-        print('form stopped')
-        # assigned_selected = request.POST.get('assigned_staff_id')
-
-        # form.fields['assigned_staff_id'].choices = [(assigned_selected, assigned_selected)]
-        if form.is_valid():
-            print('form is valid')
-            form.save()
-            messages.success(request, 'Shift added successfully.')
-            return redirect('shift_schedule')
+        if request.POST.get('action_type') == 'add_schedule':
+            return add_shift_schedule(request)
         else:
-            print('form is invalid')
-            for error in form.errors:
-                print(f'the error is {form.errors[error]}')
-                messages.error(request, form.errors[error])
+            return redirect(request.path)
+        form = ShiftScheduleForm(request.POST)
     else:
-        # active_users = User.objects.filter(is_active=True, is_superuser=False)
-        # choices = [("", "---------")]  # Adding the default option
-        # choices.extend([(user.pk, user.name) for user in active_users])
+        shifts = ShiftSchedule.objects.all()
         form = ShiftScheduleForm()
-        # form.fields['assigned_staff_id'].choices = choices
         context = {
-            'form': form
+            'form': form,
+            'shifts': shifts,
         }
         return render(request,'shift_schedule.html', context)
 
-def add_shift(request):
-    if request.method == 'POST':
-        form = ShiftScheduleForm(request.POST)
-        print('form stopped')
-        if form.is_valid():
-            print('form is valid')
-            form.save()
-            messages.success(request, 'Shift added successfully.')
-            return redirect('shift_schedule') 
+
+
+def add_shift_schedule(request):
+    form = ShiftScheduleForm(request.POST)
+    if form.is_valid():
+        form.save()
+        messages.success(request, 'Shift added successfully.')
+        return redirect('shift_schedule')  # Redirect to desired location
     else:
-        print('form is invalid')
-        messages.error(request, 'Invalid form submission.')
-    return redirect('shift_schedule') 
+        for error in form.errors:
+            messages.error(request, form.errors[error])
+    return redirect(request.path)  # Fallback in case of non-POST requests
