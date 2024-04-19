@@ -17,7 +17,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import include, path
 from accounts.views import dashboard
-from shift_schedule.views import shift_schedule, get_shift_schedule_item
+from shift_schedule.views import shift_schedule, get_shift_schedule_item, delete_shift_schedule
 from maintenance_system.api import api as maintenance_system_api
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -25,6 +25,7 @@ urlpatterns = [
     path('user/', include("accounts.urls")),
     path('shifts/', shift_schedule, name="shift_schedule"),
     path('shift_detail/', get_shift_schedule_item, name="shift_detail"),
+    path('shift_delete/<uuid:shift_id>/', delete_shift_schedule, name="delete_shift"),
     path('dashboard/', dashboard, name='dashboard'),
     path("api/", maintenance_system_api.urls),
 ]

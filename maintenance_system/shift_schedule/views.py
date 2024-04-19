@@ -50,7 +50,6 @@ def edit_shift_schedule(request):
         shift_end_time = editform.cleaned_data['end_time']
         
         try:
-            # shift_staff = get_object_or_404(User, pk=shift_assigned_staff)
             shift = get_object_or_404(ShiftSchedule, pk=shift_id)
         except ShiftSchedule.DoesNotExist:
             messages.error(request, 'Shift not found.')
@@ -68,6 +67,19 @@ def edit_shift_schedule(request):
         for error in editform.errors:
             messages.error(request, editform.errors[error])
     return redirect(request.path)  # Fallback in case of non-POST requests
+
+def delete_shift_schedule(request, shift_id):
+    if request.method == 'POST':
+        try:
+            shift = get_object_or_404(ShiftSchedule, pk=shift_id)
+            shift.delete()
+            messages.success(request, 'Shift deleted successfully.')
+            return redirect('shift_schedule')  # Redirect to desired location
+        except ShiftSchedule.DoesNotExist:
+            messages.error(request, 'Shift not found.')
+            return redirect('shift_schedule')  # Or another error page
+    else:
+        return redirect('shift_schedule')
 
 def get_shift_schedule_item(request):
     shift_schedule_id = request.GET.get('shift_schedule_id')
