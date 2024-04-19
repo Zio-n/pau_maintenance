@@ -44,6 +44,7 @@
   <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
   <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
   {% load static %}
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
   <!-- Link your Tailwind CSS file -->
   {% tailwind_css %}
 </head>
@@ -71,8 +72,66 @@
         dateFormat: "H:i",
     });
 
+    flatpickr("#id_edit_start_time", {
+        enableTime: true,
+        noCalendar: true,
+        dateFormat: "H:i",
+    });
+
+    flatpickr("#id_edit_end_time", {
+        enableTime: true,
+        noCalendar: true,
+        dateFormat: "H:i",
+    });
+
+    function get_shift_schedule_detail(shift_id){
+  // Get the lead ID from somewhere (e.g., data attribute on the modal element)
+    // const response = await fetch(interactionUrl);
+    const csrftoken = getCookie('csrftoken');
+    const scheduleUrl = `/shift_detail?shift_schedule_id=${shift_id}`;
+        fetch(scheduleUrl, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': csrftoken
+            }
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+          document.getElementById("id_edit_shift_day").value=data.shift_day
+          document.getElementById("id_edit_assigned_staff").value=data.assigned_staff_id
+          document.getElementById("id_edit_start_time").value=data.start_time
+          document.getElementById("id_edit_end_time").value=data.end_time
+
+    })
+          .catch(error => {
+            console.error('Error:', error);
+        });
     
   
+};
+
+function getCookie(name) {
+          let cookieValue = null;
+          if (document.cookie && document.cookie !== '') {
+              const cookies = document.cookie.split(';');
+              for (let i = 0; i < cookies.length; i++) {
+                  const cookie = cookies[i].trim();
+                  // Check if the cookie name matches the desired name
+                  if (cookie.startsWith(name + '=')) {
+                      cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                      break;
+                  }
+              }
+          }
+          return cookieValue;
+        }
+         
 </script>
   <script src="{% static 'node_modules/preline/dist/preline.js' %}"></script>
 </body>
