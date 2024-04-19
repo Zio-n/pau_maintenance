@@ -7,7 +7,7 @@ class UserForm(forms.ModelForm):
     confirm_password=forms.CharField(widget=forms.PasswordInput())
     class Meta:
         model = User
-        fields = ('email', 'password',)
+        fields = ('email', 'name', 'password',)
         # labels = {}
         # widgets = {}
     

@@ -50,6 +50,9 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     def get_absolute_url(self):
         return "/users/%i/" % (self.pk)
+      
+    def __str__(self) -> str:
+        return f"{self.name}"
     
 class Staff(models.Model):
   id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, unique = True)
