@@ -12,8 +12,10 @@ from django.core.mail import send_mail
 # Create your views here.
 def manage_accounts(request):
     inactive_users = User.objects.filter(is_active=False)
+    active_users = User.objects.filter(is_active=True)
     
     context = {
+        'active_users': active_users,
         'inactive_users': inactive_users,
     }
 

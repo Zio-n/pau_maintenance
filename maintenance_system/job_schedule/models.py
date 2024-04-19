@@ -5,7 +5,7 @@ import uuid
 class JobSchedule(models.Model):
   id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, unique = True)
   task_id = models.ForeignKey('TaskFunnel', on_delete=models.CASCADE)
-  assigned_staff_id = models.ForeignKey(User, on_delete=models.CASCADE)
+  assigned_staff_id = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
   job_status = models.CharField(max_length=100, choices=(
       ('unassigned', 'unassigned'),
       ('assigned', 'assigned'),
