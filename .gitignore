@@ -18,6 +18,7 @@ local_settings.py
 
 # Ignore the secret key
 *.secret_key
+.env
 
 # Ignore IDE and editor files
 .vscode/

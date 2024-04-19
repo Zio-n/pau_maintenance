@@ -1,10 +1,13 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from .forms import UserForm, SignUserForm
 from django.views.decorators.csrf import csrf_protect
 from django.contrib import messages
 from django.contrib.auth import authenticate, login
 from .models import User
-
+from django.conf import settings
+from django.template.loader import render_to_string
+from django.http import HttpResponseServerError
+from django.core.mail import send_mail
 
 # Create your views here.
 def manage_accounts(request):
@@ -16,6 +19,27 @@ def manage_accounts(request):
 
     return render(request, 'manage_accounts/manage_account.html', context)
 
+def activate_user(request, user_id):
+    try:
+        user = get_object_or_404(User, pk=user_id)
+
+        user.is_active = True
+        user.save()
+
+        # Render the HTML email template
+        email_html_message = render_to_string('emails/confirmation_email.html')
+
+        # Send account activation email notification
+        subject = 'PAU Maintenance: Your Account Has Been Activated!'
+        from_email = settings.EMAIL_HOST_USER  # Replace with your email address
+        recipient_list = [user.email]
+        send_mail(subject, '',from_email, recipient_list, html_message=email_html_message)
+
+        # Redirect to success page or login page after activation
+        return redirect('manage_account')  # Replace with your login URL
+    except Exception as e:
+        # Log the error or handle it appropriately
+        return HttpResponseServerError(f"An error occurred during account activation. Please try again later. {e}")
 
 def signup(request):
     if request.method == 'POST':
