@@ -6,7 +6,7 @@
       All Users
     </button>
     <button type="button" class="hs-tab-active:border-b-blue-600 hs-tab-active:text-gray-900 dark:hs-tab-active:text-white relative dark:hs-tab-active:border-b-blue-600 min-w-0 flex-1 bg-white first:border-s-0 border-s border-b-2 py-4 px-4 text-gray-500 hover:text-gray-700 text-sm font-medium text-center overflow-hidden hover:bg-gray-50 focus:z-10 focus:outline-none focus:text-blue-600 disabled:opacity-50 disabled:pointer-events-none dark:bg-gray-800 dark:border-l-gray-700 dark:border-b-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-400" id="bar-with-underline-item-2" data-hs-tab="#bar-with-underline-2" aria-controls="bar-with-underline-2" role="tab">
-      Approve Users
+      Unapproved Users
     </button>
   </nav>
   
@@ -32,18 +32,10 @@
               <div class="px-6 py-2">
                 <div class="flex items-center gap-x-2">
                     <select class="py-3 px-4 pe-9 block w-full border-gray-200 rounded-full text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400 dark:focus:ring-gray-600">
-                        <option selected="">Select Role</option>
-                        <option>Team Lead Mech</option>
-                        <option>Team Lead Elect</option>
-                        <option>Team Lead HVAC</option>
-                        <option>Ass Manager Mech</option>
-                        <option>Manager Mech</option>
-                        <option>Manager HVAC</option>
-                        <option>Ass Manager HVAC</option>
-                        <option>Manager Elect</option>
-                        <option>Elect Technician</option>
-                        <option>Mech Technician</option>
-                        <option>HVAC Technician</option>
+                        <option selected="">--------</option>
+                        {% for role in roles %}
+                        <option>{{ role }}</option>
+                        {% endfor %}
                       </select>
                 </div>
               </div>
@@ -86,25 +78,57 @@
                   {{ inactive_user.name }}
                 </h3>
               </div>
-             
+              <form method="post" class="inline-flex items-center" action="{% url 'activate_account' inactive_user.pk %}">
+                <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
+              <div class="px-6 py-2">
+                <div class="flex items-center gap-x-2">
+                    <select name="role" class="py-3 px-4 pe-9 block w-full border-gray-200 rounded-full text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400 dark:focus:ring-gray-600">
+                        <option selected="">--------</option>
+                        {% for role in roles %}
+                        <option>{{ role }}</option>
+                        {% endfor %}
+                      </select>
+                </div>
+              </div>
               
+
               <div class="flex flex-col sm:inline-flex sm:flex-row rounded-sm shadow-sm">
-                <form method="post" class="inline-flex items-center" action="{% url 'activate_account' inactive_user.pk %}">
-                  <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
+                
                 <button type="submit" class="mr-4 py-3 px-4 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none">
                     Activate account
                   </button>
-                  </form>
                   <!-- <button type="button" class="py-3 px-4 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-red-500 text-red-500 hover:border-red-400 hover:text-red-400 disabled:opacity-50 disabled:pointer-events-none">
                     Decline
                   </button> -->
               </div>
-        
+            </form>
             </div>
           </div>
         </div>
       {% endfor %}
     </div>
   </div>
-  
+  <!-- Toast -->
+  {% for message in messages %}
+  {% if message.tags == 'error' %}
+<div id="error-message-mng" class="mr-5 mb-5 absolute bottom-0 end-0">
+<div class="max-w-xs bg-red-100 border border-red-200 text-sm text-red-800 rounded-lg dark:bg-red-800/10 dark:border-red-900 dark:text-red-500" role="alert">
+<div class="flex p-4">
+  {{ message }}
+
+  <div class="ms-auto">
+    <button type="button" class="inline-flex flex-shrink-0 justify-center items-center size-5 rounded-lg text-red-800 opacity-50 hover:opacity-100 focus:outline-none focus:opacity-100 dark:text-red-200" data-hs-remove-element="#error-message-mng">
+      <span class="sr-only">Close</span>
+      <svg class="flex-shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M18 6 6 18"></path>
+        <path d="m6 6 12 12"></path>
+      </svg>
+    </button>
+  </div>
+</div>
+</div>
+</div>
+{% endif %}
+{% endfor %}
+<!-- End Toast -->
 {% endblock managecontent %}

@@ -56,6 +56,7 @@ class Staff(models.Model):
   id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, unique = True)
   user = models.ForeignKey(User, on_delete=models.CASCADE)
   ROLE_CHOICES = (
+      ('Admin','Admin'),
       ('Team Lead Mech', 'Team Lead Mech'),
       ('Team Lead Elect', 'Team Lead Elect'),
       ('Team Lead HVAC', 'Team Lead HVAC'),
