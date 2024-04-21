@@ -3749,6 +3749,10 @@ select {
   background-color: rgb(191 219 254 / var(--tw-bg-opacity));
 }
 
+.bg-transparent {
+  background-color: transparent;
+}
+
 .bg-opacity-50 {
   --tw-bg-opacity: 0.5;
 }
