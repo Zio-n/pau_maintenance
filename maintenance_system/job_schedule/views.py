@@ -1,3 +1,4 @@
 from django.shortcuts import render
 
-# Create your views here.
+def job_schedule(request):
+    return render(request,'job_schedule.html')

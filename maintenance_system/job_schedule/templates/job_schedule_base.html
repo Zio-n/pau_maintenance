@@ -1,0 +1,129 @@
+{% load static tailwind_tags %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <!-- Required Meta Tags Always Come First -->
+  <meta charset="utf-8">
+  <meta name="robots" content="max-snippet:-1, max-image-preview:large, max-video-preview:-1">
+  <link rel="canonical" href="https://preline.co/">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="This is a simple application layout with header only example using Tailwind CSS.">
+
+  <meta name="twitter:site" content="@preline">
+  <meta name="twitter:creator" content="@htmlstream">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title"
+    content="Application Layout Navbar: Header using Tailwind CSS | Preline UI, crafted with Tailwind CSS">
+  <meta name="twitter:description"
+    content="This is a simple application layout with header only example using Tailwind CSS.">
+  <meta name="twitter:image" content="../../assets/img/og-image.png">
+
+  <meta property="og:url" content="https://preline.co/">
+  <meta property="og:locale" content="en_US">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Preline">
+  <meta property="og:title"
+    content="Application Layout Navbar: Header using Tailwind CSS | Preline UI, crafted with Tailwind CSS">
+  <meta property="og:description"
+    content="This is a simple application layout with header only example using Tailwind CSS.">
+  <meta property="og:image" content="../../assets/img/og-image.png">
+
+  <!-- Title -->
+  <title>PAU maintenance | job schedule</title>
+
+  <!-- Favicon -->
+  <link rel="shortcut icon" href="../../favicon.ico">
+
+  <!-- Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <!-- Include Flatpickr CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+
+  <!-- Include Flatpickr JavaScript -->
+  <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+  <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+  {% load static %}
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+  <!-- Link your Tailwind CSS file -->
+  {% tailwind_css %}
+</head>
+
+<body class="w-auto h-auto bg-slate-200 dark:bg-slate-900">
+  <script src="{% static 'js/hs.theme-appearance.js' %}"></script>
+{% include 'partials/navbar.html' %}
+
+
+
+
+{% block jobcontent %}
+{% endblock jobcontent %}
+  
+<script>
+     flatpickr("#id_start_time", {
+        enableTime: true,
+        noCalendar: true,
+        dateFormat: "H:i",
+    });
+
+
+    function get_job_schedule_detail(job_id){
+  // Get the lead ID from somewhere (e.g., data attribute on the modal element)
+    // const response = await fetch(interactionUrl);
+    const csrftoken = getCookie('csrftoken');
+    const scheduleUrl = `/shift_detail?shift_schedule_id=${job_id}`;
+        fetch(scheduleUrl, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': csrftoken
+            }
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+          document.getElementById("id_edit_shift_day").value=data.shift_day
+          document.getElementById("id_edit_assigned_staff").value=data.assigned_staff_id
+          document.getElementById("id_edit_start_time").value=data.start_time
+          document.getElementById("id_edit_end_time").value=data.end_time
+          document.getElementById("id_shift_id").value=data.shift_schedule_id
+
+    })
+          .catch(error => {
+            console.error('Error:', error);
+        });
+    
+  
+};
+
+function getCookie(name) {
+          let cookieValue = null;
+          if (document.cookie && document.cookie !== '') {
+              const cookies = document.cookie.split(';');
+              for (let i = 0; i < cookies.length; i++) {
+                  const cookie = cookies[i].trim();
+                  // Check if the cookie name matches the desired name
+                  if (cookie.startsWith(name + '=')) {
+                      cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                      break;
+                  }
+              }
+          }
+          return cookieValue;
+        }
+         
+</script>
+  <script src="{% static 'node_modules/preline/dist/preline.js' %}"></script>
+</body>
+
+</html>
+
+
+
+
+
+
