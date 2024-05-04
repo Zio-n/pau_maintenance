@@ -16,10 +16,13 @@ class JobSchedule(models.Model):
 
 class TaskFunnel(models.Model):
   id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, unique = True)
+  task_dept = models.CharField(max_length=254, blank=True)
+  task_building = models.CharField(max_length=254, blank=True)
   task_location = models.CharField(max_length=254)
   task_wing = models.CharField(max_length=254)
   task_category = models.CharField(max_length=254)
   task_asset_with_fault = models.CharField(max_length=254)
+  task_problem = models.CharField(max_length=254, blank=True)
   task_note = models.CharField(max_length=254, blank=True)
   task_fault_image = models.FileField(upload_to='fault_images/', blank=True)
   task_floor = models.CharField(max_length=254)
