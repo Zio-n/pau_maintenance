@@ -2,21 +2,27 @@ from django.db import models
 from accounts.models import User
 import uuid
 
-class JobSchedule(models.Model):
+# class JobSchedule(models.Model):
+#   id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, unique = True)
+#   task_id = models.ForeignKey('TaskFunnel', on_delete=models.CASCADE)
+#   assigned_staff_id = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+#   job_status = models.CharField(max_length=100, choices=(
+#       ('unassigned', 'unassigned'),
+#       ('assigned', 'assigned'),
+#       ('in progress', 'in progress'),
+#       ('completed', 'completed'),
+#   ))
+#   feedback = models.TextField(blank=True)
+
+class TaskFunnel(models.Model):
   id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, unique = True)
-  task_id = models.ForeignKey('TaskFunnel', on_delete=models.CASCADE)
   assigned_staff_id = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
   job_status = models.CharField(max_length=100, choices=(
       ('unassigned', 'unassigned'),
       ('assigned', 'assigned'),
       ('in progress', 'in progress'),
       ('completed', 'completed'),
-  ))
-  feedback = models.TextField(blank=True)
-
-class TaskFunnel(models.Model):
-  id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, unique = True)
-  task_dept = models.CharField(max_length=254, blank=True)
+  ), default='unassigned')
   task_building = models.CharField(max_length=254, blank=True)
   task_location = models.CharField(max_length=254)
   task_wing = models.CharField(max_length=254)
@@ -26,7 +32,7 @@ class TaskFunnel(models.Model):
   task_note = models.CharField(max_length=254, blank=True)
   task_fault_image = models.FileField(upload_to='fault_images/', blank=True)
   task_floor = models.CharField(max_length=254)
-  task_type = models.CharField(max_length=54, choices=(
+  task_dept = models.CharField(max_length=54, choices=(
       ('Electrical', 'Electrical'),
       ('Mechanical', 'Mechanical'),
       ('HVAC', 'HVAC'),
@@ -39,3 +45,4 @@ class TaskFunnel(models.Model):
       ('Mid', 'Mid'),
       ('Low', 'Low'),
   ))
+  feedback = models.TextField(blank=True)

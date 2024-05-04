@@ -11,7 +11,9 @@
         </svg>
       </button>
     </div>
-    <div class="p-4 max-h-[620px] overflow-y-auto
+    <form method="post">
+      {% csrf_token %}
+      <div class="p-4 max-h-[620px] overflow-y-auto
     [&::-webkit-scrollbar]:w-2
     [&::-webkit-scrollbar-track]:rounded-full
     [&::-webkit-scrollbar-track]:bg-gray-100
@@ -19,9 +21,14 @@
     [&::-webkit-scrollbar-thumb]:bg-gray-300
     dark:[&::-webkit-scrollbar-track]:bg-slate-700
     dark:[&::-webkit-scrollbar-thumb]:bg-slate-500">
+    {% load widget_tweaks %}
+    {% render_field editform.action_type type="text" class="hidden peer p-4 pe-9 w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400 dark:focus:ring-gray-600 focus:pt-6 focus:pb-2 [&:not(:placeholder-shown)]:pt-6 [&:not(:placeholder-shown)]:pb-2 autofill:pt-6 autofill:pb-2" %}
+    {% render_field editform.update_job_id type="text" class="hidden peer p-4 pe-9 w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400 dark:focus:ring-gray-600 focus:pt-6 focus:pb-2 [&:not(:placeholder-shown)]:pt-6 [&:not(:placeholder-shown)]:pb-2 autofill:pt-6 autofill:pb-2" %}
+
     <!-- Department -->
 <div class="relative">  
-  <select class="peer p-4 pe-9 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:focus:ring-neutral-600
+  {% render_field editform.task_dept class="peer p-4 pe-9 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:focus:ring-neutral-600 focus:pt-6 focus:pb-2 [&:not(:placeholder-shown)]:pt-6 [&:not(:placeholder-shown)]:pb-2 autofill:pt-6 autofill:pb-2" %}
+  <!-- <select class="peer p-4 pe-9 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:focus:ring-neutral-600
   focus:pt-6
   focus:pb-2
   [&:not(:placeholder-shown)]:pt-6
@@ -32,7 +39,7 @@
     <option>Electrical</option>
     <option>Mechanical</option>
     <option>HVAC</option>
-  </select>
+  </select> -->
   <label class="absolute top-0 start-0 p-4 h-full truncate pointer-events-none transition ease-in-out duration-100 border border-transparent dark:text-white peer-disabled:opacity-50 peer-disabled:pointer-events-none
     peer-focus:text-xs
     peer-focus:-translate-y-1.5
@@ -44,8 +51,9 @@
 <!-- End Department -->
       <!-- assigned staff and status -->
   <div class="flex flex-row mt-4">  
-    <div class="relative w-1/2 mr-4">  
-  <select class="peer p-4 pe-9 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:focus:ring-neutral-600
+    <div class="relative w-1/2 mr-4"> 
+    {% render_field editform.assigned_staff_id class="peer p-4 pe-9 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:focus:ring-neutral-600 focus:pt-6 focus:pb-2 [&:not(:placeholder-shown)]:pt-6 [&:not(:placeholder-shown)]:pb-2 autofill:pt-6 autofill:pb-2" %} 
+  <!-- <select class="peer p-4 pe-9 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:focus:ring-neutral-600
   focus:pt-6
   focus:pb-2
   [&:not(:placeholder-shown)]:pt-6
@@ -56,7 +64,7 @@
     <option>1</option>
     <option>2</option>
     <option>3</option>
-  </select>
+  </select> -->
   <label class="absolute top-0 start-0 p-4 h-full truncate pointer-events-none transition ease-in-out duration-100 border border-transparent dark:text-white peer-disabled:opacity-50 peer-disabled:pointer-events-none
     peer-focus:text-xs
     peer-focus:-translate-y-1.5
@@ -68,7 +76,8 @@
 
 <!-- Status -->
 <div class="relative w-1/2 mr-4">  
-  <select class="peer p-4 pe-9 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:focus:ring-neutral-600
+  {% render_field editform.job_status class="peer p-4 pe-9 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:focus:ring-neutral-600 focus:pt-6 focus:pb-2 [&:not(:placeholder-shown)]:pt-6 [&:not(:placeholder-shown)]:pb-2 autofill:pt-6 autofill:pb-2" %} 
+  <!-- <select class="peer p-4 pe-9 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:focus:ring-neutral-600
   focus:pt-6
   focus:pb-2
   [&:not(:placeholder-shown)]:pt-6
@@ -79,7 +88,7 @@
     <option>1</option>
     <option>2</option>
     <option>3</option>
-  </select>
+  </select> -->
   <label class="absolute top-0 start-0 p-4 h-full truncate pointer-events-none transition ease-in-out duration-100 border border-transparent dark:text-white peer-disabled:opacity-50 peer-disabled:pointer-events-none
     peer-focus:text-xs
     peer-focus:-translate-y-1.5
@@ -98,7 +107,8 @@
 <!-- priority level and scheduled-date -->
 <div class="flex flex-row mt-4">  
   <div class="relative w-1/2 mr-4">  
-<select class="peer p-4 pe-9 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:focus:ring-neutral-600
+    {% render_field editform.priority_level class="peer p-4 pe-9 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:focus:ring-neutral-600 focus:pt-6 focus:pb-2 [&:not(:placeholder-shown)]:pt-6 [&:not(:placeholder-shown)]:pb-2 autofill:pt-6 autofill:pb-2" %} 
+<!-- <select class="peer p-4 pe-9 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:focus:ring-neutral-600
 focus:pt-6
 focus:pb-2
 [&:not(:placeholder-shown)]:pt-6
@@ -109,7 +119,7 @@ autofill:pb-2">
   <option>Low</option>
   <option>Mid</option>
   <option>High</option>
-</select>
+</select> -->
 <label class="absolute top-0 start-0 p-4 h-full truncate pointer-events-none transition ease-in-out duration-100 border border-transparent dark:text-white peer-disabled:opacity-50 peer-disabled:pointer-events-none
   peer-focus:text-xs
   peer-focus:-translate-y-1.5
@@ -121,13 +131,14 @@ autofill:pb-2">
 
 
 <div class="relative w-1/2 mr-4">  
-  <input type="text" id="id_scheduled_date" class="peer p-4 block w-full border-gray-200 rounded-lg text-sm placeholder:text-transparent focus:border-blue-500 focus:ring-blue-500 disabled:opacity-100 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400 dark:focus:ring-gray-600
+  {% render_field editform.scheduled_datetime class="peer p-4 block w-full border-gray-200 rounded-lg text-sm placeholder:text-transparent focus:border-blue-500 focus:ring-blue-500 disabled:opacity-100 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400 dark:focus:ring-gray-600 focus:pt-6 focus:pb-2 [&:not(:placeholder-shown)]:pt-6 [&:not(:placeholder-shown)]:pb-2 autofill:pt-6 autofill:pb-2" %} 
+  <!-- <input type="text" id="id_scheduled_date" class="peer p-4 block w-full border-gray-200 rounded-lg text-sm placeholder:text-transparent focus:border-blue-500 focus:ring-blue-500 disabled:opacity-100 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400 dark:focus:ring-gray-600
   focus:pt-6
   focus:pb-2
   [&:not(:placeholder-shown)]:pt-6
   [&:not(:placeholder-shown)]:pb-2
   autofill:pt-6
-  autofill:pb-2"  value="12/03/2023">
+  autofill:pb-2"  value="12/03/2023"> -->
   <label for="id_scheduled_date" class="absolute top-0 start-0 p-4 h-full text-sm truncate pointer-events-none transition ease-in-out duration-100 border border-transparent dark:text-white peer-disabled:opacity-80 peer-disabled:pointer-events-none
     peer-focus:text-xs
     peer-focus:-translate-y-1.5
@@ -151,13 +162,14 @@ autofill:pb-2">
 <!-- Asset at fault Input -->
 <div class="flex flex-row mt-4">
     <div class="relative w-1/2 mr-4">
-        <input type="text" id="id_task_asset_fault" class="peer p-4 block w-full border-gray-200 rounded-lg text-sm placeholder:text-transparent focus:border-blue-500 focus:ring-blue-500 disabled:opacity-100 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400 dark:focus:ring-gray-600
+      {% render_field editform.task_asset_with_fault class="peer p-4 pe-9 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:focus:ring-neutral-600 focus:pt-6 focus:pb-2 [&:not(:placeholder-shown)]:pt-6 [&:not(:placeholder-shown)]:pb-2 autofill:pt-6 autofill:pb-2" %} 
+        <!-- <input type="text" id="id_task_asset_fault" class="peer p-4 block w-full border-gray-200 rounded-lg text-sm placeholder:text-transparent focus:border-blue-500 focus:ring-blue-500 disabled:opacity-100 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400 dark:focus:ring-gray-600
         focus:pt-6
         focus:pb-2
         [&:not(:placeholder-shown)]:pt-6
         [&:not(:placeholder-shown)]:pb-2
         autofill:pt-6
-        autofill:pb-2"  value="Air conditioner">
+        autofill:pb-2"  value="Air conditioner"> -->
         <label for="id_task_asset_fault" class="absolute top-0 start-0 p-4 h-full text-sm truncate pointer-events-none transition ease-in-out duration-100 border border-transparent dark:text-white peer-disabled:opacity-80 peer-disabled:pointer-events-none
           peer-focus:text-xs
           peer-focus:-translate-y-1.5
@@ -168,13 +180,14 @@ autofill:pb-2">
       </div>
 
       <div class="relative w-1/2 mr-4">
-        <input type="text" id="id_building" class="peer p-4 block w-full border-gray-200 rounded-lg text-sm placeholder:text-transparent focus:border-blue-500 focus:ring-blue-500 disabled:opacity-100 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400 dark:focus:ring-gray-600
+        {% render_field editform.task_building class="peer p-4 pe-9 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:focus:ring-neutral-600 focus:pt-6 focus:pb-2 [&:not(:placeholder-shown)]:pt-6 [&:not(:placeholder-shown)]:pb-2 autofill:pt-6 autofill:pb-2" %} 
+        <!-- <input type="text" id="id_building" class="peer p-4 block w-full border-gray-200 rounded-lg text-sm placeholder:text-transparent focus:border-blue-500 focus:ring-blue-500 disabled:opacity-100 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400 dark:focus:ring-gray-600
         focus:pt-6
         focus:pb-2
         [&:not(:placeholder-shown)]:pt-6
         [&:not(:placeholder-shown)]:pb-2
         autofill:pt-6
-        autofill:pb-2">
+        autofill:pb-2"> -->
         <label for="id_building" class="absolute top-0 start-0 p-4 h-full text-sm truncate pointer-events-none transition ease-in-out duration-100 border border-transparent dark:text-white peer-disabled:opacity-80 peer-disabled:pointer-events-none
           peer-focus:text-xs
           peer-focus:-translate-y-1.5
@@ -189,14 +202,15 @@ autofill:pb-2">
 
 <!-- task location and wing -->
   <div class="flex flex-row mt-4">  
-    <div class="relative w-1/2 mr-4">  
-      <input type="text" id="id_fault_location" class="peer p-4 block w-full border-gray-200 rounded-lg text-sm placeholder:text-transparent focus:border-blue-500 focus:ring-blue-500 disabled:opacity-100 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400 dark:focus:ring-gray-600
+    <div class="relative w-1/2 mr-4"> 
+      {% render_field editform.task_location class="peer p-4 pe-9 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:focus:ring-neutral-600 focus:pt-6 focus:pb-2 [&:not(:placeholder-shown)]:pt-6 [&:not(:placeholder-shown)]:pb-2 autofill:pt-6 autofill:pb-2" %}  
+      <!-- <input type="text" id="id_fault_location" class="peer p-4 block w-full border-gray-200 rounded-lg text-sm placeholder:text-transparent focus:border-blue-500 focus:ring-blue-500 disabled:opacity-100 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400 dark:focus:ring-gray-600
       focus:pt-6
       focus:pb-2
       [&:not(:placeholder-shown)]:pt-6
       [&:not(:placeholder-shown)]:pb-2
       autofill:pt-6
-      autofill:pb-2">
+      autofill:pb-2"> -->
       <label for="id_fault_location" class="absolute top-0 start-0 p-4 h-full text-sm truncate pointer-events-none transition ease-in-out duration-100 border border-transparent dark:text-white peer-disabled:opacity-80 peer-disabled:pointer-events-none
         peer-focus:text-xs
         peer-focus:-translate-y-1.5
@@ -207,13 +221,14 @@ autofill:pb-2">
     </div>
 
 <div class="relative w-1/2 mr-4">  
-  <input type="text" id="id_fault_wing" class="peer p-4 block w-full border-gray-200 rounded-lg text-sm placeholder:text-transparent focus:border-blue-500 focus:ring-blue-500 disabled:opacity-100 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400 dark:focus:ring-gray-600
+  {% render_field editform.task_wing class="peer p-4 pe-9 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:focus:ring-neutral-600 focus:pt-6 focus:pb-2 [&:not(:placeholder-shown)]:pt-6 [&:not(:placeholder-shown)]:pb-2 autofill:pt-6 autofill:pb-2" %} 
+  <!-- <input type="text" id="id_fault_wing" class="peer p-4 block w-full border-gray-200 rounded-lg text-sm placeholder:text-transparent focus:border-blue-500 focus:ring-blue-500 disabled:opacity-100 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400 dark:focus:ring-gray-600
   focus:pt-6
   focus:pb-2
   [&:not(:placeholder-shown)]:pt-6
   [&:not(:placeholder-shown)]:pb-2
   autofill:pt-6
-  autofill:pb-2">
+  autofill:pb-2"> -->
   <label for="id_fault_wing" class="absolute top-0 start-0 p-4 h-full text-sm truncate pointer-events-none transition ease-in-out duration-100 border border-transparent dark:text-white peer-disabled:opacity-80 peer-disabled:pointer-events-none
     peer-focus:text-xs
     peer-focus:-translate-y-1.5
@@ -232,14 +247,15 @@ autofill:pb-2">
 
 <!-- task floor and category -->
 <div class="flex flex-row mt-4">  
-  <div class="relative w-1/2 mr-4">  
-    <input type="text" id="id_fault_floor" class="peer p-4 block w-full border-gray-200 rounded-lg text-sm placeholder:text-transparent focus:border-blue-500 focus:ring-blue-500 disabled:opacity-100 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400 dark:focus:ring-gray-600
+  <div class="relative w-1/2 mr-4"> 
+    {% render_field editform.task_floor class="peer p-4 pe-9 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:focus:ring-neutral-600 focus:pt-6 focus:pb-2 [&:not(:placeholder-shown)]:pt-6 [&:not(:placeholder-shown)]:pb-2 autofill:pt-6 autofill:pb-2" %}  
+    <!-- <input type="text" id="id_fault_floor" class="peer p-4 block w-full border-gray-200 rounded-lg text-sm placeholder:text-transparent focus:border-blue-500 focus:ring-blue-500 disabled:opacity-100 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400 dark:focus:ring-gray-600
     focus:pt-6
     focus:pb-2
     [&:not(:placeholder-shown)]:pt-6
     [&:not(:placeholder-shown)]:pb-2
     autofill:pt-6
-    autofill:pb-2">
+    autofill:pb-2"> -->
     <label for="id_fault_floor" class="absolute top-0 start-0 p-4 h-full text-sm truncate pointer-events-none transition ease-in-out duration-100 border border-transparent dark:text-white peer-disabled:opacity-80 peer-disabled:pointer-events-none
       peer-focus:text-xs
       peer-focus:-translate-y-1.5
@@ -249,14 +265,15 @@ autofill:pb-2">
       peer-[:not(:placeholder-shown)]:text-gray-500">Floor</label>
   </div>
 
-<div class="relative w-1/2 mr-4">  
-<input type="text" id="id_fault_category" class="peer p-4 block w-full border-gray-200 rounded-lg text-sm placeholder:text-transparent focus:border-blue-500 focus:ring-blue-500 disabled:opacity-100 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400 dark:focus:ring-gray-600
+<div class="relative w-1/2 mr-4"> 
+  {% render_field editform.task_category class="peer p-4 pe-9 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:focus:ring-neutral-600 focus:pt-6 focus:pb-2 [&:not(:placeholder-shown)]:pt-6 [&:not(:placeholder-shown)]:pb-2 autofill:pt-6 autofill:pb-2" %}  
+<!-- <input type="text" id="id_fault_category" class="peer p-4 block w-full border-gray-200 rounded-lg text-sm placeholder:text-transparent focus:border-blue-500 focus:ring-blue-500 disabled:opacity-100 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400 dark:focus:ring-gray-600
 focus:pt-6
 focus:pb-2
 [&:not(:placeholder-shown)]:pt-6
 [&:not(:placeholder-shown)]:pb-2
 autofill:pt-6
-autofill:pb-2">
+autofill:pb-2"> -->
 <label for="id_fault_category" class="absolute top-0 start-0 p-4 h-full text-sm truncate pointer-events-none transition ease-in-out duration-100 border border-transparent dark:text-white peer-disabled:opacity-80 peer-disabled:pointer-events-none
   peer-focus:text-xs
   peer-focus:-translate-y-1.5
@@ -278,7 +295,8 @@ autofill:pb-2">
     <div class="max-w-full space-y-4">
       <div>
         <div class="relative">
-          <textarea id="hs-validation-name-error" class="py-3 px-4 block w-full rounded-lg text-sm  disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600" rows="3" placeholder="Problem details" aria-describedby="hs-validation-name-error-helper" required=""></textarea>
+          {% render_field editform.task_problem class="peer p-4 pe-9 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:focus:ring-neutral-600 focus:pt-6 focus:pb-2 [&:not(:placeholder-shown)]:pt-6 [&:not(:placeholder-shown)]:pb-2 autofill:pt-6 autofill:pb-2" placeholder="Problem details" %} 
+          <!-- <textarea id="hs-validation-name-error" class="py-3 px-4 block w-full rounded-lg text-sm  disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600" rows="3" placeholder="Problem details" aria-describedby="hs-validation-name-error-helper" required=""></textarea> -->
           <div class="absolute top-0 end-0 flex items-center pointer-events-none p-3">
             
           </div>
@@ -295,11 +313,12 @@ autofill:pb-2">
     <label for="hs-validation-name-error" class="block text-sm font-medium mb-2 dark:text-white">Fault Image</label>
     <form class="max-w-full">
       <label for="file-input" class="sr-only">Choose file</label>
-      <input type="file" name="file-input" id="file-input" class="block w-full border border-gray-200 shadow-sm rounded-lg text-sm focus:z-10 focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400
+      {% render_field editform.task_fault_image type="file" class="block w-full border border-gray-200 shadow-sm rounded-lg text-sm focus:z-10 focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 file:bg-gray-50 file:border-0 file:me-4 file:py-3 file:px-4dark:file:bg-neutral-700 dark:file:text-neutral-400" %} 
+      <!-- <input type="file" name="file-input" id="file-input" class="block w-full border border-gray-200 shadow-sm rounded-lg text-sm focus:z-10 focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400
         file:bg-gray-50 file:border-0
         file:me-4
         file:py-3 file:px-4
-        dark:file:bg-neutral-700 dark:file:text-neutral-400">
+        dark:file:bg-neutral-700 dark:file:text-neutral-400"> -->
     </form>
     <div class="flex flex-wrap gap-2 mt-3 ml-1">
         <button type="button" id="trigger-download" class="py-1 px-2 text-sm font-medium rounded-md border border-teal-400 bg-teal-100 dark:bg-teal-800/25 text-teal-600 dark:text-teal-400 hover:bg-teal-200 dark:hover:bg-teal-600/50">
@@ -320,7 +339,8 @@ autofill:pb-2">
     <div>
       <label for="hs-validation-name-error" class="block text-sm font-medium mb-2 dark:text-white">More details</label>
       <div class="relative">
-        <textarea id="hs-validation-name-error" class="py-3 px-4 block w-full rounded-lg text-sm  disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600" rows="3" placeholder="More details on the fault" aria-describedby="hs-validation-name-error-helper" required=""></textarea>
+        {% render_field editform.task_note class="peer p-4 pe-9 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:focus:ring-neutral-600 focus:pt-6 focus:pb-2 [&:not(:placeholder-shown)]:pt-6 [&:not(:placeholder-shown)]:pb-2 autofill:pt-6 autofill:pb-2"  placeholder="More details on the fault" %} 
+        <!-- <textarea id="hs-validation-name-error" class="py-3 px-4 block w-full rounded-lg text-sm  disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600" rows="3" placeholder="More details on the fault" aria-describedby="hs-validation-name-error-helper" required=""></textarea> -->
         <div class="absolute top-0 end-0 flex items-center pointer-events-none p-3">
           
         </div>
@@ -338,13 +358,8 @@ autofill:pb-2">
 <!-- customer name and email -->
 <div class="flex flex-row mt-4">  
   <div class="relative w-1/2 mr-4">  
-    <input type="text" id="id_customer_name" class="peer p-4 block w-full border-gray-200 rounded-lg text-sm placeholder:text-transparent focus:border-blue-500 focus:ring-blue-500 disabled:opacity-100 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400 dark:focus:ring-gray-600
-    focus:pt-6
-    focus:pb-2
-    [&:not(:placeholder-shown)]:pt-6
-    [&:not(:placeholder-shown)]:pb-2
-    autofill:pt-6
-    autofill:pb-2">
+    {% render_field editform.customer_name class="peer p-4 pe-9 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:focus:ring-neutral-600 focus:pt-6 focus:pb-2 [&:not(:placeholder-shown)]:pt-6 [&:not(:placeholder-shown)]:pb-2 autofill:pt-6 autofill:pb-2" %} 
+
     <label for="id_customer_name" class="absolute top-0 start-0 p-4 h-full text-sm truncate pointer-events-none transition ease-in-out duration-100 border border-transparent dark:text-white peer-disabled:opacity-80 peer-disabled:pointer-events-none
       peer-focus:text-xs
       peer-focus:-translate-y-1.5
@@ -354,14 +369,15 @@ autofill:pb-2">
       peer-[:not(:placeholder-shown)]:text-gray-500">Customer name</label>
   </div>
 
-<div class="relative w-1/2 mr-4">  
-<input type="text" id="id_customer_email" class="peer p-4 block w-full border-gray-200 rounded-lg text-sm placeholder:text-transparent focus:border-blue-500 focus:ring-blue-500 disabled:opacity-100 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400 dark:focus:ring-gray-600
+<div class="relative w-1/2 mr-4"> 
+  {% render_field editform.customer_email class="peer p-4 pe-9 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:focus:ring-neutral-600 focus:pt-6 focus:pb-2 [&:not(:placeholder-shown)]:pt-6 [&:not(:placeholder-shown)]:pb-2 autofill:pt-6 autofill:pb-2" %}  
+<!-- <input type="text" id="id_customer_email" class="peer p-4 block w-full border-gray-200 rounded-lg text-sm placeholder:text-transparent focus:border-blue-500 focus:ring-blue-500 disabled:opacity-100 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400 dark:focus:ring-gray-600
 focus:pt-6
 focus:pb-2
 [&:not(:placeholder-shown)]:pt-6
 [&:not(:placeholder-shown)]:pb-2
 autofill:pt-6
-autofill:pb-2">
+autofill:pb-2"> -->
 <label for="id_customer_email" class="absolute top-0 start-0 p-4 h-full text-sm truncate pointer-events-none transition ease-in-out duration-100 border border-transparent dark:text-white peer-disabled:opacity-80 peer-disabled:pointer-events-none
   peer-focus:text-xs
   peer-focus:-translate-y-1.5
@@ -420,12 +436,14 @@ autofill:pb-2">
 <!-- End Feedback -->
 
 <div class="flex justify-end items-center gap-x-2 py-3 px-4 border-t dark:border-neutral-700">
-  <button type="button" class="py-2 px-6 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none">
+  <button type="submit" class="py-2 px-6 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none">
     Update
   </button>
 </div>
 
 
   </div>
+    </form>
+    
 
 </div>
