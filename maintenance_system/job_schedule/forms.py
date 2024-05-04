@@ -47,7 +47,6 @@ class UpdateTaskForm(forms.ModelForm):
         self.fields['customer_email'].widget.attrs.update({'id': 'id_edittask_customer_email'})
         self.fields['scheduled_datetime'].widget.attrs.update({'id': 'id_edittask_scheduled_datetime'})        
         self.fields['priority_level'].widget.attrs.update({'id': 'id_edittask_priority_level'})
-        self.fields['feedback'].widget.attrs.update({'id': 'id_edittask_feedback'}) 
     
     @staticmethod
     def label_from_instance(obj):
@@ -55,7 +54,7 @@ class UpdateTaskForm(forms.ModelForm):
     
     class Meta:
         model = TaskFunnel
-        fields = ['task_dept', 'task_building', 'task_location', 'task_wing', 'task_category', 'task_asset_with_fault', 'task_problem', 'task_note', 'task_fault_image', 'task_floor', 'customer_name', 'customer_email', 'scheduled_datetime', 'priority_level', 'feedback']
+        fields = ('task_dept', 'task_building', 'task_location', 'task_wing', 'task_category', 'task_asset_with_fault', 'task_problem', 'task_note', 'task_fault_image', 'task_floor', 'customer_name', 'customer_email', 'scheduled_datetime', 'priority_level',)
         widgets = {
             'task_problem': forms.Textarea(attrs={'rows':'3'}),
             'task_note': forms.Textarea(attrs={'rows':'3'})
@@ -87,7 +86,7 @@ class UpdateJobScheduleForm(forms.ModelForm):
         self.fields['task_location'].widget.attrs.update({'id': 'id_edit_task_location'})
         self.fields['task_wing'].widget.attrs.update({'id': 'id_task_wing'})
         self.fields['task_category'].widget.attrs.update({'id': 'id_edit_task_category'})
-        self.fields['task_asset_with_fault'].widget.attrs.update({'id': 'id_task_asset_with_fault'})
+        self.fields['task_asset_with_fault'].widget.attrs.update({'id': 'id_edit_task_asset_with_fault'})
         self.fields['task_problem'].widget.attrs.update({'id': 'id_edit_task_problem'})
         self.fields['task_note'].widget.attrs.update({'id': 'id_edit_task_note'})
         self.fields['task_fault_image'].widget.attrs.update({'id': 'id_edit_task_fault_image'})
@@ -97,7 +96,6 @@ class UpdateJobScheduleForm(forms.ModelForm):
         self.fields['customer_email'].widget.attrs.update({'id': 'id_edit_customer_email'})
         self.fields['scheduled_datetime'].widget.attrs.update({'id': 'id_edit_scheduled_datetime'})        
         self.fields['priority_level'].widget.attrs.update({'id': 'id_edit_priority_level'})
-        self.fields['feedback'].widget.attrs.update({'id': 'id_edit_feedback'}) 
                 
         self.fields['assigned_staff_id'].label_from_instance = self.label_from_instance
     
@@ -107,7 +105,7 @@ class UpdateJobScheduleForm(forms.ModelForm):
     
     class Meta:
         model = TaskFunnel
-        fields = ['assigned_staff_id', 'job_status', 'task_dept', 'task_building', 'task_location', 'task_wing', 'task_category', 'task_asset_with_fault', 'task_problem', 'task_note', 'task_fault_image', 'task_floor', 'customer_name', 'customer_email', 'scheduled_datetime', 'priority_level', 'feedback']
+        fields = ('assigned_staff_id', 'job_status', 'task_dept', 'task_building', 'task_location', 'task_wing', 'task_category', 'task_asset_with_fault', 'task_problem', 'task_note', 'task_fault_image', 'task_floor', 'customer_name', 'customer_email', 'scheduled_datetime', 'priority_level',)
         widgets = {
             'task_problem': forms.Textarea(attrs={'rows':'3'}),
             'task_note': forms.Textarea(attrs={'rows':'3'})

@@ -83,7 +83,7 @@
   // Get the lead ID from somewhere (e.g., data attribute on the modal element)
     // const response = await fetch(interactionUrl);
     const csrftoken = getCookie('csrftoken');
-    const scheduleUrl = `/shift_detail?shift_schedule_id=${job_id}`;
+    const scheduleUrl = `{% url 'job_detail' %}?job_id=${job_id}`;
         fetch(scheduleUrl, {
             method: 'GET',
             headers: {
@@ -98,11 +98,24 @@
             return response.json();
         })
         .then(data => {
-          document.getElementById("id_edit_shift_day").value=data.shift_day
-          document.getElementById("id_edit_assigned_staff").value=data.assigned_staff_id
-          document.getElementById("id_edit_start_time").value=data.start_time
-          document.getElementById("id_edit_end_time").value=data.end_time
-          document.getElementById("id_shift_id").value=data.shift_schedule_id
+          console.log(data);
+          document.getElementById("id_edit_update_job_id").value=data.job_schedule_id
+          document.getElementById("id_edit_scheduled_datetime").value=data.scheduled_datetime
+          document.getElementById("id_edit_task_asset_with_fault").value=data.task_asset_with_fault
+          document.getElementById("id_edit_task_building").value=data.task_building
+          document.getElementById("id_edit_task_location").value=data.task_location
+          document.getElementById("id_task_wing").value=data.task_wing
+          document.getElementById("id_edit_task_floor").value=data.task_floor
+          document.getElementById("id_edit_task_category").value=data.task_category
+          document.getElementById("id_edit_task_problem").value=data.task_problem
+          document.getElementById("id_edit_task_fault_image").value=data.task_fault_image
+          document.getElementById("id_edit_task_note").value=data.task_note
+          document.getElementById("id_edit_customer_name").value=data.customer_name
+          document.getElementById("id_edit_customer_email").value=data.customer_email
+          document.getElementById("id_edit_customer_feedback_post_date").innerHTML=data.feedback_post_date
+          document.getElementById("id_edit_customer_feedback").innerHTML=data.feedback
+
+
 
     })
           .catch(error => {
