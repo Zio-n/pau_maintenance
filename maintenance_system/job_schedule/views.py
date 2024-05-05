@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .forms import UpdateJobScheduleForm, UpdateTaskForm
+from .forms import UpdateJobScheduleForm, UpdateTaskForm, AddJobScheduleForm
 from .models import TaskFunnel
 from django.http import JsonResponse
 import uuid
@@ -10,6 +10,8 @@ def job_schedule(request):
             return update_task_schedule(request)
         elif request.POST.get('action_type') == 'update_job_schedule':
             return update_job_schedule(request)
+        elif request.POST.get('action_type') == 'add_job_schedule':
+            return add_job_schedule(request)
         else:
             return redirect(request.path)
         form = ShiftScheduleForm(request.POST)
@@ -18,6 +20,7 @@ def job_schedule(request):
         assigned_inprogres_jobs = TaskFunnel.objects.filter(job_status__in=['assigned', 'in progress'])
         completed_jobs = TaskFunnel.objects.filter(job_status='completed')
         
+        addform = AddJobScheduleForm()
         editform = UpdateJobScheduleForm()
         edittaskform = UpdateTaskForm()
         
@@ -25,10 +28,25 @@ def job_schedule(request):
             'unassignedjobs': unassigned_jobs,
             'assignedjobs': assigned_inprogres_jobs,
             'completedjobs': completed_jobs,
+            'addform': addform,
             'editform': editform,
             'edittaskform': edittaskform
         }
     return render(request,'job_schedule.html', context)
+
+def fault_form(request):
+    return render(request,'customer_forms/fault_form.html')
+
+def add_job_schedule(request):
+    form = AddJobScheduleForm(request.POST)
+    if form.is_valid():
+        form.save()
+        messages.success(request, 'Job added successfully.')
+        return redirect('job_schedule')  # Redirect to desired location
+    else:
+        for error in form.errors:
+            messages.error(request, form.errors[error])
+    return redirect(request.path)  # Fallback in case of non-POST requests
 
 
 def job_schedule_detail(request):

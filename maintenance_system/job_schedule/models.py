@@ -38,6 +38,7 @@ class TaskFunnel(models.Model):
         ('Mechanical', 'Mechanical'),
         ('HVAC', 'HVAC'),
     ))
+    form_id = models.UUIDField(editable=False, unique = True, blank=True, null=True)
     customer_name = models.CharField(max_length=254)
     customer_email = models.EmailField(max_length=255)
     scheduled_datetime = models.DateField(blank=True, null=True)

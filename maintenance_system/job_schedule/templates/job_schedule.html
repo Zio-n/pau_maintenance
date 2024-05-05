@@ -1,6 +1,20 @@
 {% extends 'job_schedule_base.html' %}
 
 {% block jobcontent %}
+<header class="flex items-center justify-between border-b border-gray-200 px-6 py-4 lg:flex-none">
+  <h1 class="text-base font-semibold leading-6 text-gray-900 dark:text-gray-200">
+    <time datetime="2022-01">Jobs</time>
+  </h1>
+  <div class="flex items-center">
+   
+    <div class="hidden md:ml-4 md:flex md:items-center">
+   
+      <div class="ml-6 h-6 w-px bg-gray-300"></div>
+      <button type="button" class="ml-6 rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500 disabled:opacity-50 disabled:pointer-events-none" data-hs-overlay="#hs-add-overlay-right">Add job</button>
+    </div>
+    
+  </div>
+</header>
 <nav class="relative z-0 flex border rounded-xl overflow-hidden dark:border-gray-700" aria-label="Tabs" role="tablist">
     <button type="button" class="hs-tab-active:border-b-blue-600 hs-tab-active:text-gray-900 dark:hs-tab-active:text-white relative dark:hs-tab-active:border-b-blue-600 min-w-0 flex-1 bg-white first:border-s-0 border-s border-b-2 py-4 px-4 text-gray-500 hover:text-gray-700 text-sm font-medium text-center overflow-hidden hover:bg-gray-50 focus:z-10 focus:outline-none focus:text-blue-600 disabled:opacity-50 disabled:pointer-events-none dark:bg-gray-800 dark:border-l-gray-700 dark:border-b-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-400 active" id="tabs-with-unassigned-item-1" data-hs-tab="#tabs-with-unassigned" aria-controls="tabs-with-unassigned" role="tab">
       Unassigned Jobs
@@ -235,7 +249,32 @@
           </div>
     </div>
   </div>
+
+    <!-- Toast -->
+    {% for message in messages %}
+    {% if message.tags == 'error' %}
+<div id="error-message-shift" class="mr-5 mb-5 absolute bottom-0 end-0">
+<div class="max-w-xs bg-red-100 border border-red-200 text-sm text-red-800 rounded-lg dark:bg-red-800/10 dark:border-red-900 dark:text-red-500" role="alert">
+  <div class="flex p-4">
+    {{ message }}
+
+    <div class="ms-auto">
+      <button type="button" class="inline-flex flex-shrink-0 justify-center items-center size-5 rounded-lg text-red-800 opacity-50 hover:opacity-100 focus:outline-none focus:opacity-100 dark:text-red-200" data-hs-remove-element="#error-message-shift">
+        <span class="sr-only">Close</span>
+        <svg class="flex-shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M18 6 6 18"></path>
+          <path d="m6 6 12 12"></path>
+        </svg>
+      </button>
+    </div>
+  </div>
+</div>
+</div>
+{% endif %}
+{% endfor %}
+<!-- End Toast -->
   {% include 'edit_schedule.html' %}
+  {% include 'add_schedule.html' %}
   {% include 'edit_unassigned_schedule.html' %}
   {% include 'assign_staff.html' %}
 {% endblock jobcontent %}
