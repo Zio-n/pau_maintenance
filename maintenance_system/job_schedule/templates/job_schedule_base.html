@@ -79,6 +79,84 @@
         dateFormat: "Y-m-d",
     });
 
+    function get_task_schedule_detail(job_id){
+  // Get the lead ID from somewhere (e.g., data attribute on the modal element)
+    // const response = await fetch(interactionUrl);
+    const csrftoken = getCookie('csrftoken');
+    const scheduleUrl = `{% url 'job_detail' %}?job_id=${job_id}`;
+        fetch(scheduleUrl, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': csrftoken
+            }
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+          document.getElementById("id_edittask_update_task_id").value=data.job_schedule_id
+          document.getElementById("id_edittask_scheduled_datetime").value=data.scheduled_datetime
+          document.getElementById("id_edittask_asset_with_fault").value=data.task_asset_with_fault
+          document.getElementById("id_edittask_task_building").value=data.task_building
+          document.getElementById("id_edittask_task_location").value=data.task_location
+          document.getElementById("id_edittask_task_wing").value=data.task_wing
+          document.getElementById("id_edittask_task_floor").value=data.task_floor
+          document.getElementById("id_edittask_task_category").value=data.task_category
+          document.getElementById("id_edittask_task_problem").value=data.task_problem
+          // document.getElementById("id_edit_task_fault_image").value=data.task_fault_image
+          document.getElementById("id_edittask_task_note").value=data.task_note
+          document.getElementById("id_edittask_customer_name").value=data.customer_name
+          document.getElementById("id_edittask_customer_email").value=data.customer_email
+      
+          // Department
+          const responseSelectDataDept = data.task_dept
+          const selectElementDept = document.getElementById('id_edittask_task_dept');
+
+          for (let i = 0; i < selectElementDept.options.length; i++) {
+    if (selectElementDept.options[i].text === responseSelectDataDept) {
+        // console.log('Select is '+selectElementContact.options[i].text)
+        // Set the selected attribute for the matching option
+        selectElementDept.options[i].selected = true;
+        // Break out of the loop since we found the matching option
+        break;
+    }
+
+
+}
+
+ 
+
+
+ 
+    // Priority
+    const responseSelectDataPriority = data.priority_level
+    const selectElementPriority = document.getElementById('id_edittask_priority_level');
+
+          for (let i = 0; i < selectElementPriority.options.length; i++) {
+    if (selectElementPriority.options[i].text === responseSelectDataPriority) {
+        // Set the selected attribute for the matching option
+        selectElementPriority.options[i].selected = true;
+        // Break out of the loop since we found the matching option
+        break;
+    }
+
+
+}
+
+
+    })
+          .catch(error => {
+            console.error('Error:', error);
+        });
+    
+  
+};
+
+
     function get_job_schedule_detail(job_id){
   // Get the lead ID from somewhere (e.g., data attribute on the modal element)
     // const response = await fetch(interactionUrl);
@@ -98,7 +176,6 @@
             return response.json();
         })
         .then(data => {
-          console.log(data);
           document.getElementById("id_edit_update_job_id").value=data.job_schedule_id
           document.getElementById("id_edit_scheduled_datetime").value=data.scheduled_datetime
           document.getElementById("id_edit_task_asset_with_fault").value=data.task_asset_with_fault
@@ -108,13 +185,74 @@
           document.getElementById("id_edit_task_floor").value=data.task_floor
           document.getElementById("id_edit_task_category").value=data.task_category
           document.getElementById("id_edit_task_problem").value=data.task_problem
-          document.getElementById("id_edit_task_fault_image").value=data.task_fault_image
+          // document.getElementById("id_edit_task_fault_image").value=data.task_fault_image
           document.getElementById("id_edit_task_note").value=data.task_note
           document.getElementById("id_edit_customer_name").value=data.customer_name
           document.getElementById("id_edit_customer_email").value=data.customer_email
           document.getElementById("id_edit_customer_feedback_post_date").innerHTML=data.feedback_post_date
           document.getElementById("id_edit_customer_feedback").innerHTML=data.feedback
 
+          // Department
+          const responseSelectDataDept = data.task_dept
+          const selectElementDept = document.getElementById('id_edit_task_dept');
+
+          for (let i = 0; i < selectElementDept.options.length; i++) {
+    if (selectElementDept.options[i].text === responseSelectDataDept) {
+        // console.log('Select is '+selectElementContact.options[i].text)
+        // Set the selected attribute for the matching option
+        selectElementDept.options[i].selected = true;
+        // Break out of the loop since we found the matching option
+        break;
+    }
+
+
+}
+
+          // Assigned
+          const responseSelectDataStaff = data.assigned_name
+          const selectElementStaff = document.getElementById('id_edit_assigned_staff_id');
+
+          for (let i = 0; i < selectElementStaff.options.length; i++) {
+    if (selectElementStaff.options[i].text === responseSelectDataStaff) {
+        // console.log('Select is '+selectElementContact.options[i].text)
+        // Set the selected attribute for the matching option
+        selectElementStaff.options[i].selected = true;
+        // Break out of the loop since we found the matching option
+        break;
+    }
+
+
+}
+
+
+         // Status
+         const responseSelectDataStatus = data.job_status
+          const selectElementStatus = document.getElementById('id_edit_job_status');
+
+          for (let i = 0; i < selectElementStatus.options.length; i++) {
+    if (selectElementStatus.options[i].text === responseSelectDataStatus) {
+        // Set the selected attribute for the matching option
+        selectElementStatus.options[i].selected = true;
+        // Break out of the loop since we found the matching option
+        break;
+    }
+
+
+}
+    // Priority
+    const responseSelectDataPriority = data.priority_level
+    const selectElementPriority = document.getElementById('id_edit_priority_level');
+
+          for (let i = 0; i < selectElementPriority.options.length; i++) {
+    if (selectElementPriority.options[i].text === responseSelectDataPriority) {
+        // Set the selected attribute for the matching option
+        selectElementPriority.options[i].selected = true;
+        // Break out of the loop since we found the matching option
+        break;
+    }
+
+
+}
 
 
     })
