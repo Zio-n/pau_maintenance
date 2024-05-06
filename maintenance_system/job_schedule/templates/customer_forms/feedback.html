@@ -17,7 +17,7 @@
         <!-- Form -->
         <form method="post">
             <div class="mb-4">
-                <textarea name="feedback_text" class="py-3 px-4 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600" rows="3" placeholder="What did you think about the fix"></textarea>
+                <textarea name="feedback_text" class="py-3 px-4 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600" rows="3" placeholder="What did you think about the fix" required></textarea>
               </div>
   
           <div class="grid">
@@ -33,4 +33,28 @@
     <!-- End Col -->
   </div>
   <!-- End Hero -->
+
+   <!-- Toast -->
+   {% for message in messages %}
+   {% if message.tags == 'error' %}
+<div id="error-message-shift" class="mr-5 mb-5 absolute bottom-0 end-0">
+<div class="max-w-xs bg-red-100 border border-red-200 text-sm text-red-800 rounded-lg dark:bg-red-800/10 dark:border-red-900 dark:text-red-500" role="alert">
+ <div class="flex p-4">
+   {{ message }}
+
+   <div class="ms-auto">
+     <button type="button" class="inline-flex flex-shrink-0 justify-center items-center size-5 rounded-lg text-red-800 opacity-50 hover:opacity-100 focus:outline-none focus:opacity-100 dark:text-red-200" data-hs-remove-element="#error-message-shift">
+       <span class="sr-only">Close</span>
+       <svg class="flex-shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+         <path d="M18 6 6 18"></path>
+         <path d="m6 6 12 12"></path>
+       </svg>
+     </button>
+   </div>
+ </div>
+</div>
+</div>
+{% endif %}
+{% endfor %}
+<!-- End Toast -->
 {% endblock feedbackcontent %}
