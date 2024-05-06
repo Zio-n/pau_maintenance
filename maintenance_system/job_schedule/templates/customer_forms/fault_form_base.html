@@ -59,6 +59,34 @@
 
   
 <script>
+document.addEventListener("DOMContentLoaded", function() {
+  const selectElement = document.getElementById("id_add_task_building");
+  const otherFieldSection = document.getElementById("other_task_building");
+  const targetOptionValue = "Other";
+
+  selectElement.addEventListener("change", function() {
+    if (selectElement.value === targetOptionValue) {
+      otherFieldSection.classList.remove("hidden");
+    } else {
+      otherFieldSection.classList.add("hidden");
+    }
+  });
+});
+
+document.addEventListener("DOMContentLoaded", function() {
+  const selectElement = document.getElementById("id_add_task_floor");
+  const otherFieldSection = document.getElementById("other_task_floor");
+  const targetOptionValue = "Other";
+
+  selectElement.addEventListener("change", function() {
+    if (selectElement.value === targetOptionValue) {
+      otherFieldSection.classList.remove("hidden");
+    } else {
+      otherFieldSection.classList.add("hidden");
+    }
+  });
+});
+
 
 function getCookie(name) {
           let cookieValue = null;

@@ -20,7 +20,6 @@ def job_schedule(request):
         assigned_inprogres_jobs = TaskFunnel.objects.filter(job_status__in=['assigned', 'in progress'])
         completed_jobs = TaskFunnel.objects.filter(job_status='completed')
         
-        addform = AddJobScheduleForm()
         editform = UpdateJobScheduleForm()
         edittaskform = UpdateTaskForm()
         
@@ -28,14 +27,17 @@ def job_schedule(request):
             'unassignedjobs': unassigned_jobs,
             'assignedjobs': assigned_inprogres_jobs,
             'completedjobs': completed_jobs,
-            'addform': addform,
             'editform': editform,
             'edittaskform': edittaskform
         }
     return render(request,'job_schedule.html', context)
 
 def fault_form(request):
-    return render(request,'customer_forms/fault_form.html')
+    addform = AddJobScheduleForm()
+    context={
+        'addform': addform,
+    }
+    return render(request,'customer_forms/fault_form.html', context)
 
 def add_job_schedule(request):
     form = AddJobScheduleForm(request.POST)

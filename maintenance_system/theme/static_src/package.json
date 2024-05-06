@@ -26,6 +26,7 @@
     "tailwindcss": "^3.4.0"
   },
   "dependencies": {
+    "@preline/select": "^2.1.0",
     "apexcharts": "^3.49.0",
     "lodash": "^4.17.21",
     "preline": "^2.1.0"
