@@ -48,6 +48,7 @@ class TaskFunnel(models.Model):
         ('Low', 'Low'),
     ))
     feedback_post_date = models.DateField(blank=True, null=True)
+    feedback_url_status = models.BooleanField(default=True)
     feedback = models.TextField(blank=True)
     
     def save(self, *args, **kwargs):

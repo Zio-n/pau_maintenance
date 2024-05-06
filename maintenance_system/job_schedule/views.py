@@ -4,7 +4,8 @@ from .models import TaskFunnel
 from django.http import JsonResponse
 import uuid
 from django.contrib import messages
-
+from django.utils import timezone
+from django.views.decorators.csrf import csrf_exempt
 
 def job_schedule(request):
     if request.method == 'POST':
@@ -45,6 +46,30 @@ def fault_form(request):
     
 def fault_success(request):
     return render(request,'customer_forms/fault_form_success.html')
+
+def feedback_success(request):
+     return render(request,'customer_forms/feedback_success.html')
+
+
+@csrf_exempt
+def feedback_form(request):
+    form_id  = request.GET.get('form_id')
+    task_funnel = get_object_or_404(TaskFunnel, form_id=form_id)
+    feedback_status = task_funnel.feedback_url_status
+    if request.method == 'POST':
+        feedback_text = request.POST.get('feedback_text')  # Assuming feedback text is sent in the request
+        if feedback_text:
+            task_funnel.feedback = feedback_text
+            task_funnel.feedback_post_date = timezone.now()
+            task_funnel.feedback_url_status = False
+            task_funnel.save()
+            return redirect('feedback_success')  # Return JSON response indicating success
+        else:
+            return redirect(request.path)
+    elif feedback_status:
+        return render(request,'customer_forms/feedback.html')  # Method not allowed if request method is not POST
+    else:
+        return render(request,'customer_forms/feedback_inactive.html')
 
 def add_job_schedule(request):
     form = AddJobScheduleForm(request.POST)
