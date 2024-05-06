@@ -59,6 +59,35 @@
 
   
 <script>
+function validateFile(input) {
+        const file = input.files[0];
+        const allowedTypes = ['application/msword', 'application/vnd.ms-excel', 'application/vnd.ms-powerpoint', 'application/pdf', 'image/jpeg', 'image/png', 'image/gif', 'video/mp4', 'video/quicktime', 'audio/mpeg'];
+        const maxSize = 10 * 1024 * 1024; // 10MB
+
+        if (!file) {
+            return;
+        }
+
+        if (!allowedTypes.includes(file.type)) {
+            alert("Unsupported file type.");
+            input.value = ''; // Clear input
+            return;
+        }
+
+        if (file.size > maxSize) {
+            alert("File size exceeds the limit.");
+            input.value = ''; // Clear input
+            return;
+        }
+
+        if (input.files.length > 1) {
+            alert("Only one file is allowed.");
+            input.value = ''; // Clear input
+            return;
+        }
+    }
+
+
 document.addEventListener("DOMContentLoaded", function() {
   const selectElement = document.getElementById("id_add_task_building");
   const otherFieldSection = document.getElementById("other_task_building");
@@ -76,6 +105,34 @@ document.addEventListener("DOMContentLoaded", function() {
 document.addEventListener("DOMContentLoaded", function() {
   const selectElement = document.getElementById("id_add_task_floor");
   const otherFieldSection = document.getElementById("other_task_floor");
+  const targetOptionValue = "Other";
+
+  selectElement.addEventListener("change", function() {
+    if (selectElement.value === targetOptionValue) {
+      otherFieldSection.classList.remove("hidden");
+    } else {
+      otherFieldSection.classList.add("hidden");
+    }
+  });
+});
+
+document.addEventListener("DOMContentLoaded", function() {
+  const selectElement = document.getElementById("id_add_task_location");
+  const otherFieldSection = document.getElementById("other_task_location");
+  const targetOptionValue = "Other";
+
+  selectElement.addEventListener("change", function() {
+    if (selectElement.value === targetOptionValue) {
+      otherFieldSection.classList.remove("hidden");
+    } else {
+      otherFieldSection.classList.add("hidden");
+    }
+  });
+});
+
+document.addEventListener("DOMContentLoaded", function() {
+  const selectElement = document.getElementById("id_add_task_category");
+  const otherFieldSection = document.getElementById("other_task_category");
   const targetOptionValue = "Other";
 
   selectElement.addEventListener("change", function() {

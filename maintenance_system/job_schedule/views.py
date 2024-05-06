@@ -3,6 +3,8 @@ from .forms import UpdateJobScheduleForm, UpdateTaskForm, AddJobScheduleForm
 from .models import TaskFunnel
 from django.http import JsonResponse
 import uuid
+from django.contrib import messages
+
 
 def job_schedule(request):
     if request.method == 'POST':
@@ -10,8 +12,6 @@ def job_schedule(request):
             return update_task_schedule(request)
         elif request.POST.get('action_type') == 'update_job_schedule':
             return update_job_schedule(request)
-        elif request.POST.get('action_type') == 'add_job_schedule':
-            return add_job_schedule(request)
         else:
             return redirect(request.path)
         form = ShiftScheduleForm(request.POST)
@@ -33,18 +33,25 @@ def job_schedule(request):
     return render(request,'job_schedule.html', context)
 
 def fault_form(request):
-    addform = AddJobScheduleForm()
-    context={
-        'addform': addform,
-    }
-    return render(request,'customer_forms/fault_form.html', context)
+    if request.method == 'POST':
+          if request.POST.get('action_type') == 'add_job_schedule':
+            return add_job_schedule(request)
+    else:
+        addform = AddJobScheduleForm()
+        context={
+            'addform': addform,
+        }
+        return render(request,'customer_forms/fault_form.html', context)
+    
+def fault_success(request):
+    return render(request,'customer_forms/fault_form_success.html')
 
 def add_job_schedule(request):
     form = AddJobScheduleForm(request.POST)
     if form.is_valid():
         form.save()
         messages.success(request, 'Job added successfully.')
-        return redirect('job_schedule')  # Redirect to desired location
+        return redirect('fault_success')  # Redirect to desired location
     else:
         for error in form.errors:
             messages.error(request, form.errors[error])
