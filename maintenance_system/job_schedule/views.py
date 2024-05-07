@@ -279,3 +279,15 @@ def update_task_schedule(request):
             messages.error(request, editform.errors[error])
     return redirect(request.path)  # Fallback in case of non-POST requests
 
+def delete_job_schedule(request, job_id):
+    if request.method == 'POST':
+        try:
+            job = get_object_or_404(TaskFunnel, pk=job_id)
+            job.delete()
+            messages.success(request, 'Job deleted successfully.')
+            return redirect('job_schedule')  # Redirect to desired location
+        except TaskFunnel.DoesNotExist:
+            messages.error(request, 'Job not found.')
+            return redirect('job_schedule')  # Or another error page
+    else:
+        return redirect('job_schedule')

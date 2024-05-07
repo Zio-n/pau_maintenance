@@ -62,7 +62,7 @@
                                 </svg>                  
                                 Edit details
                               </button>
-                              <form method="post" class="inline-flex items-center" action="#">
+                              <form method="post" class="inline-flex items-center" action="{% url 'delete_job' unassignedjob.pk %}">
                                 <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
                                 <button type="submit" class="py-2 px-3 gap-x-2 inline-flex items-center text-sm font-semibold rounded-lg border border-transparent bg-red-500 text-white hover:bg-red-600 disabled:opacity-50 disabled:pointer-events-none">
                                   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
@@ -170,7 +170,7 @@
                                   </svg>                  
                                   Edit
                                 </button>
-                                <form method="post" class="inline-flex items-center" action="#">
+                                <form method="post" class="inline-flex items-center" action="{% url 'delete_job' assignedjob.pk %}">
                                   <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
                                   <button type="submit" class="py-2 px-3 gap-x-2 inline-flex items-center text-sm font-semibold rounded-lg border border-transparent bg-red-500 text-white hover:bg-red-600 disabled:opacity-50 disabled:pointer-events-none">
                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
@@ -227,7 +227,7 @@
                                   </svg>                  
                                   Edit
                                 </button>
-                                <form method="post" class="inline-flex items-center" action="#">
+                                <form method="post" class="inline-flex items-center" action="{% url 'delete_job' completedjob.pk %}">
                                   <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
                                   <button type="submit" class="py-2 px-3 gap-x-2 inline-flex items-center text-sm font-semibold rounded-lg border border-transparent bg-red-500 text-white hover:bg-red-600 disabled:opacity-50 disabled:pointer-events-none">
                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
