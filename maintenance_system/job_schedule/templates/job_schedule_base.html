@@ -62,28 +62,24 @@
   
 <script>
      flatpickr("#id_scheduled_date", {
-        altInput: true,
-        altFormat: "F j, Y",
         dateFormat: "Y-m-d",
     });
 
     flatpickr("#id_edittask_scheduled_datetime", {
-        altInput: true,
-        altFormat: "F j, Y",
         dateFormat: "Y-m-d",
     });
 
     flatpickr("#id_edit_scheduled_datetime", {
-        altInput: true,
-        altFormat: "F j, Y",
         dateFormat: "Y-m-d",
     });
+
+
 
     function get_task_schedule_detail(job_id){
   // Get the lead ID from somewhere (e.g., data attribute on the modal element)
     // const response = await fetch(interactionUrl);
     const csrftoken = getCookie('csrftoken');
-    const scheduleUrl = `{% url 'job_detail' %}?job_id=${job_id}`;
+    const scheduleUrl = `{% url 'task_detail' %}?job_id=${job_id}`;
         fetch(scheduleUrl, {
             method: 'GET',
             headers: {
@@ -103,11 +99,20 @@
           document.getElementById("id_edittask_asset_with_fault").value=data.task_asset_with_fault
           document.getElementById("id_edittask_task_building").value=data.task_building
           document.getElementById("id_edittask_task_location").value=data.task_location
-          document.getElementById("id_edittask_task_wing").value=data.task_wing
+          document.getElementById("id_edittask_wing").value=data.task_wing
           document.getElementById("id_edittask_task_floor").value=data.task_floor
           document.getElementById("id_edittask_task_category").value=data.task_category
           document.getElementById("id_edittask_task_problem").value=data.task_problem
-          // document.getElementById("id_edit_task_fault_image").value=data.task_fault_image
+          if (data.task_fault_image) {
+            const downloadButton = document.getElementById("trigger-download");
+            const imageUrl = data.task_fault_image;
+            // Update the image element's src attribute with the URL
+            document.getElementById("id_edittask_task_fault_image_name").value = imageUrl;
+            downloadButton.download=imageUrl;
+            downloadButton.href = imageUrl;
+        }else{
+            document.getElementById("id_edit_task_fault_image_name").value = '';
+        }
           document.getElementById("id_edittask_task_note").value=data.task_note
           document.getElementById("id_edittask_customer_name").value=data.customer_name
           document.getElementById("id_edittask_customer_email").value=data.customer_email
@@ -185,7 +190,17 @@
           document.getElementById("id_edit_task_floor").value=data.task_floor
           document.getElementById("id_edit_task_category").value=data.task_category
           document.getElementById("id_edit_task_problem").value=data.task_problem
-          // document.getElementById("id_edit_task_fault_image").value=data.task_fault_image
+          if (data.task_fault_image) {
+            const downloadButton = document.getElementById("trigger-download");
+            const imageUrl = data.task_fault_image;
+            // Update the image element's src attribute with the URL
+            document.getElementById("id_edit_task_fault_image_name").value = imageUrl;
+            downloadButton.download=imageUrl;
+            downloadButton.href = imageUrl;
+        }else{
+            document.getElementById("id_edit_task_fault_image_name").value = '';
+        }
+
           document.getElementById("id_edit_task_note").value=data.task_note
           document.getElementById("id_edit_customer_name").value=data.customer_name
           document.getElementById("id_edit_customer_email").value=data.customer_email
@@ -262,6 +277,35 @@
     
   
 };
+
+function validateFile(input) {
+        const file = input.files[0];
+        const allowedTypes = ['application/msword', 'application/vnd.ms-excel', 'application/vnd.ms-powerpoint', 'application/pdf', 'image/jpeg', 'image/png', 'image/gif', 'video/mp4', 'video/quicktime', 'audio/mpeg'];
+        const maxSize = 10 * 1024 * 1024; // 10MB
+
+        if (!file) {
+            return;
+        }
+
+        if (!allowedTypes.includes(file.type)) {
+            alert("Unsupported file type.");
+            input.value = ''; // Clear input
+            return;
+        }
+
+        if (file.size > maxSize) {
+            alert("File size exceeds the limit.");
+            input.value = ''; // Clear input
+            return;
+        }
+
+        if (input.files.length > 1) {
+            alert("Only one file is allowed.");
+            input.value = ''; // Clear input
+            return;
+        }
+    }
+
 
 function getCookie(name) {
           let cookieValue = null;

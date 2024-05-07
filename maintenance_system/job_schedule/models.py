@@ -46,7 +46,7 @@ class TaskFunnel(models.Model):
         ('High', 'High'),
         ('Mid', 'Mid'),
         ('Low', 'Low'),
-    ))
+    ), default='Mid')
     feedback_post_date = models.DateField(blank=True, null=True)
     feedback_url_status = models.BooleanField(default=True)
     feedback = models.TextField(blank=True)

@@ -4,7 +4,7 @@ from accounts.models import User
 from django.shortcuts import render, get_object_or_404
 import uuid
 import json
-
+from django.core.mail import send_mail
 
 
 DEPARTMENTS = [
@@ -315,29 +315,38 @@ class AddJobScheduleForm(forms.ModelForm):
 
 class UpdateTaskForm(forms.ModelForm):
     action_type = forms.CharField(widget=forms.HiddenInput(), initial='update_task_schedule')
+    assigned_staff_id = forms.ModelChoiceField(queryset=User.objects.filter(is_active=True, is_superuser=False), label='Technician', required=False,)
     task_dept = forms.ChoiceField(choices=DEPARTMENTS, required=True,)
+    job_status = forms.ChoiceField(choices=STATUS, required=True,)
     priority_level = forms.ChoiceField(choices=PRIORITY, required=True,)
     update_task_id = forms.CharField(widget=forms.HiddenInput())
+    fault_image_name = forms.CharField(required=False,)
+    customer_name = forms.CharField(required=True,)
+    customer_email = forms.CharField(required=True,)
     
     
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['action_type'].widget.attrs.update({'id': 'id_edittask_action_type'})
         self.fields['update_task_id'].widget.attrs.update({'id': 'id_edittask_update_task_id'})
+        self.fields['assigned_staff_id'].widget.attrs.update({'id': 'id_edittask_assigned_staff_id'})
+        self.fields['job_status'].widget.attrs.update({'id': 'id_edittask_job_status'})
         self.fields['task_building'].widget.attrs.update({'id': 'id_edittask_task_building'})
         self.fields['task_location'].widget.attrs.update({'id': 'id_edittask_task_location'})
-        self.fields['task_wing'].widget.attrs.update({'id': 'id_edittask_task_wing'})
+        self.fields['task_wing'].widget.attrs.update({'id': 'id_edittask_wing'})
         self.fields['task_category'].widget.attrs.update({'id': 'id_edittask_task_category'})
         self.fields['task_asset_with_fault'].widget.attrs.update({'id': 'id_edittask_asset_with_fault'})
         self.fields['task_problem'].widget.attrs.update({'id': 'id_edittask_task_problem'})
         self.fields['task_note'].widget.attrs.update({'id': 'id_edittask_task_note'})
-        self.fields['task_fault_image'].widget.attrs.update({'id': 'id_edittask_task_fault_image'})
+        # self.fields['fault_image_name'].widget.attrs.update({'id': 'id_edittask_task_fault_image_name'})
         self.fields['task_floor'].widget.attrs.update({'id': 'id_edittask_task_floor'})
         self.fields['task_dept'].widget.attrs.update({'id': 'id_edittask_task_dept'})
         self.fields['customer_name'].widget.attrs.update({'id': 'id_edittask_customer_name'})
         self.fields['customer_email'].widget.attrs.update({'id': 'id_edittask_customer_email'})
         self.fields['scheduled_datetime'].widget.attrs.update({'id': 'id_edittask_scheduled_datetime'})        
         self.fields['priority_level'].widget.attrs.update({'id': 'id_edittask_priority_level'})
+                
+        self.fields['assigned_staff_id'].label_from_instance = self.label_from_instance
     
     @staticmethod
     def label_from_instance(obj):
@@ -345,7 +354,7 @@ class UpdateTaskForm(forms.ModelForm):
     
     class Meta:
         model = TaskFunnel
-        fields = ('task_dept', 'task_building', 'task_location', 'task_wing', 'task_category', 'task_asset_with_fault', 'task_problem', 'task_note', 'task_fault_image', 'task_floor', 'customer_name', 'customer_email', 'scheduled_datetime', 'priority_level',)
+        fields = ('assigned_staff_id', 'job_status', 'task_dept', 'task_building', 'task_location', 'task_wing', 'task_category', 'task_asset_with_fault', 'task_problem', 'task_note', 'task_floor', 'customer_name', 'customer_email', 'scheduled_datetime', 'priority_level',)
         widgets = {
             'task_problem': forms.Textarea(attrs={'rows':'3'}),
             'task_note': forms.Textarea(attrs={'rows':'3'})
@@ -358,13 +367,17 @@ class UpdateTaskForm(forms.ModelForm):
         return instance
 
 
+
 class UpdateJobScheduleForm(forms.ModelForm):
     action_type = forms.CharField(widget=forms.HiddenInput(), initial='update_job_schedule')
-    assigned_staff_id = forms.ModelChoiceField(queryset=User.objects.filter(is_active=True, is_superuser=False), label='Technician')
+    assigned_staff_id = forms.ModelChoiceField(queryset=User.objects.filter(is_active=True, is_superuser=False), label='Technician', required=False,)
     task_dept = forms.ChoiceField(choices=DEPARTMENTS, required=True,)
     job_status = forms.ChoiceField(choices=STATUS, required=True,)
     priority_level = forms.ChoiceField(choices=PRIORITY, required=True,)
     update_job_id = forms.CharField(widget=forms.HiddenInput())
+    fault_image_name = forms.CharField(required=False,)
+    customer_name = forms.CharField(required=True,)
+    customer_email = forms.CharField(required=True,)
     
     
     def __init__(self, *args, **kwargs):
@@ -380,7 +393,7 @@ class UpdateJobScheduleForm(forms.ModelForm):
         self.fields['task_asset_with_fault'].widget.attrs.update({'id': 'id_edit_task_asset_with_fault'})
         self.fields['task_problem'].widget.attrs.update({'id': 'id_edit_task_problem'})
         self.fields['task_note'].widget.attrs.update({'id': 'id_edit_task_note'})
-        self.fields['task_fault_image'].widget.attrs.update({'id': 'id_edit_task_fault_image'})
+        self.fields['fault_image_name'].widget.attrs.update({'id': 'id_edit_task_fault_image_name'})
         self.fields['task_floor'].widget.attrs.update({'id': 'id_edit_task_floor'})
         self.fields['task_dept'].widget.attrs.update({'id': 'id_edit_task_dept'})
         self.fields['customer_name'].widget.attrs.update({'id': 'id_edit_customer_name'})
@@ -396,11 +409,57 @@ class UpdateJobScheduleForm(forms.ModelForm):
     
     class Meta:
         model = TaskFunnel
-        fields = ('assigned_staff_id', 'job_status', 'task_dept', 'task_building', 'task_location', 'task_wing', 'task_category', 'task_asset_with_fault', 'task_problem', 'task_note', 'task_fault_image', 'task_floor', 'customer_name', 'customer_email', 'scheduled_datetime', 'priority_level',)
+        fields = ('assigned_staff_id', 'job_status', 'task_dept', 'task_building', 'task_location', 'task_wing', 'task_category', 'task_asset_with_fault', 'task_problem', 'task_note', 'task_floor', 'customer_name', 'customer_email', 'scheduled_datetime', 'priority_level',)
         widgets = {
             'task_problem': forms.Textarea(attrs={'rows':'3'}),
             'task_note': forms.Textarea(attrs={'rows':'3'})
         }
+    
+    def clean(self):
+        cleaned_data = super().clean()
+        task_dept = cleaned_data.get('task_dept')
+        assigned_staff = cleaned_data.get('assigned_staff_id')
+        job_id = cleaned_data.get('update_job_id')
+        job = get_object_or_404(TaskFunnel, pk=job_id)
+        current_task_dept = job.task_dept
+        current_assigned_staff = job.assigned_staff_id
+        # Check if the department is changed
+        if self.is_valid():
+            # handle department
+            if task_dept != current_task_dept:
+                # Define the roles to be checked for each department
+                department_roles = {
+                    'Electrical': ['Team Lead Elect', 'Manager Elect', 'Ass Manager Elect'],
+                    'Mechanical': ['Team Lead Mech', 'Manager Mech', 'Ass Manager Mech'],
+                    'HVAC': ['Team Lead HVAC', 'Manager HVAC', 'Ass Manager HVAC'],
+                }
+                # Get users with roles corresponding to the selected department
+                users_emails = []
+                for role in department_roles.get(task_dept, []):
+                    users = User.objects.filter(staff__role=role)
+                    users_emails.extend(users.values_list('email', flat=True))
+                print(f"user emails list {users_emails}")
+                # Send emails to the collected users
+                # send_mail(
+                #     'Department Update',
+                #     f'The department has been updated to {task_dept}',
+                #     'from@example.com',
+                #     users_emails,
+                #     fail_silently=True,
+                # )
+            # handle assigned user
+            if assigned_staff != current_assigned_staff:
+                newly_assigned_email = assigned_staff.email
+                print(f"Sending email to {newly_assigned_email} for assignment")
+                # send_mail(
+                #     'Assignment Update',
+                #     f'You have been assigned a new task.',
+                #     'from@example.com',
+                #     [newly_assigned_email],
+                #     fail_silently=True,
+                # )
+            
+        return cleaned_data
     
     def save(self, commit=True):
         instance = super().save(commit=False)
