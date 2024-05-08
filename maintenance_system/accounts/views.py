@@ -9,7 +9,8 @@ from django.template.loader import render_to_string
 from django.http import HttpResponseServerError
 from django.core.mail import send_mail
 from django.contrib.auth.models import Group, Permission
-
+from job_schedule.models import TaskFunnel
+from django.db.models import Avg, F
 
 # Create your views here.
 def manage_accounts(request):
@@ -169,4 +170,18 @@ def reset_password(request):
     return render(request,'reset_password.html')
 
 def dashboard(request):
-    return render(request,'dashboard/dashboard.html')
+  completed_jobs = TaskFunnel.objects.filter(job_status='completed')
+  total_jobs = completed_jobs.count()
+
+  # Calculate average resolution time (consider edge case of no completed jobs)
+  if completed_jobs.exists():
+    average_resolution_time = completed_jobs.aggregate(avg_resolution_time=Avg(F('completed_date') - F('task_upload_date')))['avg_resolution_time']
+  else:
+    average_resolution_time = None
+
+  context = {
+    'total_jobs': total_jobs,
+    'average_resolution_time': average_resolution_time,
+    # Add other relevant data for the dashboard here
+  }
+  return render(request, 'dashboard/dashboard.html', context)

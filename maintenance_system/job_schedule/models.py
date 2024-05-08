@@ -24,6 +24,8 @@ class TaskFunnel(models.Model):
         ('in progress', 'in progress'),
         ('completed', 'completed'),
     ), default='unassigned')
+    task_upload_date = models.DateField(blank=True, null=True)
+    completed_date = models.DateField(blank=True, null=True)
     task_building = models.CharField(max_length=254, blank=True)
     task_location = models.CharField(max_length=254)
     task_wing = models.CharField(max_length=254)

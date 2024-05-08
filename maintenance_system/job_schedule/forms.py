@@ -7,6 +7,7 @@ import json
 from django.core.mail import send_mail
 from django.template.loader import render_to_string
 from django.conf import settings
+from django.utils import timezone
 
 DEPARTMENTS = [
          ('Electrical', 'Electrical'),
@@ -238,7 +239,8 @@ class AddJobScheduleForm(forms.ModelForm):
     customer_email = forms.CharField(required=True,)
     task_asset_with_fault = forms.CharField(required=True,)
     task_problem = forms.CharField(required=True,)
-    task_fault_image = forms.FileField(required=False)
+    task_fault_image = forms.FileField(required=False,)
+    task_upload_date = forms.DateTimeField(widget=forms.HiddenInput(), initial=timezone.now())
     
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -268,7 +270,7 @@ class AddJobScheduleForm(forms.ModelForm):
     
     class Meta:
         model = TaskFunnel
-        fields = ('task_dept', 'task_building', 'task_location', 'task_wing', 'task_category', 'task_asset_with_fault', 'task_problem', 'task_note', 'task_fault_image', 'task_floor', 'customer_name', 'customer_email', 'scheduled_datetime',)
+        fields = ('task_upload_date', 'task_dept', 'task_building', 'task_location', 'task_wing', 'task_category', 'task_asset_with_fault', 'task_problem', 'task_note', 'task_fault_image', 'task_floor', 'customer_name', 'customer_email', 'scheduled_datetime',)
         widgets = {
             'task_problem': forms.Textarea(attrs={'rows':'3'}),
             'task_note': forms.Textarea(attrs={'rows':'3'})

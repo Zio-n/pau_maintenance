@@ -86,9 +86,12 @@ def add_job_schedule(request):
         messages.success(request, 'Job added successfully.')
         return redirect('fault_success')  # Redirect to desired location
     else:
-        for error in form.errors:
-            messages.error(request, form.errors[error])
+        for field, errors in form.errors.items():
+            for error in errors:
+                messages.error(request, f"{field.capitalize()}: {error}")
     return redirect(request.path)  # Fallback in case of non-POST requests
+
+
 
 
 def job_schedule_detail(request):
@@ -196,6 +199,8 @@ def update_job_schedule(request):
         
         job.assigned_staff_id = job_assigned_staff
         job.job_status = job_status
+        if job_status == 'completed':
+            job.completed_date = timezone.now()
         job.task_building = job_task_building
         job.task_location = job_task_location
         job.task_wing = job_task_wing

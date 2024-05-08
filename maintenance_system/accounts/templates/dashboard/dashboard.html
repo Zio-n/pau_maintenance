@@ -37,7 +37,7 @@
                      </div>
                
                 <h3 class="mt-1 text-xl sm:text-3xl font-semibold text-blue-600 dark:text-blue-500">
-                  720
+                  {{ total_jobs }}
                 </h3>
                 <div class="mt-1 flex justify-end items-center">
                   <span class="ms-1 inline-flex items-center gap-1.5 py-1 px-2 rounded-md text-xs font-medium bg-gray-200 text-gray-800 dark:bg-neutral-800 dark:text-neutral-200">
@@ -79,7 +79,11 @@
                      </div>
                
                 <h3 class="mt-1 text-xl sm:text-3xl font-semibold text-blue-600 dark:text-blue-500">
-                  5.2 days
+                  {% if average_resolution_time %}
+                {{ average_resolution_time.days }} days
+                {% else %}
+                  No completed jobs yet.
+                {% endif %}
                 </h3>
                 <div class="mt-1 flex justify-end items-center">
                   <!-- <p class="text-sm text-gray-500 dark:text-neutral-500">
