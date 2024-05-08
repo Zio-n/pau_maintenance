@@ -445,6 +445,8 @@
 </script>
 
   <script>
+     var jobTrendData = JSON.parse('{{ job_trend_data | escapejs }}');
+     var jobTrendLabels = JSON.parse('{{ job_trend_labels | escapejs }}');
     window.addEventListener('load', () => {
       // Apex Single Line Charts
       (function () {
@@ -462,7 +464,7 @@
           series: [
             {
               name: 'Jobs',
-              data: [0, 270, 250, 350, 400]
+              data: jobTrendData
             }
           ],
           dataLabels: {
@@ -489,13 +491,7 @@
           },
           xaxis: {
             type: 'category',
-            categories: [
-              '25 January 2023',
-              '28 January 2023',
-              '31 January 2023',
-              '1 February 2023',
-              '3 February 2023'
-            ],
+            categories: jobTrendLabels,
             axisBorder: {
               show: false
             },
@@ -604,6 +600,12 @@
 
 
 <script>
+  // Retrieve the top five assigned staff data from the context
+  var topAssignedStaff = JSON.parse('{{ top_staffs | escapejs }}');
+  // Extract the names and job counts from the top assigned staff data
+  const names = topAssignedStaff.map(staff => staff.user);
+  const jobCounts = topAssignedStaff.map(staff => staff.total_completed_jobs);
+
   window.addEventListener('load', () => {
     // Apex Single Bar Charts
     (function () {
@@ -621,7 +623,7 @@
         series: [
           {
             name: 'Jobs',
-            data: [20, 40, 55, 15, 630]
+            data: jobCounts
           }
         ],
         plotOptions: {
@@ -643,13 +645,7 @@
           colors: ['transparent']
         },
         xaxis: {
-          categories: [
-            'James Smith',
-            'William Smith',
-            'Zion Umoh',
-            'Oghale Fiona',
-            'Olumide Ogurewa',
-          ],
+          categories: names,
           axisBorder: {
             show: false
           },

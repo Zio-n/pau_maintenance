@@ -12,6 +12,9 @@ from django.contrib.auth.models import Group, Permission
 from job_schedule.models import TaskFunnel
 from django.db.models import Avg, F
 from django.http import JsonResponse
+from django.db.models import Count
+import json
+
 
 # Create your views here.
 def manage_accounts(request):
@@ -171,48 +174,52 @@ def reset_password(request):
     return render(request,'reset_password.html')
 
 def dashboard(request):
-  completed_jobs = TaskFunnel.objects.filter(job_status='completed')
-  in_progress_jobs = TaskFunnel.objects.filter(job_status='in progress').count()
-  assigned_jobs = TaskFunnel.objects.filter(job_status='assigned').count()
-  unassigned_jobs = TaskFunnel.objects.filter(job_status='unassigned').count()
-  total_jobs = completed_jobs.count()
-  
-  job_status ={
-      'unassigned': unassigned_jobs,
-      'assigned': assigned_jobs,
-      'in_progress': in_progress_jobs,
-      'completed': total_jobs,
-  }
-  # Calculate average resolution time (consider edge case of no completed jobs)
-  if completed_jobs.exists():
-    average_resolution_time = completed_jobs.aggregate(avg_resolution_time=Avg(F('completed_date') - F('task_upload_date')))['avg_resolution_time']
-  else:
-    average_resolution_time = None
-
-  context = {
-    'total_jobs': total_jobs,
-    'average_resolution_time': average_resolution_time,
-    'job_status': job_status
-    # Add other relevant data for the dashboard here
-  }
-  return render(request, 'dashboard/dashboard.html', context)
-
-def get_dashboard_stats(request):
-    completed_jobs = TaskFunnel.objects.filter(job_status='completed').count()
+    completed_jobs = TaskFunnel.objects.filter(job_status='completed')
     in_progress_jobs = TaskFunnel.objects.filter(job_status='in progress').count()
     assigned_jobs = TaskFunnel.objects.filter(job_status='assigned').count()
     unassigned_jobs = TaskFunnel.objects.filter(job_status='unassigned').count()
-
+    total_jobs = completed_jobs.count()
     
+    top_assigned_staff = TaskFunnel.objects.filter(job_status='completed').values('assigned_staff_id').annotate(total_completed_jobs=Count('id')).order_by('-total_completed_jobs')[:5]
+    # print(f'asigne {top_assigned_staff}')
+    top_assigned_staff_with_users = []
+    
+    # Prepare job trend data
+    completed_jobs_for_trend = TaskFunnel.objects.filter(job_status='completed').order_by('-completed_date')[:7]  # Get recent completed jobs (modify limit as needed)
+    job_trend_data = []
+    job_trend_labels = []
+    for job in completed_jobs_for_trend:
+        job_trend_data.append(completed_jobs.count())  # Assuming a count field exists in the model (replace with your field name)
+        job_trend_labels.append(job.completed_date.strftime('%d %b %Y'))  # Format date for labels
+    
+    for staff in top_assigned_staff:
+        user = get_object_or_404(User, pk=staff['assigned_staff_id'])
+        top_assigned_staff_with_users.append({
+                'user': user.name,
+                'total_completed_jobs': staff['total_completed_jobs']
+            })
+    top_staffs = json.dumps(top_assigned_staff_with_users)
+    job_trend_data_populate = json.dumps(job_trend_data)
+    job_trend_labels_populate = json.dumps(job_trend_labels)
     job_status ={
         'unassigned': unassigned_jobs,
         'assigned': assigned_jobs,
         'in_progress': in_progress_jobs,
-        'completed': completed_jobs,
+        'completed': total_jobs,
     }
-    
-    data ={
+    # Calculate average resolution time (consider edge case of no completed jobs)
+    if completed_jobs.exists():
+        average_resolution_time = completed_jobs.aggregate(avg_resolution_time=Avg(F('completed_date') - F('task_upload_date')))['avg_resolution_time']
+    else:
+        average_resolution_time = None
+
+    context = {
+        'total_jobs': total_jobs,
+        'average_resolution_time': average_resolution_time,
         'job_status': job_status,
+        'top_staffs': top_staffs,
+        'job_trend_data': job_trend_data_populate,
+        'job_trend_labels': job_trend_labels_populate,
     }
-    
-    return JsonResponse(data)
+    return render(request, 'dashboard/dashboard.html', context)
+
