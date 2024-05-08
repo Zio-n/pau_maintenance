@@ -11,6 +11,7 @@ from django.core.mail import send_mail
 from django.contrib.auth.models import Group, Permission
 from job_schedule.models import TaskFunnel
 from django.db.models import Avg, F
+from django.http import JsonResponse
 
 # Create your views here.
 def manage_accounts(request):
@@ -171,8 +172,17 @@ def reset_password(request):
 
 def dashboard(request):
   completed_jobs = TaskFunnel.objects.filter(job_status='completed')
+  in_progress_jobs = TaskFunnel.objects.filter(job_status='in progress').count()
+  assigned_jobs = TaskFunnel.objects.filter(job_status='assigned').count()
+  unassigned_jobs = TaskFunnel.objects.filter(job_status='unassigned').count()
   total_jobs = completed_jobs.count()
-
+  
+  job_status ={
+      'unassigned': unassigned_jobs,
+      'assigned': assigned_jobs,
+      'in_progress': in_progress_jobs,
+      'completed': total_jobs,
+  }
   # Calculate average resolution time (consider edge case of no completed jobs)
   if completed_jobs.exists():
     average_resolution_time = completed_jobs.aggregate(avg_resolution_time=Avg(F('completed_date') - F('task_upload_date')))['avg_resolution_time']
@@ -182,6 +192,27 @@ def dashboard(request):
   context = {
     'total_jobs': total_jobs,
     'average_resolution_time': average_resolution_time,
+    'job_status': job_status
     # Add other relevant data for the dashboard here
   }
   return render(request, 'dashboard/dashboard.html', context)
+
+def get_dashboard_stats(request):
+    completed_jobs = TaskFunnel.objects.filter(job_status='completed').count()
+    in_progress_jobs = TaskFunnel.objects.filter(job_status='in progress').count()
+    assigned_jobs = TaskFunnel.objects.filter(job_status='assigned').count()
+    unassigned_jobs = TaskFunnel.objects.filter(job_status='unassigned').count()
+
+    
+    job_status ={
+        'unassigned': unassigned_jobs,
+        'assigned': assigned_jobs,
+        'in_progress': in_progress_jobs,
+        'completed': completed_jobs,
+    }
+    
+    data ={
+        'job_status': job_status,
+    }
+    
+    return JsonResponse(data)

@@ -67,6 +67,11 @@
 
 
   <script>
+     const assigned = Number('{{ job_status.assigned }}')
+      const unassigned = Number('{{ job_status.unassigned }}')
+      const inprogress = Number('{{ job_status.in_progress }}')
+      const completed = Number('{{ job_status.completed }}')
+      const pievalues = [assigned, unassigned, inprogress, completed]
     window.addEventListener('load', () => {
     // Apex Pie Chart
     (function () {
@@ -78,8 +83,8 @@
             enabled: false
           }
         },
-        series: [70, 18, 12, 34],
-        labels: ['Unassigned', 'Assigned', 'In Progress', 'Completed'],
+        series: pievalues,
+        labels: ['Assigned','Unassigned', 'In Progress', 'Completed'],
         title: {
           show: false
         },
