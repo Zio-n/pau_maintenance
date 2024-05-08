@@ -88,14 +88,14 @@ def activate_user(request, user_id):
                 messages.error(request, 'A Role is required')
                 return redirect('manage_account')
 
-            # # Render the HTML email template
-            # email_html_message = render_to_string('emails/confirmation_email.html')
+            # Render the HTML email template
+            email_html_message = render_to_string('emails/confirmation_email.html')
 
-            # # Send account activation email notification
-            # subject = 'PAU Maintenance: Your Account Has Been Activated!'
-            # from_email = settings.EMAIL_HOST_USER  # Replace with your email address
-            # recipient_list = [user.email]
-            # send_mail(subject, '',from_email, recipient_list, html_message=email_html_message)
+            # Send account activation email notification
+            subject = 'PAU Maintenance: Your Account Has Been Activated!'
+            from_email = settings.EMAIL_HOST_USER  # Replace with your email address
+            recipient_list = [user.email]
+            send_mail(subject, '',from_email, recipient_list, html_message=email_html_message)
 
             # Redirect to success page or login page after activation
             return redirect('manage_account')  # Replace with your login URL

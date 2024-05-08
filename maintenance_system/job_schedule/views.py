@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .forms import UpdateJobScheduleForm, UpdateTaskForm, AddJobScheduleForm
+from .forms import UpdateJobScheduleForm, UpdateTaskForm, AddJobScheduleForm, AssignStaffForm
 from .models import TaskFunnel
 from django.http import JsonResponse
 import uuid
@@ -7,7 +7,9 @@ from django.contrib import messages
 from django.utils import timezone
 from django.views.decorators.csrf import csrf_exempt
 import os
-
+from django.core.mail import send_mail
+from django.conf import settings
+from django.template.loader import render_to_string
 
 def job_schedule(request):
     if request.method == 'POST':
@@ -15,6 +17,8 @@ def job_schedule(request):
             return update_task_schedule(request)
         elif request.POST.get('action_type') == 'update_job_schedule':
             return update_job_schedule(request)
+        elif request.POST.get('action_type') == 'assign_staff_job_schedule':
+            return assign_staff(request)
         else:
             return redirect(request.path)
         form = ShiftScheduleForm(request.POST)
@@ -25,13 +29,15 @@ def job_schedule(request):
         
         editform = UpdateJobScheduleForm()
         edittaskform = UpdateTaskForm()
+        assignStaffForm = AssignStaffForm()
         
         context = {
             'unassignedjobs': unassigned_jobs,
             'assignedjobs': assigned_inprogres_jobs,
             'completedjobs': completed_jobs,
             'editform': editform,
-            'edittaskform': edittaskform
+            'edittaskform': edittaskform,
+            'assignStaffForm': assignStaffForm
         }
     return render(request,'job_schedule.html', context)
 
@@ -74,7 +80,7 @@ def feedback_form(request):
         return render(request,'customer_forms/feedback_inactive.html')
 
 def add_job_schedule(request):
-    form = AddJobScheduleForm(request.POST)
+    form = AddJobScheduleForm(request.POST, request.FILES)
     if form.is_valid():
         form.save()
         messages.success(request, 'Job added successfully.')
@@ -223,8 +229,6 @@ def update_task_schedule(request):
     editform = UpdateTaskForm(request.POST, request.FILES)
     if editform.is_valid():
         job_id = editform.cleaned_data['update_task_id']
-        job_assigned_staff = editform.cleaned_data['assigned_staff_id']
-        job_status = editform.cleaned_data['job_status']
         job_task_building = editform.cleaned_data['task_building']
         job_task_location = editform.cleaned_data['task_location']
         job_task_wing = editform.cleaned_data['task_wing']
@@ -250,8 +254,6 @@ def update_task_schedule(request):
             messages.error(request, 'Job not found.')
             return redirect('job_schedule')
         
-        job.assigned_staff_id = job_assigned_staff
-        job.job_status = job_status
         job.task_building = job_task_building
         job.task_location = job_task_location
         job.task_wing = job_task_wing
@@ -278,6 +280,36 @@ def update_task_schedule(request):
         for error in editform.errors:
             messages.error(request, editform.errors[error])
     return redirect(request.path)  # Fallback in case of non-POST requests
+
+
+def assign_staff(request):
+    assignform = AssignStaffForm(request.POST)  # Pre-populate job ID
+    if assignform.is_valid():
+      assigned_staff = assignform.cleaned_data['assigned_staff_id']
+      job_id = assignform.cleaned_data['assign_job_id']
+      
+      job = get_object_or_404(TaskFunnel, pk=job_id) 
+      
+      job.assigned_staff_id = assigned_staff
+      job.job_status = 'assigned'
+      job.save()
+      
+      # Send email notification (uncomment and configure)
+      assigned_staff_email = assigned_staff.email
+      
+      email_html_message = render_to_string('emails/assigned_email.html')
+
+      # Send account activation email notification
+      subject = 'PAU Maintenance: You have been assigned a Task'
+      from_email = settings.EMAIL_HOST_USER  # Replace with your email address
+      recipient_list = [assigned_staff_email]
+      send_mail(subject, '',from_email, recipient_list, html_message=email_html_message)
+      
+      return redirect('job_schedule')   # Redirect to job schedule detail view
+    else:
+        for error in editform.errors:
+                messages.error(request, editform.errors[error])
+        return redirect(request.path)  # Fallback in case of non-POST requests
 
 def delete_job_schedule(request, job_id):
     if request.method == 'POST':

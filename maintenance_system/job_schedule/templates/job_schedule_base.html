@@ -74,6 +74,10 @@
     });
 
 
+    function get_assign_staff_job_id(job_id){
+        document.getElementById("id_assign_staff_assign_job_id").value=job_id
+
+    }
 
     function get_task_schedule_detail(job_id){
   // Get the lead ID from somewhere (e.g., data attribute on the modal element)
@@ -103,11 +107,12 @@
           document.getElementById("id_edittask_task_floor").value=data.task_floor
           document.getElementById("id_edittask_task_category").value=data.task_category
           document.getElementById("id_edittask_task_problem").value=data.task_problem
+          console.log(data.task_fault_image)
           if (data.task_fault_image) {
             const downloadButton = document.getElementById("trigger-download");
             const imageUrl = data.task_fault_image;
             // Update the image element's src attribute with the URL
-            document.getElementById("id_edittask_task_fault_image_name").value = imageUrl;
+            document.getElementById("id_edittask_fault_image_name").value = imageUrl;
             downloadButton.download=imageUrl;
             downloadButton.href = imageUrl;
         }else{
