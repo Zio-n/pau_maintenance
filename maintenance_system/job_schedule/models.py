@@ -52,6 +52,11 @@ class TaskFunnel(models.Model):
     feedback_post_date = models.DateField(blank=True, null=True)
     feedback_url_status = models.BooleanField(default=True)
     feedback = models.TextField(blank=True)
+    feedback_sentiment = models.CharField(max_length=54, blank=True, null=True, choices=(
+        ('Positive', 'Positive'),
+        ('Negative', 'Negative'),
+        ('Neutral', 'Neutral'),
+    ), )
     
     def save(self, *args, **kwargs):
         if not self.task_num:

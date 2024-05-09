@@ -10,6 +10,8 @@ import os
 from django.core.mail import send_mail
 from django.conf import settings
 from django.template.loader import render_to_string
+from .sentiment_gen import get_sentiment
+
 
 def job_schedule(request):
     if request.method == 'POST':
@@ -58,7 +60,6 @@ def fault_success(request):
 def feedback_success(request):
      return render(request,'customer_forms/feedback_success.html')
 
-
 @csrf_exempt
 def feedback_form(request):
     form_id  = request.GET.get('form_id')
@@ -66,8 +67,11 @@ def feedback_form(request):
     feedback_status = task_funnel.feedback_url_status
     if request.method == 'POST':
         feedback_text = request.POST.get('feedback_text')  # Assuming feedback text is sent in the request
+        # get the sentiment
+        feedback_sentiment = get_sentiment(feedback_text)
         if feedback_text:
             task_funnel.feedback = feedback_text
+            task_funnel.feedback_sentiment = feedback_sentiment
             task_funnel.feedback_post_date = timezone.now()
             task_funnel.feedback_url_status = False
             task_funnel.save()
