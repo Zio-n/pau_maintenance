@@ -1,6 +1,6 @@
 from django import forms
 from .models import ShiftSchedule
-from accounts.models import User
+from accounts.models import User, Staff
 from django.shortcuts import render, get_object_or_404
 
 
@@ -22,6 +22,18 @@ class ShiftScheduleForm(forms.ModelForm):
         model = ShiftSchedule
         fields = ['shift_day', 'assigned_staff_id', 'start_time', 'end_time']
         
+        
+    def get_department(self, role):
+        if 'Elect' in role:
+            return 'Electrical'
+        elif 'Mech' in role:
+            return 'Mechanical'
+        elif 'HVAC' in role:
+            return 'HVAC'
+        elif 'Admin' in role:
+            return 'Admin'
+        else:
+            return None  # Handle other cases if necessary
     def clean(self):
         cleaned_data = super().clean()
         start_time = cleaned_data.get('start_time')
@@ -32,7 +44,15 @@ class ShiftScheduleForm(forms.ModelForm):
             raise forms.ValidationError("End time must be after start time.")
 
         return cleaned_data
-
+    
+    def save(self, commit=True):
+        instance = super().save(commit=False)
+        assigned_staff = self.cleaned_data['assigned_staff_id']
+        staff = get_object_or_404(Staff, user=assigned_staff)
+        instance.dept = self.get_department(staff.role)
+        if commit:
+            instance.save()
+        return instance
 
 class UpdateShiftScheduleForm(forms.ModelForm):
     # assigned_staff_id = forms.ChoiceField(choices=[], label='Technician')

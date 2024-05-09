@@ -1,12 +1,36 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from accounts.models import User
+from accounts.models import User, Staff
 from  .forms import ShiftScheduleForm, UpdateShiftScheduleForm
 from django.contrib import messages
 from .models import ShiftSchedule
 from django.http import JsonResponse
+from django.contrib.auth.decorators import login_required
 
+# Filter the shifts shown by 
+# normal staff - dept & name
+# mng & team leads - by dept
 
-# Create your views here.
+# also pass the dept
+
+def get_department_for_user(user):
+    staff = get_object_or_404(Staff, user=user)
+    # Retrieve the user's role
+    role = staff.role
+    
+    department = None
+    if 'Elect' in role:
+        department = 'Electrical'
+    elif 'Mech' in role:
+         department = 'Mechanical'
+    elif 'HVAC' in role:
+         department = 'HVAC'
+    elif 'Admin' in role:
+         department = 'Admin'
+    else:
+         department = None  # Handle other cases if necessary
+    return department
+
+@login_required
 def shift_schedule(request):
     if request.method == 'POST':
         if request.POST.get('action_type') == 'add_schedule':
@@ -17,7 +41,16 @@ def shift_schedule(request):
             return redirect(request.path)
         form = ShiftScheduleForm(request.POST)
     else:
-        shifts = ShiftSchedule.objects.all()
+        user = request.user
+        department = get_department_for_user(user)
+        print(department)
+        if department=='Admin':  # Check if user is admin
+            shifts = ShiftSchedule.objects.all()
+        else:
+            # Filter shifts based on the department associated with user's role
+            shifts = ShiftSchedule.objects.filter(dept=department)
+            
+        # shifts = ShiftSchedule.objects.all()
         form = ShiftScheduleForm()
         editform = UpdateShiftScheduleForm()
         context = {
@@ -28,7 +61,7 @@ def shift_schedule(request):
         return render(request,'shift_schedule.html', context)
 
 
-
+@login_required
 def add_shift_schedule(request):
     form = ShiftScheduleForm(request.POST)
     if form.is_valid():
@@ -40,6 +73,7 @@ def add_shift_schedule(request):
             messages.error(request, form.errors[error])
     return redirect(request.path)  # Fallback in case of non-POST requests
 
+@login_required
 def edit_shift_schedule(request):
     editform = UpdateShiftScheduleForm(request.POST)
     if editform.is_valid():
@@ -68,6 +102,7 @@ def edit_shift_schedule(request):
             messages.error(request, editform.errors[error])
     return redirect(request.path)  # Fallback in case of non-POST requests
 
+@login_required
 def delete_shift_schedule(request, shift_id):
     if request.method == 'POST':
         try:
@@ -81,6 +116,7 @@ def delete_shift_schedule(request, shift_id):
     else:
         return redirect('shift_schedule')
 
+@login_required
 def get_shift_schedule_item(request):
     shift_schedule_id = request.GET.get('shift_schedule_id')
     shift_schedule = get_object_or_404(ShiftSchedule, pk=shift_schedule_id)

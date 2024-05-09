@@ -16,3 +16,4 @@ class ShiftSchedule(models.Model):
   assigned_staff_id = models.ForeignKey(User, on_delete=models.CASCADE)
   start_time = models.TimeField()
   end_time = models.TimeField()
+  dept = models.CharField(max_length=254, blank=True, null=True)

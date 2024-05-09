@@ -13,8 +13,9 @@ from job_schedule.models import TaskFunnel
 from django.http import JsonResponse
 from django.db.models import Avg, F, Count, Case, When, IntegerField, Sum, Value
 import json
-
-
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth import logout
+@login_required
 # Create your views here.
 def manage_accounts(request):
     inactive_users = User.objects.filter(is_active=False)
@@ -28,6 +29,7 @@ def manage_accounts(request):
 
     return render(request, 'manage_accounts/manage_account.html', context)
 
+@login_required
 def activate_user(request, user_id):
     try:
         user = get_object_or_404(User, pk=user_id)
@@ -146,7 +148,7 @@ def signin(request):
                         if staff.role:
                             # User has a role assigned, log in
                             login(request, user)
-                            return redirect('dashboard')
+                            return redirect('shift_schedule')
                         else:
                             # User is not associated with a role
                             messages.error(request, 'You do not have a role assigned. Please contact an administrator.')
@@ -172,6 +174,13 @@ def forgot_password(request):
 def reset_password(request):
     return render(request,'reset_password.html')
 
+@login_required
+def logout_view(request):
+    logout(request)
+    # Redirect to a specific page after logout
+    return redirect('signin') 
+
+@login_required
 def dashboard(request):
     postive_feedback = TaskFunnel.objects.filter(feedback_sentiment='POSITIVE').count()
     neutral_feedback = TaskFunnel.objects.filter(feedback_sentiment='NEUTRAL').count()
