@@ -375,6 +375,51 @@ class UpdateTaskForm(forms.ModelForm):
         return instance
 
 
+class ViewJobScheduleForm(forms.ModelForm):
+    assigned_staff_id = forms.ModelChoiceField(queryset=User.objects.filter(is_active=True, is_superuser=False), label='Technician', required=False,)
+    task_dept = forms.ChoiceField(choices=DEPARTMENTS, required=True,)
+    job_status = forms.ChoiceField(choices=STATUS, required=True,)
+    priority_level = forms.ChoiceField(choices=PRIORITY, required=True,)
+    update_job_id = forms.CharField(widget=forms.HiddenInput())
+    fault_image_name = forms.CharField(required=False,)
+    customer_name = forms.CharField(required=True,)
+    customer_email = forms.CharField(required=True,)
+    
+    
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['update_job_id'].widget.attrs.update({'id': 'id_view_update_job_id'})
+        self.fields['assigned_staff_id'].widget.attrs.update({'id': 'id_view_assigned_staff_id'})
+        self.fields['job_status'].widget.attrs.update({'id': 'id_view_job_status'})
+        self.fields['task_building'].widget.attrs.update({'id': 'id_view_task_building'})
+        self.fields['task_location'].widget.attrs.update({'id': 'id_view_task_location'})
+        self.fields['task_wing'].widget.attrs.update({'id': 'id_view_task_wing'})
+        self.fields['task_category'].widget.attrs.update({'id': 'id_view_task_category'})
+        self.fields['task_asset_with_fault'].widget.attrs.update({'id': 'id_view_task_asset_with_fault'})
+        self.fields['task_problem'].widget.attrs.update({'id': 'id_view_task_problem'})
+        self.fields['task_note'].widget.attrs.update({'id': 'id_view_task_note'})
+        self.fields['fault_image_name'].widget.attrs.update({'id': 'id_view_task_fault_image_name'})
+        self.fields['task_floor'].widget.attrs.update({'id': 'id_view_task_floor'})
+        self.fields['task_dept'].widget.attrs.update({'id': 'id_view_task_dept'})
+        self.fields['customer_name'].widget.attrs.update({'id': 'id_view_customer_name'})
+        self.fields['customer_email'].widget.attrs.update({'id': 'id_view_customer_email'})
+        self.fields['scheduled_datetime'].widget.attrs.update({'id': 'id_view_scheduled_datetime'})        
+        self.fields['priority_level'].widget.attrs.update({'id': 'id_view_priority_level'})
+                
+        self.fields['assigned_staff_id'].label_from_instance = self.label_from_instance
+    
+    @staticmethod
+    def label_from_instance(obj):
+        return "%s" % obj.name
+    
+    class Meta:
+        model = TaskFunnel
+        fields = ('assigned_staff_id', 'job_status', 'task_dept', 'task_building', 'task_location', 'task_wing', 'task_category', 'task_asset_with_fault', 'task_problem', 'task_note', 'task_floor', 'customer_name', 'customer_email', 'scheduled_datetime', 'priority_level',)
+        widgets = {
+            'task_problem': forms.Textarea(attrs={'rows':'3'}),
+            'task_note': forms.Textarea(attrs={'rows':'3'})
+        }
+    # might need to change this to be done in the view
 
 class UpdateJobScheduleForm(forms.ModelForm):
     action_type = forms.CharField(widget=forms.HiddenInput(), initial='update_job_schedule')
@@ -408,6 +453,8 @@ class UpdateJobScheduleForm(forms.ModelForm):
         self.fields['customer_email'].widget.attrs.update({'id': 'id_edit_customer_email'})
         self.fields['scheduled_datetime'].widget.attrs.update({'id': 'id_edit_scheduled_datetime'})        
         self.fields['priority_level'].widget.attrs.update({'id': 'id_edit_priority_level'})
+
+
                 
         self.fields['assigned_staff_id'].label_from_instance = self.label_from_instance
     

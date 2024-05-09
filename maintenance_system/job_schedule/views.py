@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .forms import UpdateJobScheduleForm, UpdateTaskForm, AddJobScheduleForm, AssignStaffForm
+from .forms import UpdateJobScheduleForm, UpdateTaskForm, AddJobScheduleForm, AssignStaffForm, ViewJobScheduleForm
 from .models import TaskFunnel
 from django.http import JsonResponse
 import uuid
@@ -45,6 +45,10 @@ def job_schedule(request):
             unassigned_jobs = TaskFunnel.objects.filter(task_dept='HVAC',job_status='unassigned')            
             assigned_inprogres_jobs = TaskFunnel.objects.filter(task_dept='HVAC',job_status__in=['assigned', 'in progress'])
             completed_jobs = TaskFunnel.objects.filter(task_dept='HVAC', job_status='completed')
+        elif user_staff.role in ['Admin']:
+            unassigned_jobs = TaskFunnel.objects.filter(job_status='unassigned')            
+            assigned_inprogres_jobs = TaskFunnel.objects.filter(job_status__in=['assigned', 'in progress'])
+            completed_jobs = TaskFunnel.objects.filter(job_status='completed')
         # Normal staff only see jobs assigned to them
         else:
             unassigned_jobs = TaskFunnel.objects.filter(assigned_staff_id=user,job_status='unassigned')            
@@ -59,6 +63,7 @@ def job_schedule(request):
         editform = UpdateJobScheduleForm()
         edittaskform = UpdateTaskForm()
         assignStaffForm = AssignStaffForm()
+        viewtask = ViewJobScheduleForm()
         
         context = {
             'unassignedjobs': unassigned_jobs,
@@ -66,7 +71,8 @@ def job_schedule(request):
             'completedjobs': completed_jobs,
             'editform': editform,
             'edittaskform': edittaskform,
-            'assignStaffForm': assignStaffForm
+            'assignStaffForm': assignStaffForm,
+            'viewtask': viewtask
         }
     return render(request,'job_schedule.html', context)
 
@@ -318,7 +324,7 @@ def update_task_schedule(request):
             messages.error(request, editform.errors[error])
     return redirect(request.path)  # Fallback in case of non-POST requests
 
-@login_required
+
 def assign_staff(request):
     assignform = AssignStaffForm(request.POST)  # Pre-populate job ID
     if assignform.is_valid():

@@ -6,7 +6,7 @@
       <h1 class="text-base font-semibold leading-6 text-gray-900 dark:text-gray-200">
         <time datetime="2022-01">Your Schedule</time>
       </h1>
-      {# if perms.shift_schedule.add_shiftschedule #}
+      {% if perms.shift_schedule.add_shiftschedule %}
       <div class="flex items-center">
         <!-- <div class="relative flex items-center rounded-md bg-white shadow-sm md:items-stretch">
           <button type="button" class="flex h-9 w-12 items-center justify-center rounded-l-md border-y border-l border-gray-300 pr-1 text-gray-400 hover:text-gray-500 focus:relative md:w-9 md:pr-0 md:hover:bg-gray-50">
@@ -72,7 +72,7 @@
         
         </div>
       </div>
-      {# endif #}
+      {% endif %}
     </header>
     <nav class="relative z-0 flex border rounded-xl overflow-hidden dark:border-gray-700" aria-label="Tabs" role="tablist">
         <button type="button" class="hs-tab-active:border-b-blue-600 hs-tab-active:text-gray-900 dark:hs-tab-active:text-white relative dark:hs-tab-active:border-b-blue-600 min-w-0 flex-1 bg-white first:border-s-0 border-s border-b-2 py-4 px-4 text-gray-500 hover:text-gray-700 text-sm font-medium text-center overflow-hidden hover:bg-gray-50 focus:z-10 focus:outline-none focus:text-blue-600 disabled:opacity-50 disabled:pointer-events-none dark:bg-gray-800 dark:border-l-gray-700 dark:border-b-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-400 active" id="bar-with-underline-item-1" data-hs-tab="#bar-with-underline-1" aria-controls="bar-with-underline-1" role="tab">
@@ -116,7 +116,8 @@
                     <div class="flex items-center justify-center flex-grow"> <!-- Add this line -->
                       <span class="inline-flex items-center gap-x-1.5 py-1.5 px-3 rounded-full text-sm font-medium border {% if shift.dept == 'Electrical' %}border-blue-600 text-blue-600 dark:text-blue-500 {% elif shift.dept == 'Mechanical' %} border-yellow-500 text-yellow-500 {% elif shift.dept == 'HVAC' %} border-gray-500 text-gray-500 dark:text-neutral-400 {% else %} border-gray-600 text-gray-600 dark:text-neutral-200 {% endif %}">{{ shift.dept }}</span>
                   </div> <!-- flex-grow ensures this div expands to take remaining space -->      
-                    <div class="mt-5">
+                  {% if perms.shift_schedule.change_shiftschedule %}  
+                  <div class="mt-5">
                       <button type="button" @click="get_shift_schedule_detail('{{ shift.pk }}')" class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none" data-hs-overlay="#hs-modal-edit-schedule">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
                           <path stroke-linecap="round" stroke-linejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L6.832 19.82a4.5 4.5 0 0 1-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 0 1 1.13-1.897L16.863 4.487Zm0 0L19.5 7.125" />
@@ -133,6 +134,7 @@
                         </button>
                       </form>
                     </div>
+                  {% endif %}
                   </div>
                 </div>
               </div>
@@ -159,6 +161,7 @@
                     <div class="flex items-center justify-center flex-grow"> <!-- Add this line -->
                       <span class="inline-flex items-center gap-x-1.5 py-1.5 px-3 rounded-full text-sm font-medium border {% if shift.dept == 'Electrical' %}border-blue-600 text-blue-600 dark:text-blue-500 {% elif shift.dept == 'Mechanical' %} border-yellow-500 text-yellow-500 {% elif shift.dept == 'HVAC' %} border-gray-500 text-gray-500 dark:text-neutral-400 {% else %} border-gray-600 text-gray-600 dark:text-neutral-200 {% endif %}">{{ shift.dept }}</span>
                     </div> <!-- flex-grow ensures this div expands to take remaining space -->  
+                    {% if perms.shift_schedule.change_shiftschedule %}  
                     <div class="mt-5">
                       <button type="button" @click="get_shift_schedule_detail('{{ shift.pk }}')" class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none" data-hs-overlay="#hs-modal-edit-schedule">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
@@ -176,6 +179,7 @@
                         </button>
                       </form>
                     </div>
+                    {% endif %}
                   </div>
                 </div>
               </div>
@@ -200,6 +204,7 @@
                     <div class="flex items-center justify-center flex-grow"> <!-- Add this line -->
                       <span class="inline-flex items-center gap-x-1.5 py-1.5 px-3 rounded-full text-sm font-medium border {% if shift.dept == 'Electrical' %}border-blue-600 text-blue-600 dark:text-blue-500 {% elif shift.dept == 'Mechanical' %} border-yellow-500 text-yellow-500 {% elif shift.dept == 'HVAC' %} border-gray-500 text-gray-500 dark:text-neutral-400 {% else %} border-gray-600 text-gray-600 dark:text-neutral-200 {% endif %}">{{ shift.dept }}</span>
                     </div> <!-- flex-grow ensures this div expands to take remaining space --> 
+                    {% if perms.shift_schedule.change_shiftschedule %}  
                     <div class="mt-5">
                       <button type="button" @click="get_shift_schedule_detail('{{ shift.pk }}')" class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none" data-hs-overlay="#hs-modal-edit-schedule">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
@@ -217,6 +222,7 @@
                         </button>
                       </form>
                     </div>
+                    {% endif %}
                   </div>
                 </div>
               </div>
@@ -241,6 +247,7 @@
                     <div class="flex items-center justify-center flex-grow"> <!-- Add this line -->
                       <span class="inline-flex items-center gap-x-1.5 py-1.5 px-3 rounded-full text-sm font-medium border {% if shift.dept == 'Electrical' %}border-blue-600 text-blue-600 dark:text-blue-500 {% elif shift.dept == 'Mechanical' %} border-yellow-500 text-yellow-500 {% elif shift.dept == 'HVAC' %} border-gray-500 text-gray-500 dark:text-neutral-400 {% else %} border-gray-600 text-gray-600 dark:text-neutral-200 {% endif %}">{{ shift.dept }}</span>
                     </div> 
+                    {% if perms.shift_schedule.change_shiftschedule %}  
                     <div class="mt-5">
                       <button type="button" @click="get_shift_schedule_detail('{{ shift.pk }}')" class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none" data-hs-overlay="#hs-modal-edit-schedule">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
@@ -258,6 +265,7 @@
                         </button>
                       </form>
                     </div>
+                    {% endif %}
                   </div>
                 </div>
               </div>
@@ -282,6 +290,7 @@
                       <div class="flex items-center justify-center flex-grow"> <!-- Add this line -->
                         <span class="inline-flex items-center gap-x-1.5 py-1.5 px-3 rounded-full text-sm font-medium border {% if shift.dept == 'Electrical' %}border-blue-600 text-blue-600 dark:text-blue-500 {% elif shift.dept == 'Mechanical' %} border-yellow-500 text-yellow-500 {% elif shift.dept == 'HVAC' %} border-gray-500 text-gray-500 dark:text-neutral-400 {% else %} border-gray-600 text-gray-600 dark:text-neutral-200 {% endif %}">{{ shift.dept }}</span>
                       </div> 
+                      {% if perms.shift_schedule.change_shiftschedule %}  
                       <div class="mt-5">
                         <button type="button" @click="get_shift_schedule_detail('{{ shift.pk }}')" class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none" data-hs-overlay="#hs-modal-edit-schedule">
                           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
@@ -299,6 +308,7 @@
                           </button>
                         </form>
                       </div>
+                      {% endif %}
                     </div>
                   </div>
                 </div>
@@ -323,6 +333,7 @@
                       <div class="flex items-center justify-center flex-grow"> <!-- Add this line -->
                         <span class="inline-flex items-center gap-x-1.5 py-1.5 px-3 rounded-full text-sm font-medium border {% if shift.dept == 'Electrical' %}border-blue-600 text-blue-600 dark:text-blue-500 {% elif shift.dept == 'Mechanical' %} border-yellow-500 text-yellow-500 {% elif shift.dept == 'HVAC' %} border-gray-500 text-gray-500 dark:text-neutral-400 {% else %} border-gray-600 text-gray-600 dark:text-neutral-200 {% endif %}">{{ shift.dept }}</span>
                       </div> 
+                      {% if perms.shift_schedule.change_shiftschedule %}  
                       <div class="mt-5">
                         <button type="button" @click="get_shift_schedule_detail('{{ shift.pk }}')" class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none" data-hs-overlay="#hs-modal-edit-schedule">
                           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
@@ -341,6 +352,7 @@
                         </form>
                         
                       </div>
+                      {% endif %}
                     </div>
                   </div>
                 </div>
@@ -365,6 +377,7 @@
                       <div class="flex items-center justify-center flex-grow"> <!-- Add this line -->
                         <span class="inline-flex items-center gap-x-1.5 py-1.5 px-3 rounded-full text-sm font-medium border {% if shift.dept == 'Electrical' %}border-blue-600 text-blue-600 dark:text-blue-500 {% elif shift.dept == 'Mechanical' %} border-yellow-500 text-yellow-500 {% elif shift.dept == 'HVAC' %} border-gray-500 text-gray-500 dark:text-neutral-400 {% else %} border-gray-600 text-gray-600 dark:text-neutral-200 {% endif %}">{{ shift.dept }}</span>
                       </div> 
+                      {% if perms.shift_schedule.change_shiftschedule %}  
                       <div class="mt-5">
                         <button type="button" @click="get_shift_schedule_detail('{{ shift.pk }}')" class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none" data-hs-overlay="#hs-modal-edit-schedule">
                           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
@@ -382,6 +395,7 @@
                           </button>
                         </form>
                       </div>
+                      {% endif %}
                     </div>
                   </div>
                 </div>

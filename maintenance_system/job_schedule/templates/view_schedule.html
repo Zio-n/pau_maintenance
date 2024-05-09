@@ -1,0 +1,459 @@
+
+<div id="hs-overlay-right-view" class="hs-overlay hs-overlay-open:translate-x-0 hidden translate-x-full fixed top-0 end-0 transition-all duration-300 transform h-full max-w-5xl w-full z-[80] bg-white border-s dark:bg-gray-800 dark:border-gray-700" tabindex="-1">
+    <div class="flex justify-between items-center py-3 px-4 border-b dark:border-gray-700">
+      <h3 class="font-bold text-gray-800 dark:text-white">
+        Job details
+      </h3>
+      <button type="button" class="flex justify-center items-center size-7 text-sm font-semibold rounded-full border border-transparent text-gray-800 hover:bg-gray-100 disabled:opacity-100 disabled:pointer-events-none dark:text-white dark:hover:bg-gray-700" data-hs-overlay="#hs-overlay-right-view">
+        <span class="sr-only">Close modal</span>
+        <svg class="flex-shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M18 6 6 18"></path>
+          <path d="m6 6 12 12"></path>
+        </svg>
+      </button>
+    </div>
+    <form method="post" enctype="multipart/form-data">
+      {% csrf_token %}
+      <div class="p-4 max-h-[620px] overflow-y-auto
+    [&::-webkit-scrollbar]:w-2
+    [&::-webkit-scrollbar-track]:rounded-full
+    [&::-webkit-scrollbar-track]:bg-gray-100
+    [&::-webkit-scrollbar-thumb]:rounded-full
+    [&::-webkit-scrollbar-thumb]:bg-gray-300
+    dark:[&::-webkit-scrollbar-track]:bg-slate-700
+    dark:[&::-webkit-scrollbar-thumb]:bg-slate-500">
+    {% load widget_tweaks %}
+    {% render_field viewtask.update_job_id|attr:'disabled' type="text" class="hidden peer p-4 pe-9 w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-90 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400 dark:focus:ring-gray-600 focus:pt-6 focus:pb-2 [&:not(:placeholder-shown)]:pt-6 [&:not(:placeholder-shown)]:pb-2 autofill:pt-6 autofill:pb-2" %}
+
+    <!-- Department -->
+<div class="relative">  
+  {% render_field viewtask.task_dept|attr:'disabled' class="peer p-4 pe-9 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-100 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:focus:ring-neutral-600 focus:pt-6 focus:pb-2 [&:not(:placeholder-shown)]:pt-6 [&:not(:placeholder-shown)]:pb-2 autofill:pt-6 autofill:pb-2" %}
+  <!-- <select class="peer p-4 pe-9 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-100 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:focus:ring-neutral-600
+  focus:pt-6
+  focus:pb-2
+  [&:not(:placeholder-shown)]:pt-6
+  [&:not(:placeholder-shown)]:pb-2
+  autofill:pt-6
+  autofill:pb-2">
+    <option selected="">---------</option>
+    <option>Electrical</option>
+    <option>Mechanical</option>
+    <option>HVAC</option>
+  </select> -->
+  <label class="absolute top-0 start-0 p-4 h-full truncate pointer-events-none transition ease-in-out duration-100 border border-transparent dark:text-white peer-disabled:opacity-100 peer-disabled:pointer-events-none
+    peer-focus:text-xs
+    peer-focus:-translate-y-1.5
+    peer-focus:text-gray-500 dark:peer-focus:text-neutral-500
+    peer-[:not(:placeholder-shown)]:text-xs
+    peer-[:not(:placeholder-shown)]:-translate-y-1.5
+    peer-[:not(:placeholder-shown)]:text-gray-500 dark:peer-[:not(:placeholder-shown)]:text-neutral-500 dark:text-neutral-500">Department</label>
+  </div>
+<!-- End Department -->
+      <!-- assigned staff and status -->
+  <div class="flex flex-row mt-4">  
+    <div class="relative w-1/2 mr-4"> 
+    {% render_field viewtask.assigned_staff_id|attr:'disabled' class="peer p-4 pe-9 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-100 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:focus:ring-neutral-600 focus:pt-6 focus:pb-2 [&:not(:placeholder-shown)]:pt-6 [&:not(:placeholder-shown)]:pb-2 autofill:pt-6 autofill:pb-2" %} 
+  <!-- <select class="peer p-4 pe-9 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-100 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:focus:ring-neutral-600
+  focus:pt-6
+  focus:pb-2
+  [&:not(:placeholder-shown)]:pt-6
+  [&:not(:placeholder-shown)]:pb-2
+  autofill:pt-6
+  autofill:pb-2">
+    <option selected="">Open this select menu</option>
+    <option>1</option>
+    <option>2</option>
+    <option>3</option>
+  </select> -->
+  <label class="absolute top-0 start-0 p-4 h-full truncate pointer-events-none transition ease-in-out duration-100 border border-transparent dark:text-white peer-disabled:opacity-100 peer-disabled:pointer-events-none
+    peer-focus:text-xs
+    peer-focus:-translate-y-1.5
+    peer-focus:text-gray-500 dark:peer-focus:text-neutral-500
+    peer-[:not(:placeholder-shown)]:text-xs
+    peer-[:not(:placeholder-shown)]:-translate-y-1.5
+    peer-[:not(:placeholder-shown)]:text-gray-500 dark:peer-[:not(:placeholder-shown)]:text-neutral-500 dark:text-neutral-500">Assigned Staff</label>
+</div>
+
+<!-- Status -->
+<div class="relative w-1/2 mr-4">  
+  {% render_field viewtask.job_status|attr:'disabled' class="peer p-4 pe-9 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-100 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:focus:ring-neutral-600 focus:pt-6 focus:pb-2 [&:not(:placeholder-shown)]:pt-6 [&:not(:placeholder-shown)]:pb-2 autofill:pt-6 autofill:pb-2" %} 
+  <!-- <select class="peer p-4 pe-9 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-100 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:focus:ring-neutral-600
+  focus:pt-6
+  focus:pb-2
+  [&:not(:placeholder-shown)]:pt-6
+  [&:not(:placeholder-shown)]:pb-2
+  autofill:pt-6
+  autofill:pb-2">
+    <option selected="">Open this select menu</option>
+    <option>1</option>
+    <option>2</option>
+    <option>3</option>
+  </select> -->
+  <label class="absolute top-0 start-0 p-4 h-full truncate pointer-events-none transition ease-in-out duration-100 border border-transparent dark:text-white peer-disabled:opacity-100 peer-disabled:pointer-events-none
+    peer-focus:text-xs
+    peer-focus:-translate-y-1.5
+    peer-focus:text-gray-500 dark:peer-focus:text-neutral-500
+    peer-[:not(:placeholder-shown)]:text-xs
+    peer-[:not(:placeholder-shown)]:-translate-y-1.5
+    peer-[:not(:placeholder-shown)]:text-gray-500 dark:peer-[:not(:placeholder-shown)]:text-neutral-500 dark:text-neutral-500">Status</label>
+</div>
+<!-- End Status -->
+
+
+
+</div>
+<!-- End assigned staff and status -->
+
+<!-- priority level and scheduled-date -->
+<div class="flex flex-row mt-4">  
+  <div class="relative w-1/2 mr-4">  
+    {% render_field viewtask.priority_level|attr:'disabled' class="peer p-4 pe-9 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-100 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:focus:ring-neutral-600 focus:pt-6 focus:pb-2 [&:not(:placeholder-shown)]:pt-6 [&:not(:placeholder-shown)]:pb-2 autofill:pt-6 autofill:pb-2" %} 
+<!-- <select class="peer p-4 pe-9 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-100 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:focus:ring-neutral-600
+focus:pt-6
+focus:pb-2
+[&:not(:placeholder-shown)]:pt-6
+[&:not(:placeholder-shown)]:pb-2
+autofill:pt-6
+autofill:pb-2">
+  <option selected="">---------</option>
+  <option>Low</option>
+  <option>Mid</option>
+  <option>High</option>
+</select> -->
+<label class="absolute top-0 start-0 p-4 h-full truncate pointer-events-none transition ease-in-out duration-100 border border-transparent dark:text-white peer-disabled:opacity-100 peer-disabled:pointer-events-none
+  peer-focus:text-xs
+  peer-focus:-translate-y-1.5
+  peer-focus:text-gray-500 dark:peer-focus:text-neutral-500
+  peer-[:not(:placeholder-shown)]:text-xs
+  peer-[:not(:placeholder-shown)]:-translate-y-1.5
+  peer-[:not(:placeholder-shown)]:text-gray-500 dark:peer-[:not(:placeholder-shown)]:text-neutral-500 dark:text-neutral-500">Priority Level</label>
+</div>
+
+
+<div class="relative w-1/2 mr-4">  
+  {% render_field viewtask.scheduled_datetime|attr:'disabled' class="peer p-4 block w-full border-gray-200 rounded-lg text-sm placeholder:text-transparent focus:border-blue-500 focus:ring-blue-500 disabled:opacity-100 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400 dark:focus:ring-gray-600 focus:pt-6 focus:pb-2 [&:not(:placeholder-shown)]:pt-6 [&:not(:placeholder-shown)]:pb-2 autofill:pt-6 autofill:pb-2" %} 
+  <!-- <input type="text" id="id_scheduled_date" class="peer p-4 block w-full border-gray-200 rounded-lg text-sm placeholder:text-transparent focus:border-blue-500 focus:ring-blue-500 disabled:opacity-100 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400 dark:focus:ring-gray-600
+  focus:pt-6
+  focus:pb-2
+  [&:not(:placeholder-shown)]:pt-6
+  [&:not(:placeholder-shown)]:pb-2
+  autofill:pt-6
+  autofill:pb-2"  value="12/03/2023"> -->
+  <label for="id_scheduled_date" class="absolute top-0 start-0 p-4 h-full text-sm truncate pointer-events-none transition ease-in-out duration-100 border border-transparent dark:text-white peer-disabled:opacity-80 peer-disabled:pointer-events-none
+    peer-focus:text-xs
+    peer-focus:-translate-y-1.5
+    peer-focus:text-gray-500
+    peer-[:not(:placeholder-shown)]:text-xs
+    peer-[:not(:placeholder-shown)]:-translate-y-1.5
+    peer-[:not(:placeholder-shown)]:text-gray-500">Scheduled Date</label>
+</div>
+
+
+
+
+</div>
+<!-- End priority level and scheduled-date -->
+
+<h4 class="mb-2 mt-4 text-xs font-semibold uppercase text-gray-600 dark:text-gray-400">
+  Fault details
+</h4>
+
+
+<!-- Asset at fault Input -->
+<div class="flex flex-row mt-4">
+    <div class="relative w-1/2 mr-4">
+      {% render_field viewtask.task_asset_with_fault|attr:'disabled' class="peer p-4 pe-9 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-100 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:focus:ring-neutral-600 focus:pt-6 focus:pb-2 [&:not(:placeholder-shown)]:pt-6 [&:not(:placeholder-shown)]:pb-2 autofill:pt-6 autofill:pb-2" %} 
+        <!-- <input type="text" id="id_task_asset_fault" class="peer p-4 block w-full border-gray-200 rounded-lg text-sm placeholder:text-transparent focus:border-blue-500 focus:ring-blue-500 disabled:opacity-100 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400 dark:focus:ring-gray-600
+        focus:pt-6
+        focus:pb-2
+        [&:not(:placeholder-shown)]:pt-6
+        [&:not(:placeholder-shown)]:pb-2
+        autofill:pt-6
+        autofill:pb-2"  value="Air conditioner"> -->
+        <label for="id_task_asset_fault" class="absolute top-0 start-0 p-4 h-full text-sm truncate pointer-events-none transition ease-in-out duration-100 border border-transparent dark:text-white peer-disabled:opacity-80 peer-disabled:pointer-events-none
+          peer-focus:text-xs
+          peer-focus:-translate-y-1.5
+          peer-focus:text-gray-500
+          peer-[:not(:placeholder-shown)]:text-xs
+          peer-[:not(:placeholder-shown)]:-translate-y-1.5
+          peer-[:not(:placeholder-shown)]:text-gray-500">Asset at Fault</label>
+      </div>
+
+      <div class="relative w-1/2 mr-4">
+        {% render_field viewtask.task_building|attr:'disabled' class="peer p-4 pe-9 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-100 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:focus:ring-neutral-600 focus:pt-6 focus:pb-2 [&:not(:placeholder-shown)]:pt-6 [&:not(:placeholder-shown)]:pb-2 autofill:pt-6 autofill:pb-2" %} 
+        <!-- <input type="text" id="id_building" class="peer p-4 block w-full border-gray-200 rounded-lg text-sm placeholder:text-transparent focus:border-blue-500 focus:ring-blue-500 disabled:opacity-100 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400 dark:focus:ring-gray-600
+        focus:pt-6
+        focus:pb-2
+        [&:not(:placeholder-shown)]:pt-6
+        [&:not(:placeholder-shown)]:pb-2
+        autofill:pt-6
+        autofill:pb-2"> -->
+        <label for="id_building" class="absolute top-0 start-0 p-4 h-full text-sm truncate pointer-events-none transition ease-in-out duration-100 border border-transparent dark:text-white peer-disabled:opacity-80 peer-disabled:pointer-events-none
+          peer-focus:text-xs
+          peer-focus:-translate-y-1.5
+          peer-focus:text-gray-500
+          peer-[:not(:placeholder-shown)]:text-xs
+          peer-[:not(:placeholder-shown)]:-translate-y-1.5
+          peer-[:not(:placeholder-shown)]:text-gray-500">Building</label>
+      </div>
+</div>
+
+<!-- End Asset at fault Input -->
+
+<!-- task location and wing -->
+  <div class="flex flex-row mt-4">  
+    <div class="relative w-1/2 mr-4"> 
+      {% render_field viewtask.task_location|attr:'disabled' class="peer p-4 pe-9 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-100 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:focus:ring-neutral-600 focus:pt-6 focus:pb-2 [&:not(:placeholder-shown)]:pt-6 [&:not(:placeholder-shown)]:pb-2 autofill:pt-6 autofill:pb-2" %}  
+      <!-- <input type="text" id="id_fault_location" class="peer p-4 block w-full border-gray-200 rounded-lg text-sm placeholder:text-transparent focus:border-blue-500 focus:ring-blue-500 disabled:opacity-100 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400 dark:focus:ring-gray-600
+      focus:pt-6
+      focus:pb-2
+      [&:not(:placeholder-shown)]:pt-6
+      [&:not(:placeholder-shown)]:pb-2
+      autofill:pt-6
+      autofill:pb-2"> -->
+      <label for="id_fault_location" class="absolute top-0 start-0 p-4 h-full text-sm truncate pointer-events-none transition ease-in-out duration-100 border border-transparent dark:text-white peer-disabled:opacity-80 peer-disabled:pointer-events-none
+        peer-focus:text-xs
+        peer-focus:-translate-y-1.5
+        peer-focus:text-gray-500
+        peer-[:not(:placeholder-shown)]:text-xs
+        peer-[:not(:placeholder-shown)]:-translate-y-1.5
+        peer-[:not(:placeholder-shown)]:text-gray-500">Location</label>
+    </div>
+
+<div class="relative w-1/2 mr-4">  
+  {% render_field viewtask.task_wing|attr:'disabled' class="peer p-4 pe-9 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-100 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:focus:ring-neutral-600 focus:pt-6 focus:pb-2 [&:not(:placeholder-shown)]:pt-6 [&:not(:placeholder-shown)]:pb-2 autofill:pt-6 autofill:pb-2" %} 
+  <!-- <input type="text" id="id_fault_wing" class="peer p-4 block w-full border-gray-200 rounded-lg text-sm placeholder:text-transparent focus:border-blue-500 focus:ring-blue-500 disabled:opacity-100 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400 dark:focus:ring-gray-600
+  focus:pt-6
+  focus:pb-2
+  [&:not(:placeholder-shown)]:pt-6
+  [&:not(:placeholder-shown)]:pb-2
+  autofill:pt-6
+  autofill:pb-2"> -->
+  <label for="id_fault_wing" class="absolute top-0 start-0 p-4 h-full text-sm truncate pointer-events-none transition ease-in-out duration-100 border border-transparent dark:text-white peer-disabled:opacity-80 peer-disabled:pointer-events-none
+    peer-focus:text-xs
+    peer-focus:-translate-y-1.5
+    peer-focus:text-gray-500
+    peer-[:not(:placeholder-shown)]:text-xs
+    peer-[:not(:placeholder-shown)]:-translate-y-1.5
+    peer-[:not(:placeholder-shown)]:text-gray-500">Wing</label>
+
+
+</div>
+
+
+
+</div>
+<!-- End task location and wing -->
+
+<!-- task floor and category -->
+<div class="flex flex-row mt-4">  
+  <div class="relative w-1/2 mr-4"> 
+    {% render_field viewtask.task_floor|attr:'disabled' class="peer p-4 pe-9 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-100 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:focus:ring-neutral-600 focus:pt-6 focus:pb-2 [&:not(:placeholder-shown)]:pt-6 [&:not(:placeholder-shown)]:pb-2 autofill:pt-6 autofill:pb-2" %}  
+    <!-- <input type="text" id="id_fault_floor" class="peer p-4 block w-full border-gray-200 rounded-lg text-sm placeholder:text-transparent focus:border-blue-500 focus:ring-blue-500 disabled:opacity-100 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400 dark:focus:ring-gray-600
+    focus:pt-6
+    focus:pb-2
+    [&:not(:placeholder-shown)]:pt-6
+    [&:not(:placeholder-shown)]:pb-2
+    autofill:pt-6
+    autofill:pb-2"> -->
+    <label for="id_fault_floor" class="absolute top-0 start-0 p-4 h-full text-sm truncate pointer-events-none transition ease-in-out duration-100 border border-transparent dark:text-white peer-disabled:opacity-80 peer-disabled:pointer-events-none
+      peer-focus:text-xs
+      peer-focus:-translate-y-1.5
+      peer-focus:text-gray-500
+      peer-[:not(:placeholder-shown)]:text-xs
+      peer-[:not(:placeholder-shown)]:-translate-y-1.5
+      peer-[:not(:placeholder-shown)]:text-gray-500">Floor</label>
+  </div>
+
+<div class="relative w-1/2 mr-4"> 
+  {% render_field viewtask.task_category|attr:'disabled' class="peer p-4 pe-9 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-100 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:focus:ring-neutral-600 focus:pt-6 focus:pb-2 [&:not(:placeholder-shown)]:pt-6 [&:not(:placeholder-shown)]:pb-2 autofill:pt-6 autofill:pb-2" %}  
+<!-- <input type="text" id="id_fault_category" class="peer p-4 block w-full border-gray-200 rounded-lg text-sm placeholder:text-transparent focus:border-blue-500 focus:ring-blue-500 disabled:opacity-100 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400 dark:focus:ring-gray-600
+focus:pt-6
+focus:pb-2
+[&:not(:placeholder-shown)]:pt-6
+[&:not(:placeholder-shown)]:pb-2
+autofill:pt-6
+autofill:pb-2"> -->
+<label for="id_fault_category" class="absolute top-0 start-0 p-4 h-full text-sm truncate pointer-events-none transition ease-in-out duration-100 border border-transparent dark:text-white peer-disabled:opacity-80 peer-disabled:pointer-events-none
+  peer-focus:text-xs
+  peer-focus:-translate-y-1.5
+  peer-focus:text-gray-500
+  peer-[:not(:placeholder-shown)]:text-xs
+  peer-[:not(:placeholder-shown)]:-translate-y-1.5
+  peer-[:not(:placeholder-shown)]:text-gray-500">Category</label>
+
+
+</div>
+
+
+
+</div>
+<!-- End task floor and category -->
+
+<!-- Problem -->
+<div class="relative mt-4">
+    <div class="max-w-full space-y-4">
+      <div>
+        <div class="relative">
+          {% render_field viewtask.task_problem|attr:'disabled' class="peer p-4 pe-9 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-100 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:focus:ring-neutral-600 focus:pt-6 focus:pb-2 [&:not(:placeholder-shown)]:pt-6 [&:not(:placeholder-shown)]:pb-2 autofill:pt-6 autofill:pb-2" placeholder="Problem details" %} 
+          <!-- <textarea id="hs-validation-name-error" class="py-3 px-4 block w-full rounded-lg text-sm  disabled:opacity-100 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600" rows="3" placeholder="Problem details" aria-describedby="hs-validation-name-error-helper" required=""></textarea> -->
+          <div class="absolute top-0 end-0 flex items-center pointer-events-none p-3">
+            
+          </div>
+        </div>
+       </div>
+  </div>
+  
+      </div>
+<!-- End problem -->
+
+<!-- fault Image Input -->
+<div class="relative mt-4">
+  <div>
+    <label for="hs-validation-name-error" class="block text-sm font-medium mb-2 dark:text-white">Fault Image</label>
+    
+    <div class="relative">  
+      {% render_field viewtask.fault_image_name|attr:'disabled' class="peer p-4 pe-9 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-100 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:focus:ring-neutral-600 focus:pt-6 focus:pb-2 [&:not(:placeholder-shown)]:pt-6 [&:not(:placeholder-shown)]:pb-2 autofill:pt-6 autofill:pb-2" %}
+      <!-- <select class="peer p-4 pe-9 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-100 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:focus:ring-neutral-600
+      focus:pt-6
+      focus:pb-2
+      [&:not(:placeholder-shown)]:pt-6
+      [&:not(:placeholder-shown)]:pb-2
+      autofill:pt-6
+      autofill:pb-2">
+        <option selected="">---------</option>
+        <option>Electrical</option>
+        <option>Mechanical</option>
+        <option>HVAC</option>
+      </select> -->
+      <label class="absolute top-0 start-0 p-4 h-full truncate pointer-events-none transition ease-in-out duration-100 border border-transparent dark:text-white peer-disabled:opacity-100 peer-disabled:pointer-events-none
+        peer-focus:text-xs
+        peer-focus:-translate-y-1.5
+        peer-focus:text-gray-500 dark:peer-focus:text-neutral-500
+        peer-[:not(:placeholder-shown)]:text-xs
+        peer-[:not(:placeholder-shown)]:-translate-y-1.5
+        peer-[:not(:placeholder-shown)]:text-gray-500 dark:peer-[:not(:placeholder-shown)]:text-neutral-500 dark:text-neutral-500">Image Uploaded</label>
+      </div>
+    <div class="flex flex-wrap gap-2 mt-3 ml-1">
+        <a id="trigger-download" class="py-1 px-2 text-sm font-medium rounded-md border border-teal-400 bg-teal-100 dark:bg-teal-800/25 text-teal-600 dark:text-teal-400 hover:bg-teal-200 dark:hover:bg-teal-600/50">
+            Download image
+        </a>
+      <!-- <button type="button" id="trigger-error" class="py-1 px-2 text-sm font-medium rounded-md border border-red-400 bg-red-100 dark:bg-red-800/25 text-red-600 dark:text-red-400 hover:bg-red-200 dark:hover:bg-red-600/50">
+        Remove image
+      </button> -->
+    </div>
+  </div>
+  
+</div>
+<!-- End fault Image Input -->
+
+<!-- Note -->
+<div class="relative mt-4">
+  <div class="max-w-full space-y-4">
+    <div>
+      <label for="hs-validation-name-error" class="block text-sm font-medium mb-2 dark:text-white">More details</label>
+      <div class="relative">
+        {% render_field viewtask.task_note|attr:'disabled' class="peer p-4 pe-9 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-100 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:focus:ring-neutral-600 focus:pt-6 focus:pb-2 [&:not(:placeholder-shown)]:pt-6 [&:not(:placeholder-shown)]:pb-2 autofill:pt-6 autofill:pb-2"  placeholder="More details on the fault" %} 
+        <!-- <textarea id="hs-validation-name-error" class="py-3 px-4 block w-full rounded-lg text-sm  disabled:opacity-100 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600" rows="3" placeholder="More details on the fault" aria-describedby="hs-validation-name-error-helper" required=""></textarea> -->
+        <div class="absolute top-0 end-0 flex items-center pointer-events-none p-3">
+          
+        </div>
+      </div>
+     </div>
+</div>
+
+    </div>
+<!-- End note -->
+
+
+<h4 class="mb-2 mt-4 text-xs font-semibold uppercase text-gray-600 dark:text-gray-400">
+  Customer details
+</h4>
+<!-- customer name and email -->
+<div class="flex flex-row mt-4">  
+  <div class="relative w-1/2 mr-4">  
+    {% render_field viewtask.customer_name|attr:'disabled' class="peer p-4 pe-9 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-100 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:focus:ring-neutral-600 focus:pt-6 focus:pb-2 [&:not(:placeholder-shown)]:pt-6 [&:not(:placeholder-shown)]:pb-2 autofill:pt-6 autofill:pb-2" %} 
+
+    <label for="id_customer_name" class="absolute top-0 start-0 p-4 h-full text-sm truncate pointer-events-none transition ease-in-out duration-100 border border-transparent dark:text-white peer-disabled:opacity-80 peer-disabled:pointer-events-none
+      peer-focus:text-xs
+      peer-focus:-translate-y-1.5
+      peer-focus:text-gray-500
+      peer-[:not(:placeholder-shown)]:text-xs
+      peer-[:not(:placeholder-shown)]:-translate-y-1.5
+      peer-[:not(:placeholder-shown)]:text-gray-500">Customer name</label>
+  </div>
+
+<div class="relative w-1/2 mr-4"> 
+  {% render_field viewtask.customer_email|attr:'disabled' class="peer p-4 pe-9 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-100 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:focus:ring-neutral-600 focus:pt-6 focus:pb-2 [&:not(:placeholder-shown)]:pt-6 [&:not(:placeholder-shown)]:pb-2 autofill:pt-6 autofill:pb-2" %}  
+<!-- <input type="text" id="id_customer_email" class="peer p-4 block w-full border-gray-200 rounded-lg text-sm placeholder:text-transparent focus:border-blue-500 focus:ring-blue-500 disabled:opacity-100 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400 dark:focus:ring-gray-600
+focus:pt-6
+focus:pb-2
+[&:not(:placeholder-shown)]:pt-6
+[&:not(:placeholder-shown)]:pb-2
+autofill:pt-6
+autofill:pb-2"> -->
+<label for="id_customer_email" class="absolute top-0 start-0 p-4 h-full text-sm truncate pointer-events-none transition ease-in-out duration-100 border border-transparent dark:text-white peer-disabled:opacity-80 peer-disabled:pointer-events-none
+  peer-focus:text-xs
+  peer-focus:-translate-y-1.5
+  peer-focus:text-gray-500
+  peer-[:not(:placeholder-shown)]:text-xs
+  peer-[:not(:placeholder-shown)]:-translate-y-1.5
+  peer-[:not(:placeholder-shown)]:text-gray-500">Customer email</label>
+
+
+</div>
+
+
+
+</div>
+<!-- End customer name and email -->
+
+<!-- Feedback -->
+<div class="mt-4">
+  <!-- Heading -->
+  <div class="ps-2 my-2 first:mt-0">
+    <h3 class="text-xs font-medium uppercase text-gray-500 dark:text-neutral-400">
+      Customer Feedback
+    </h3>
+  </div>
+  <!-- End Heading -->
+
+  <!-- Item -->
+  <div class="flex gap-x-3">
+    <!-- Icon -->
+    <div class="relative last:after:hidden after:absolute after:top-7 after:bottom-0 after:start-3.5 after:w-px after:-translate-x-[0.5px] after:bg-gray-200 dark:after:bg-neutral-700">
+      <div class="relative z-10 size-7 flex justify-center items-center">
+        <div class="size-2 rounded-full bg-gray-400 dark:bg-neutral-600"></div>
+      </div>
+    </div>
+    <!-- End Icon -->
+
+    <!-- Right Content -->
+    <div class="grow pt-0.5 pb-8">
+      <h3 id="id_view_customer_feedback_post_date" class="flex gap-x-1.5 font-semibold text-gray-800 dark:text-white">
+      
+        1 Aug, 2023
+      </h3>
+      <p id="id_view_customer_feedback" class="mt-1 text-sm text-gray-600 dark:text-neutral-400">
+        
+      </p>
+    </div>
+    <!-- End Right Content -->
+  </div>
+  <!-- End Item -->
+
+
+
+
+
+</div>
+<!-- End Feedback -->
+
+
+
+
+  </div>
+    </form>
+    
+
+</div>

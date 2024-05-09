@@ -4,9 +4,9 @@ from django.contrib.auth.models import Group, Permission
 from django.contrib.contenttypes.models import ContentType
 from django.shortcuts import get_object_or_404
 
-from job_schedule.models import JobSchedule, TaskFunnel
+from job_schedule.models import TaskFunnel
 from shift_schedule.models import ShiftSchedule
-
+from accounts.models import User, Staff
 
 class Command(BaseCommand):
     help = 'Description of my custom command'
@@ -28,9 +28,6 @@ class Command(BaseCommand):
         manager_elect_group, created = Group.objects.get_or_create(name="Manager Elect")
         # Admin
         admin_group, created = Group.objects.get_or_create(name="Admin")
-        # Job Schedule
-        content_type = ContentType.objects.get_for_model(JobSchedule)
-        job_schedule_permission = Permission.objects.filter(content_type=content_type)
         # print([perm.codename for perm in job_schedule_permission])
         # shift_schedule
         content_type = ContentType.objects.get_for_model(ShiftSchedule)
@@ -41,13 +38,24 @@ class Command(BaseCommand):
         taks_funnel_permission = Permission.objects.filter(content_type=content_type)
         # print([perm.codename for perm in taks_funnel_permission])
         # Job Schedule permission
+        Staff
+        content_type = ContentType.objects.get_for_model(Staff)
+        staff_permission = Permission.objects.filter(content_type=content_type)
+        # user
+        content_type = ContentType.objects.get_for_model(User)
+        user_permission = Permission.objects.filter(content_type=content_type)
+        
         
         # admin permissions update
-        for perm in job_schedule_permission:
+        # for perm in job_schedule_permission:
+        #     admin_group.permissions.add(perm)
+        # for perm in shift_schedule_permission:
+        #     admin_group.permissions.add(perm)
+        # for perm in taks_funnel_permission:
+        #     admin_group.permissions.add(perm)
+        for perm in staff_permission:
             admin_group.permissions.add(perm)
-        for perm in shift_schedule_permission:
-            admin_group.permissions.add(perm)
-        for perm in taks_funnel_permission:
+        for perm in user_permission:
             admin_group.permissions.add(perm)
             
         # for perm in job_schedule_permission:

@@ -43,7 +43,6 @@ def shift_schedule(request):
     else:
         user = request.user
         department = get_department_for_user(user)
-        print(department)
         if department=='Admin':  # Check if user is admin
             shifts = ShiftSchedule.objects.all()
         else:
