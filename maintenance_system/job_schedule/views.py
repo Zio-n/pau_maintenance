@@ -12,7 +12,11 @@ from django.conf import settings
 from django.template.loader import render_to_string
 from .sentiment_gen import get_sentiment
 from django.contrib.auth.decorators import login_required
+from accounts.models import Staff
 
+
+# the team leads, ass mangaer and managers view all the jobs in their dept 
+# normal staffs only see jobs that have been assigned to them
 @login_required
 def job_schedule(request):
     if request.method == 'POST':
@@ -26,9 +30,31 @@ def job_schedule(request):
             return redirect(request.path)
         form = ShiftScheduleForm(request.POST)
     else:
-        unassigned_jobs = TaskFunnel.objects.filter(job_status='unassigned')
-        assigned_inprogres_jobs = TaskFunnel.objects.filter(job_status__in=['assigned', 'in progress'])
-        completed_jobs = TaskFunnel.objects.filter(job_status='completed')
+        user = request.user
+        user_staff = get_object_or_404(Staff, user=user)
+        # Team leads, assistant managers, and managers view all jobs in their department
+        if user_staff.role in ['Team Lead Mech', 'Ass Manager Mech', 'Manager Mech']:
+            unassigned_jobs = TaskFunnel.objects.filter(task_dept='Mechanical', job_status='unassigned')
+            assigned_inprogres_jobs = TaskFunnel.objects.filter(task_dept='Mechanical', job_status__in=['assigned', 'in progress'])
+            completed_jobs = TaskFunnel.objects.filter(task_dept='Mechanical', job_status='completed')
+        elif user_staff.role in ['Team Lead Elect','Manager Elect']:
+            unassigned_jobs = TaskFunnel.objects.filter(task_dept='Electrical',job_status='unassigned')            
+            assigned_inprogres_jobs = TaskFunnel.objects.filter(task_dept='Electrical',job_status__in=['assigned', 'in progress'])
+            completed_jobs = TaskFunnel.objects.filter(task_dept='Electrical', job_status='completed')
+        elif user_staff.role in ['Team Lead HVAC', 'Manager HVAC', 'Ass Manager HVAC']:
+            unassigned_jobs = TaskFunnel.objects.filter(task_dept='HVAC',job_status='unassigned')            
+            assigned_inprogres_jobs = TaskFunnel.objects.filter(task_dept='HVAC',job_status__in=['assigned', 'in progress'])
+            completed_jobs = TaskFunnel.objects.filter(task_dept='HVAC', job_status='completed')
+        # Normal staff only see jobs assigned to them
+        else:
+            unassigned_jobs = TaskFunnel.objects.filter(assigned_staff_id=user,job_status='unassigned')            
+            assigned_inprogres_jobs = TaskFunnel.objects.filter(assigned_staff_id=user,job_status__in=['assigned', 'in progress'])
+            completed_jobs = TaskFunnel.objects.filter(assigned_staff_id=user, job_status='completed')
+
+        
+        # unassigned_jobs = TaskFunnel.objects.filter(job_status='unassigned')
+        # assigned_inprogres_jobs = TaskFunnel.objects.filter(job_status__in=['assigned', 'in progress'])
+        # completed_jobs = TaskFunnel.objects.filter(job_status='completed')
         
         editform = UpdateJobScheduleForm()
         edittaskform = UpdateTaskForm()
