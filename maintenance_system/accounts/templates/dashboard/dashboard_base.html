@@ -147,6 +147,10 @@
     </script>
 
 <script>
+      const negative = Number('{{ feedback_sentiment.negative }}')
+      const positive = Number('{{ feedback_sentiment.positive }}')
+      const neutral = Number('{{ feedback_sentiment.neutral }}')
+      const sentiment_value = [positive, negative, neutral]
   window.addEventListener('load', () => {
   // Apex Pie Chart
   (function () {
@@ -158,8 +162,8 @@
           enabled: false
         }
       },
-      series: [70, 18, 12],
-      labels: ['Positive', 'Neutral', 'Negative'],
+      series: sentiment_value,
+      labels: ['Positive', 'Negative', 'Neutral'],
       title: {
         show: false
       },

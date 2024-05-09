@@ -10,9 +10,8 @@ from django.http import HttpResponseServerError
 from django.core.mail import send_mail
 from django.contrib.auth.models import Group, Permission
 from job_schedule.models import TaskFunnel
-from django.db.models import Avg, F
 from django.http import JsonResponse
-from django.db.models import Count
+from django.db.models import Avg, F, Count, Case, When, IntegerField, Sum, Value
 import json
 
 
@@ -174,6 +173,9 @@ def reset_password(request):
     return render(request,'reset_password.html')
 
 def dashboard(request):
+    postive_feedback = TaskFunnel.objects.filter(feedback_sentiment='POSITIVE').count()
+    neutral_feedback = TaskFunnel.objects.filter(feedback_sentiment='NEUTRAL').count()
+    negative_feedback = TaskFunnel.objects.filter(feedback_sentiment='NEGATIVE').count()    
     completed_jobs = TaskFunnel.objects.filter(job_status='completed')
     in_progress_jobs = TaskFunnel.objects.filter(job_status='in progress').count()
     assigned_jobs = TaskFunnel.objects.filter(job_status='assigned').count()
@@ -207,6 +209,38 @@ def dashboard(request):
         'in_progress': in_progress_jobs,
         'completed': total_jobs,
     }
+    feedback_sentiment = {
+        'positive': postive_feedback,
+        'neutral': neutral_feedback,
+        'negative': negative_feedback,
+    }
+    
+    # Average customers satisfaction score
+    sentiment_values = {
+        'POSITIVE': 100,
+        'NEUTRAL': 50,
+        'NEGATIVE': 0
+    }
+
+    # Calculate the sum of sentiment scores and the total number of feedback
+    satisfaction_data = TaskFunnel.objects.annotate(
+        sentiment_score=Case(
+            *[When(feedback_sentiment=sentiment, then=Value(score)) for sentiment, score in sentiment_values.items()],
+            default=Value(0),
+            output_field=IntegerField()
+        )
+    ).aggregate(
+        total_feedback=Count('id'),
+        total_score=Sum('sentiment_score')
+    )
+    print(satisfaction_data['total_feedback'])
+    # Calculate the average satisfaction score
+    if satisfaction_data['total_feedback'] > 0:
+        average_satisfaction_score = (satisfaction_data['total_score'] / satisfaction_data['total_feedback'])
+    else:
+        average_satisfaction_score = 0
+    
+    
     # Calculate average resolution time (consider edge case of no completed jobs)
     if completed_jobs.exists():
         average_resolution_time = completed_jobs.aggregate(avg_resolution_time=Avg(F('completed_date') - F('task_upload_date')))['avg_resolution_time']
@@ -220,6 +254,8 @@ def dashboard(request):
         'top_staffs': top_staffs,
         'job_trend_data': job_trend_data_populate,
         'job_trend_labels': job_trend_labels_populate,
+        'feedback_sentiment': feedback_sentiment,
+        'average_satisfaction_score': average_satisfaction_score
     }
     return render(request, 'dashboard/dashboard.html', context)
 
