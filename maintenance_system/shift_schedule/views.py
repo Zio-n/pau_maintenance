@@ -4,7 +4,9 @@ from  .forms import ShiftScheduleForm, UpdateShiftScheduleForm
 from django.contrib import messages
 from .models import ShiftSchedule
 from django.http import JsonResponse
-
+import os
+from django.http import HttpResponse
+from django.conf import settings
 
 # Create your views here.
 def shift_schedule(request):
@@ -27,7 +29,18 @@ def shift_schedule(request):
         }
         return render(request,'shift_schedule.html', context)
 
+def shift_csv_template(request):
+    # Define the path to your pre-created CSV template file
+    template_path = os.path.join(settings.BASE_DIR, 'shift_schedule/shift_template/staff_shift_template.csv')
 
+    # Check if the template file exists
+    if not os.path.exists(template_path):
+        return HttpResponse(status=404)  # Return 404 Not Found if file doesn't exist
+
+    with open(template_path, 'rb') as template_file:
+        response = HttpResponse(template_file.read(), content_type='text/csv')
+        response['Content-Disposition'] = 'attachment; filename="staff_shift_template.csv"'
+        return response
 
 def add_shift_schedule(request):
     form = ShiftScheduleForm(request.POST)

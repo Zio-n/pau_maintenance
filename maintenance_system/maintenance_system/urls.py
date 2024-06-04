@@ -17,7 +17,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import include, path
 from accounts.views import dashboard, activate_user
-from shift_schedule.views import shift_schedule, get_shift_schedule_item, delete_shift_schedule
+from shift_schedule.views import shift_schedule, get_shift_schedule_item, delete_shift_schedule, shift_csv_template
 from job_schedule.views import job_schedule, job_schedule_detail, task_schedule_detail, delete_job_schedule, fault_form, fault_success, feedback_form, feedback_success
 from maintenance_system.api import api as maintenance_system_api
 urlpatterns = [
@@ -25,6 +25,7 @@ urlpatterns = [
     path("__reload__/", include("django_browser_reload.urls")),
     path('user/', include("accounts.urls")),
     path('shifts/', shift_schedule, name="shift_schedule"),
+    path("shift_template/", shift_csv_template, name="shift_template"),
     path('jobs/', job_schedule, name="job_schedule"),
     path('shift_detail/', get_shift_schedule_item, name="shift_detail"),
     path('job_detail/', job_schedule_detail, name="job_detail"),
