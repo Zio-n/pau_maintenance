@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from accounts.models import User
+from accounts.models import User, Staff
 from  .forms import ShiftScheduleForm, UpdateShiftScheduleForm, GenShiftScheduleForm
 from django.contrib import messages
 from .models import ShiftSchedule
@@ -44,7 +44,14 @@ def shift_csv_template(request):
         end_date = genform.cleaned_data['end_date']
         date_length = len(pd.date_range(start_date, end_date))
         
-        user_names = ['John Doe']
+        # get all staff memebers in signed in users department
+        # Get the signed-in user
+        user = request.user
+        
+        users_dept = get_object_or_404(Staff, user=user).department
+        departments = Staff.objects.filter(department=users_dept)
+        
+        user_names = [user.user.name for user in departments]
         
         shift_days = ['Morning', 'Afternoon', 'Evening']
         

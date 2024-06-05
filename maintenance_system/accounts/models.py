@@ -70,3 +70,25 @@ class Staff(models.Model):
       ('HVAC Technician', 'HVAC Technician'),
   )
   role = models.CharField(max_length=254, choices=ROLE_CHOICES)
+  department = models.CharField(max_length=254, blank=True, null=True)
+
+  
+  
+  def save(self, *args, **kwargs):
+        department_shorthands = {
+            'Elect': 'Electrical',
+            'Mech': 'Mechanical',
+            'HVAC': 'HVAC',
+            'Admin': 'Admin',  # Add Admin department
+        }
+
+        # Check for department shorthands in role (case-insensitive)
+        for shorthand, department_name in department_shorthands.items():
+            if shorthand.lower() in self.role.lower():
+                self.department = department_name
+                break  # Exit loop after finding a match
+
+        super().save(*args, **kwargs)
+
+  def __str__(self):
+      return self.user.name
