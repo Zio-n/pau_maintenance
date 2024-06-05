@@ -60,16 +60,16 @@
 {% endblock shiftcontent %}
   
 <script>
-     flatpickr("#id_start_time", {
-        enableTime: true,
-        noCalendar: true,
-        dateFormat: "H:i",
+     flatpickr("#id_start_date", {
+        altInput: true,
+        altFormat: "F j, Y",
+        dateFormat: "Y-m-d",
     });
 
-    flatpickr("#id_end_time", {
-        enableTime: true,
-        noCalendar: true,
-        dateFormat: "H:i",
+    flatpickr("#id_end_date", {
+        altInput: true,
+        altFormat: "F j, Y",
+        dateFormat: "Y-m-d",
     });
 
     flatpickr("#id_edit_start_time", {

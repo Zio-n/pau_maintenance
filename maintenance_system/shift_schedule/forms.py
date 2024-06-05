@@ -74,3 +74,22 @@ class UpdateShiftScheduleForm(forms.ModelForm):
         if commit:
             instance.save()
         return instance
+
+
+class GenShiftScheduleForm(forms.Form):
+    # assigned_staff_id = forms.ChoiceField(choices=[], label='Technician')
+    action_type = forms.CharField(widget=forms.HiddenInput(), initial='gen_schedule')
+    start_date = forms.DateField(required=True,)
+    end_date = forms.DateField(required=True,)
+    
+        
+    def clean(self):
+        cleaned_data = super().clean()
+        start_date = cleaned_data.get('start_date')
+        end_date = cleaned_data.get('end_date')
+
+        # Validate start time and end time
+        if start_date and end_date and start_date >= end_date:
+            raise forms.ValidationError("End date must be after start date.")
+
+        return cleaned_data

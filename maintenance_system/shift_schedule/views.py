@@ -1,12 +1,15 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from accounts.models import User
-from  .forms import ShiftScheduleForm, UpdateShiftScheduleForm
+from  .forms import ShiftScheduleForm, UpdateShiftScheduleForm, GenShiftScheduleForm
 from django.contrib import messages
 from .models import ShiftSchedule
 from django.http import JsonResponse
 import os
 from django.http import HttpResponse
 from django.conf import settings
+import csv
+from datetime import datetime, timedelta
+import pandas as pd
 
 # Create your views here.
 def shift_schedule(request):
@@ -15,6 +18,8 @@ def shift_schedule(request):
             return add_shift_schedule(request)
         elif request.POST.get('action_type') == 'update_schedule':
             return edit_shift_schedule(request)
+        elif request.POST.get('action_type') == 'gen_schedule':
+            return shift_csv_template(request)
         else:
             return redirect(request.path)
         form = ShiftScheduleForm(request.POST)
@@ -22,26 +27,62 @@ def shift_schedule(request):
         shifts = ShiftSchedule.objects.all()
         form = ShiftScheduleForm()
         editform = UpdateShiftScheduleForm()
+        genform = GenShiftScheduleForm()
         context = {
             'form': form,
+            'genform': genform,
             'editform': editform,
             'shifts': shifts,
         }
         return render(request,'shift_schedule.html', context)
 
+
 def shift_csv_template(request):
-    # Define the path to your pre-created CSV template file
-    template_path = os.path.join(settings.BASE_DIR, 'shift_schedule/shift_template/staff_shift_template.csv')
+    genform = GenShiftScheduleForm(request.POST)
+    if genform.is_valid():
+        start_date = genform.cleaned_data['start_date']
+        end_date = genform.cleaned_data['end_date']
+        date_length = len(pd.date_range(start_date, end_date))
+        
+        user_names = ['John Doe']
+        
+        shift_days = ['Morning', 'Afternoon', 'Evening']
+        
+        repetitions = 3
+        date_length_repitiion = len(pd.date_range(start_date, end_date).repeat(repetitions))
 
-    # Check if the template file exists
-    if not os.path.exists(template_path):
-        return HttpResponse(status=404)  # Return 404 Not Found if file doesn't exist
 
-    with open(template_path, 'rb') as template_file:
-        response = HttpResponse(template_file.read(), content_type='text/csv')
-        response['Content-Disposition'] = 'attachment; filename="staff_shift_template.csv"'
-        return response
 
+        df1 = pd.DataFrame({
+                'id': range(1, len(user_names)+1),
+                'Staff name': user_names,
+            })
+            
+
+        df2 = pd.DataFrame({
+                'id': range(1, date_length_repitiion+1),
+                'Date': pd.date_range(start_date, end_date).repeat(repetitions),
+            })
+
+        df3 = pd.DataFrame({
+                'id': range(1, len(shift_days * date_length)+1),
+                'Shift type': shift_days * date_length,
+            })
+        temp_df = pd.merge(df1, df2, on='id', how='outer')
+
+        shift_df = pd.merge(temp_df, df3, on='id', how='outer')
+
+        shift_df_mod = shift_df.drop('id',axis=1)
+        
+        # Create the CSV content in memory
+        csv_content = shift_df_mod.to_csv(index=False)
+
+        # Serve the CSV as a download response
+        response = HttpResponse(csv_content, content_type='text/csv')
+        response['Content-Disposition'] = 'attachment; filename="shifts_template.csv"'
+        
+    
+    return response
 def add_shift_schedule(request):
     form = ShiftScheduleForm(request.POST)
     if form.is_valid():
