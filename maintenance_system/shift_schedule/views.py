@@ -177,7 +177,19 @@ def upload_shift(request):
 def add_shift_schedule(request):
     form = ShiftScheduleForm(request.POST)
     if form.is_valid():
-        form.save()
+        shift_schedule = form.save(commit=False)
+        
+        user = request.user 
+        users_dept = get_object_or_404(Staff, user=user).department
+        # Calculate the shift day from the shift date
+        shift_date = form.cleaned_data.get('shift_date')
+        if shift_date:
+            shift_day = shift_date.strftime('%a')  # Get the abbreviated day of the week (Mon, Tue, etc.)
+            shift_schedule.shift_day = shift_day
+        shift_schedule.shift_dept = users_dept
+        
+        shift_schedule.save()
+            
         messages.success(request, 'Shift added successfully.')
         return redirect('shift_schedule')  # Redirect to desired location
     else:

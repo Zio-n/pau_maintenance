@@ -6,32 +6,32 @@ from django.shortcuts import render, get_object_or_404
 
 class ShiftScheduleForm(forms.ModelForm):
     # assigned_staff_id = forms.ChoiceField(choices=[], label='Technician')
-    assigned_staff_id = forms.ModelChoiceField(queryset=User.objects.filter(is_active=True, is_superuser=False), label='Technician')
+    # assigned_staff_id = forms.ModelChoiceField(queryset=User.objects.filter(is_active=True, is_superuser=False), label='Technician')
     action_type = forms.CharField(widget=forms.HiddenInput(), initial='add_schedule')
+    shift_date = forms.DateField(required=True)
+    
     
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['assigned_staff_id'].label_from_instance = self.label_from_instance
 
-
-    @staticmethod
-    def label_from_instance(obj):
-        return "%s" % obj.name
+    # @staticmethod
+    # def label_from_instance(obj):
+    #     return "%s" % obj.name
     
     class Meta:
         model = ShiftSchedule
-        fields = ['shift_day', 'assigned_staff_id', 'start_time', 'end_time']
+        fields = ['shift_date', 'assigned_staff_name', 'shift_type']
         
-    def clean(self):
-        cleaned_data = super().clean()
-        start_time = cleaned_data.get('start_time')
-        end_time = cleaned_data.get('end_time')
+    # def clean(self):
+    #     cleaned_data = super().clean()
+    #     start_time = cleaned_data.get('start_time')
+    #     end_time = cleaned_data.get('end_time')
 
-        # Validate start time and end time
-        if start_time and end_time and start_time >= end_time:
-            raise forms.ValidationError("End time must be after start time.")
+    #     # Validate start time and end time
+    #     if start_time and end_time and start_time >= end_time:
+    #         raise forms.ValidationError("End time must be after start time.")
 
-        return cleaned_data
+    #     return cleaned_data
 
 
 class UpdateShiftScheduleForm(forms.ModelForm):
