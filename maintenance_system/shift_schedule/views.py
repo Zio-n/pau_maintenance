@@ -51,6 +51,7 @@ def shift_schedule(request):
 
 
 # Generate shift template
+@login_required
 def shift_csv_template(request):
     genform = GenShiftScheduleForm(request.POST)
     if genform.is_valid():
@@ -101,7 +102,9 @@ def shift_csv_template(request):
         # Serve the CSV as a download response
         response = HttpResponse(csv_content, content_type='text/csv')
         response['Content-Disposition'] = 'attachment; filename="shifts_template.csv"'
-        
+    else:
+        messages.error(request, 'Invalid date range')
+        return redirect(request.path)    
     
     return response
 
@@ -187,21 +190,22 @@ def edit_shift_schedule(request):
     editform = UpdateShiftScheduleForm(request.POST)
     if editform.is_valid():
         shift_id = editform.cleaned_data['update_shift_id']
-        shift_day = editform.cleaned_data['shift_day']
-        shift_assigned_staff = editform.cleaned_data['assigned_staff_id']
-        shift_start_time = editform.cleaned_data['start_time']
-        shift_end_time = editform.cleaned_data['end_time']
+        shift_date = editform.cleaned_data['shift_date']
+        shift_assigned_staff_name = editform.cleaned_data['assigned_staff_name']
+        shift_type = editform.cleaned_data['shift_type']
         
         try:
             shift = get_object_or_404(ShiftSchedule, pk=shift_id)
         except ShiftSchedule.DoesNotExist:
             messages.error(request, 'Shift not found.')
             return redirect('shift_schedule')
+        # shift_date = datetime.strptime(shift_date, '%Y-%m-%d').date()
+        shift_day = shift_date.strftime('%a')
         
+        shift.shift_date = shift_date
+        shift.assigned_staff_name = shift_assigned_staff_name  # Assuming foreign key field name
+        shift.shift_type = shift_type
         shift.shift_day = shift_day
-        shift.assigned_staff_id = shift_assigned_staff  # Assuming foreign key field name
-        shift.start_time = shift_start_time
-        shift.end_time = shift_end_time
         shift.save()
         
         messages.success(request, 'Shift update successfully.')
@@ -231,9 +235,8 @@ def get_shift_schedule_item(request):
     shift_schedule = get_object_or_404(ShiftSchedule, pk=shift_schedule_id)
     shift_schedule_data = {
         'shift_schedule_id': shift_schedule.pk,
-        'shift_day': shift_schedule.shift_day,
-        'assigned_staff_id': shift_schedule.assigned_staff_id.id,
-        'start_time': shift_schedule.start_time,
-        'end_time': shift_schedule.end_time,
+        'shift_date': shift_schedule.shift_date,
+        'assigned_staff_name': shift_schedule.assigned_staff_name,
+        'shift_type': shift_schedule.shift_type,
     }
     return JsonResponse(shift_schedule_data)
