@@ -11,7 +11,6 @@ class ShiftSchedule(models.Model):
       ('Afternoon', 'Afternoon'),
       ('Evening', 'Evening'),
   ), null=True, blank=True)
-  # Not used
   shift_day = models.CharField(max_length=254, choices=(
       ('Mon', 'Monday'),
       ('Tue', 'Tuesday'),
@@ -21,6 +20,8 @@ class ShiftSchedule(models.Model):
       ('Sat', 'Saturday'),
       ('Sun', 'Sunday'),
   ),null=True, blank=True)
+  shift_dept = models.CharField(max_length=254, null=True, blank=True)
+  # Not used
   start_time = models.TimeField(null=True, blank=True)
   end_time = models.TimeField(null=True, blank=True)
   

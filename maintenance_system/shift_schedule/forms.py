@@ -93,3 +93,9 @@ class GenShiftScheduleForm(forms.Form):
             raise forms.ValidationError("End date must be after start date.")
 
         return cleaned_data
+
+
+
+class UploadCSVForm(forms.Form):
+    action_type = forms.CharField(widget=forms.HiddenInput(), initial='upload_schedule')
+    csv_file = forms.FileField()

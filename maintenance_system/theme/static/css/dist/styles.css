@@ -3620,6 +3620,11 @@ select {
   border-top-right-radius: 0.5rem;
 }
 
+.rounded-b-xl {
+  border-bottom-right-radius: 0.75rem;
+  border-bottom-left-radius: 0.75rem;
+}
+
 .rounded-bl {
   border-bottom-left-radius: 0.25rem;
 }
@@ -4893,6 +4898,12 @@ select {
   transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, -webkit-backdrop-filter;
   transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter;
   transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter, -webkit-backdrop-filter;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms;
+}
+
+.transition-\[height\] {
+  transition-property: height;
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
   transition-duration: 150ms;
 }
@@ -6759,6 +6770,11 @@ select {
   border-color: rgb(250 204 21 / var(--tw-border-opacity));
 }
 
+.hover\:bg-blue-500:hover {
+  --tw-bg-opacity: 1;
+  background-color: rgb(59 130 246 / var(--tw-bg-opacity));
+}
+
 .hover\:bg-blue-700:hover {
   --tw-bg-opacity: 1;
   background-color: rgb(29 78 216 / var(--tw-bg-opacity));
@@ -7257,6 +7273,45 @@ select {
   opacity: 1;
 }
 
+.hs-accordion.active.hs-accordion-active\:block {
+  display: block;
+}
+
+.hs-accordion.active.hs-accordion-active\:hidden {
+  display: none;
+}
+
+.hs-accordion.active.hs-accordion-active\:text-blue-600 {
+  --tw-text-opacity: 1;
+  color: rgb(37 99 235 / var(--tw-text-opacity));
+}
+
+.hs-accordion.active > .hs-accordion-toggle .hs-accordion-active\:block {
+  display: block;
+}
+
+.hs-accordion.active > .hs-accordion-toggle .hs-accordion-active\:hidden {
+  display: none;
+}
+
+.hs-accordion.active > .hs-accordion-toggle .hs-accordion-active\:text-blue-600 {
+  --tw-text-opacity: 1;
+  color: rgb(37 99 235 / var(--tw-text-opacity));
+}
+
+.hs-accordion.active > .hs-accordion-toggle.hs-accordion-active\:block {
+  display: block;
+}
+
+.hs-accordion.active > .hs-accordion-toggle.hs-accordion-active\:hidden {
+  display: none;
+}
+
+.hs-accordion.active > .hs-accordion-toggle.hs-accordion-active\:text-blue-600 {
+  --tw-text-opacity: 1;
+  color: rgb(37 99 235 / var(--tw-text-opacity));
+}
+
 .hs-collapse.open .hs-collapse-open\:block {
   display: block;
 }
@@ -7386,6 +7441,11 @@ select {
 .dark\:border-neutral-700:is(.dark *) {
   --tw-border-opacity: 1;
   border-color: rgb(64 64 64 / var(--tw-border-opacity));
+}
+
+.dark\:border-neutral-800:is(.dark *) {
+  --tw-border-opacity: 1;
+  border-color: rgb(38 38 38 / var(--tw-border-opacity));
 }
 
 .dark\:border-red-900:is(.dark *) {
@@ -7700,6 +7760,11 @@ select {
   color: rgb(107 114 128 / var(--tw-text-opacity));
 }
 
+.dark\:hover\:text-neutral-400:hover:is(.dark *) {
+  --tw-text-opacity: 1;
+  color: rgb(163 163 163 / var(--tw-text-opacity));
+}
+
 .dark\:hover\:text-red-700:hover:is(.dark *) {
   --tw-text-opacity: 1;
   color: rgb(185 28 28 / var(--tw-text-opacity));
@@ -7718,6 +7783,11 @@ select {
 .dark\:focus\:bg-slate-800:focus:is(.dark *) {
   --tw-bg-opacity: 1;
   background-color: rgb(30 41 59 / var(--tw-bg-opacity));
+}
+
+.dark\:focus\:text-neutral-400:focus:is(.dark *) {
+  --tw-text-opacity: 1;
+  color: rgb(163 163 163 / var(--tw-text-opacity));
 }
 
 .dark\:focus\:outline-none:focus:is(.dark *) {
@@ -7763,6 +7833,21 @@ select {
 .peer:not(:placeholder-shown) ~ .dark\:peer-\[\:not\(\:placeholder-shown\)\]\:text-neutral-500:is(.dark *) {
   --tw-text-opacity: 1;
   color: rgb(115 115 115 / var(--tw-text-opacity));
+}
+
+.hs-accordion.active.dark\:hs-accordion-active\:text-blue-500:is(.dark *) {
+  --tw-text-opacity: 1;
+  color: rgb(59 130 246 / var(--tw-text-opacity));
+}
+
+.hs-accordion.active > .hs-accordion-toggle .dark\:hs-accordion-active\:text-blue-500:is(.dark *) {
+  --tw-text-opacity: 1;
+  color: rgb(59 130 246 / var(--tw-text-opacity));
+}
+
+.hs-accordion.active > .hs-accordion-toggle.dark\:hs-accordion-active\:text-blue-500:is(.dark *) {
+  --tw-text-opacity: 1;
+  color: rgb(59 130 246 / var(--tw-text-opacity));
 }
 
 [data-hs-tab].active.dark\:hs-tab-active\:border-b-blue-600:is(.dark *) {
@@ -8003,6 +8088,16 @@ select {
   .md\:py-20 {
     padding-top: 5rem;
     padding-bottom: 5rem;
+  }
+
+  .md\:px-5 {
+    padding-left: 1.25rem;
+    padding-right: 1.25rem;
+  }
+
+  .md\:py-4 {
+    padding-top: 1rem;
+    padding-bottom: 1rem;
   }
 
   .md\:pe-8 {
