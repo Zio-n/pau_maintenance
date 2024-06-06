@@ -150,7 +150,9 @@ STATICFILES_DIRS = [
     # Add more paths if needed
 ]
 
-
+LOGIN_URL = "/user/signin/"
+LOGIN_REDIRECT_URL = '/shifts'
+LOGOUT_REDIRECT_URL = "/user/signin/"
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 

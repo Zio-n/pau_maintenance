@@ -11,9 +11,11 @@ from django.core.mail import send_mail
 from django.conf import settings
 from django.template.loader import render_to_string
 from .sentiment_gen import get_sentiment
+from django.contrib.auth.decorators import login_required
 
-
+@login_required
 def job_schedule(request):
+    user = request.user
     if request.method == 'POST':
         if request.POST.get('action_type') == 'update_task_schedule':
             return update_task_schedule(request)
@@ -39,7 +41,8 @@ def job_schedule(request):
             'completedjobs': completed_jobs,
             'editform': editform,
             'edittaskform': edittaskform,
-            'assignStaffForm': assignStaffForm
+            'assignStaffForm': assignStaffForm,
+            'user': user
         }
     return render(request,'job_schedule.html', context)
 
@@ -83,6 +86,7 @@ def feedback_form(request):
     else:
         return render(request,'customer_forms/feedback_inactive.html')
 
+
 def add_job_schedule(request):
     form = AddJobScheduleForm(request.POST, request.FILES)
     if form.is_valid():
@@ -97,7 +101,7 @@ def add_job_schedule(request):
 
 
 
-
+@login_required
 def job_schedule_detail(request):
     job_schedule_id = request.GET.get('job_id')
     job_schedule = get_object_or_404(TaskFunnel, id=job_schedule_id)
@@ -134,7 +138,7 @@ def job_schedule_detail(request):
         job_schedule_data['task_fault_image'] = image_filename
     return JsonResponse(job_schedule_data)
 
-
+@login_required
 def task_schedule_detail(request):
     job_schedule_id = request.GET.get('job_id')
     job_schedule = get_object_or_404(TaskFunnel, id=job_schedule_id)
@@ -168,7 +172,7 @@ def task_schedule_detail(request):
         job_schedule_data['task_fault_image'] = image_filename
     return JsonResponse(job_schedule_data)
 
-
+@login_required
 def update_job_schedule(request):
     editform = UpdateJobScheduleForm(request.POST, request.FILES)
     if editform.is_valid():
@@ -233,7 +237,7 @@ def update_job_schedule(request):
     return redirect(request.path)  # Fallback in case of non-POST requests
 
 
-
+@login_required
 def update_task_schedule(request):
     editform = UpdateTaskForm(request.POST, request.FILES)
     if editform.is_valid():
@@ -290,7 +294,7 @@ def update_task_schedule(request):
             messages.error(request, editform.errors[error])
     return redirect(request.path)  # Fallback in case of non-POST requests
 
-
+@login_required
 def assign_staff(request):
     assignform = AssignStaffForm(request.POST)  # Pre-populate job ID
     if assignform.is_valid():
@@ -320,6 +324,7 @@ def assign_staff(request):
                 messages.error(request, editform.errors[error])
         return redirect(request.path)  # Fallback in case of non-POST requests
 
+@login_required
 def delete_job_schedule(request, job_id):
     if request.method == 'POST':
         try:

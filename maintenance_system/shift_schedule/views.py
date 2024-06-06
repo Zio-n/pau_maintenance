@@ -13,10 +13,14 @@ from datetime import datetime, timedelta
 import pandas as pd
 import io
 import magic
+from django.contrib.auth.decorators import login_required
+
 
 
 # Create your views here.
+@login_required
 def shift_schedule(request):
+    user = request.user
     if request.method == 'POST':
         if request.POST.get('action_type') == 'add_schedule':
             return add_shift_schedule(request)
@@ -41,6 +45,7 @@ def shift_schedule(request):
             'editform': editform,
             'uploadform': uploadform,
             'shifts': shifts,
+            'user': user
         }
         return render(request,'shift_schedule.html', context)
 
@@ -102,11 +107,12 @@ def shift_csv_template(request):
 
 
 # Uploa shift template
+@login_required
 def upload_shift(request):
     uploadform = UploadCSVForm(request.POST, request.FILES)
     if uploadform.is_valid():
         csv_file = request.FILES['csv_file']
-        user = request.user
+        user = request.user 
         users_dept = get_object_or_404(Staff, user=user).department
         # Use python-magic to check the MIME type
         mime = magic.Magic(mime=True)
@@ -164,6 +170,7 @@ def upload_shift(request):
             messages.success(request, f'Successfully added {num_shifts_added} shifts.')
             return redirect(request.path)
 
+@login_required
 def add_shift_schedule(request):
     form = ShiftScheduleForm(request.POST)
     if form.is_valid():
@@ -175,6 +182,7 @@ def add_shift_schedule(request):
             messages.error(request, form.errors[error])
     return redirect(request.path)  # Fallback in case of non-POST requests
 
+@login_required
 def edit_shift_schedule(request):
     editform = UpdateShiftScheduleForm(request.POST)
     if editform.is_valid():
@@ -203,6 +211,7 @@ def edit_shift_schedule(request):
             messages.error(request, editform.errors[error])
     return redirect(request.path)  # Fallback in case of non-POST requests
 
+@login_required
 def delete_shift_schedule(request, shift_id):
     if request.method == 'POST':
         try:
@@ -216,6 +225,7 @@ def delete_shift_schedule(request, shift_id):
     else:
         return redirect('shift_schedule')
 
+@login_required
 def get_shift_schedule_item(request):
     shift_schedule_id = request.GET.get('shift_schedule_id')
     shift_schedule = get_object_or_404(ShiftSchedule, pk=shift_schedule_id)
