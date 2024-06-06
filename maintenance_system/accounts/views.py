@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from .forms import UserForm, SignUserForm, ForgotPasswordForm, ChngPasswordForm
 from django.views.decorators.csrf import csrf_protect
 from django.contrib import messages
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, update_session_auth_hash
 from .models import User, Staff
 from django.conf import settings
 from django.template.loader import render_to_string
@@ -16,6 +16,8 @@ import json
 from django.utils.crypto import get_random_string
 from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
+
+
 
 # Create your views here.
 @login_required
