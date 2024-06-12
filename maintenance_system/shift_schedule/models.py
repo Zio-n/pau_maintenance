@@ -22,6 +22,6 @@ class ShiftSchedule(models.Model):
   ),null=True, blank=True)
   shift_dept = models.CharField(max_length=254, null=True, blank=True)
   # Not used
-  start_time = models.TimeField(null=True, blank=True)
-  end_time = models.TimeField(null=True, blank=True)
+#   start_time = models.TimeField(null=True, blank=True)
+#   end_time = models.TimeField(null=True, blank=True)
   

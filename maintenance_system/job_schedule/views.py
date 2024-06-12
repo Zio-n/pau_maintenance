@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from .forms import UpdateJobScheduleForm, UpdateTaskForm, AddJobScheduleForm, AssignStaffForm
 from .models import TaskFunnel
+from accounts.models import Staff
 from django.http import JsonResponse
 import uuid
 from django.contrib import messages
@@ -27,9 +28,15 @@ def job_schedule(request):
             return redirect(request.path)
         form = ShiftScheduleForm(request.POST)
     else:
-        unassigned_jobs = TaskFunnel.objects.filter(job_status='unassigned')
-        assigned_inprogres_jobs = TaskFunnel.objects.filter(job_status__in=['assigned', 'in progress'])
-        completed_jobs = TaskFunnel.objects.filter(job_status='completed')
+        users_dept = get_object_or_404(Staff, user=user).department
+        if users_dept == 'Admin':
+            unassigned_jobs = TaskFunnel.objects.filter(job_status='unassigned')
+            assigned_inprogres_jobs = TaskFunnel.objects.filter(job_status__in=['assigned', 'in progress'])
+            completed_jobs = TaskFunnel.objects.filter(job_status='completed')
+        else:
+            unassigned_jobs = TaskFunnel.objects.filter(job_status='unassigned', task_dept=users_dept)
+            assigned_inprogres_jobs = TaskFunnel.objects.filter(job_status__in=['assigned', 'in progress'], task_dept=users_dept)
+            completed_jobs = TaskFunnel.objects.filter(job_status='completed', task_dept=users_dept)
         
         editform = UpdateJobScheduleForm()
         edittaskform = UpdateTaskForm()

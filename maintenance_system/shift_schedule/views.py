@@ -34,7 +34,11 @@ def shift_schedule(request):
             return redirect(request.path)
         form = ShiftScheduleForm(request.POST)
     else:
-        shifts = ShiftSchedule.objects.all()
+        users_dept = get_object_or_404(Staff, user=user).department
+        if users_dept == 'Admin':
+            shifts = ShiftSchedule.objects.all()
+        else:
+            shifts = ShiftSchedule.objects.filter(shift_dept=users_dept)
         form = ShiftScheduleForm()
         editform = UpdateShiftScheduleForm()
         genform = GenShiftScheduleForm()
