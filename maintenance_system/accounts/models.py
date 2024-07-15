@@ -97,18 +97,3 @@ class Staff(models.Model):
     
     
     
-@receiver(post_migrate)
-def create_default_admin_user(sender, **kwargs):
-    if sender.name == 'accounts':
-        admin_role = Staff.objects.filter(role='Admin').first()
-        if not admin_role:
-            # Create a default user with the role 'Admin'
-            default_admin_user = get_user_model().objects.create(
-                email='admin@default.com',
-                password='admin123',
-                is_staff=True,  
-                is_superuser=False,  
-                is_active=True,
-               
-            )
-            Staff.objects.create(user=default_admin_user, role='Admin')
