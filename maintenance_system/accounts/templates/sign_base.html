@@ -50,13 +50,20 @@
 
 <body class="bg-slate-200 dark:bg-slate-900">
   <script src="{% static 'js/hs.theme-appearance.js' %}"></script>
-
+ <!-- Logo -->
+ <div class="flex justify-center mt-5 items-center">
+  <img src="{% static 'images/pau-logo.png' %}" width="100" height="100" alt="PAU Logo"/>
+</div>
+<!-- End Logo -->
 
 
 <main class="w-full max-w-md mx-auto p-6">
 {% block signcontent %}
 {% endblock signcontent %}
+
 </main>
+
+ 
 
   <script src="{% static 'node_modules/preline/dist/preline.js' %}"></script>
 </body>
