@@ -26,9 +26,16 @@ def manage_accounts(request):
     inactive_users = User.objects.filter(is_active=False)
     active_users = User.objects.filter(is_active=True)
     roles = ['Admin', 'Team Lead Mech', 'Team Lead Elect', 'Team Lead HVAC', 'Ass Manager Mech', 'Manager Mech', 'Manager HVAC', 'Ass Manager HVAC', 'Manager Elect', 'Elect Technician', 'Mech Technician', 'HVAC Technician']
+     # Create a dictionary to map each user to their role
+    active_users_roles = {}
+    for active_user in active_users:
+        staff = Staff.objects.filter(user=active_user).first()
+        role = staff.role if staff else 'No Role Assigned'
+        active_users_roles[active_user.name] = role
+
     context = {
         'roles': roles,
-        'active_users': active_users,
+        'active_users': active_users_roles,
         'inactive_users': inactive_users,
         'user': user
     }
