@@ -2,7 +2,7 @@
 
 ## Overview
 
-The PAU Maintenance System is a web application designed to manage maintenance tasks efficiently. This system allows users to create, assign, and track maintenance jobs within an organization. It also supports user roles and permissions, feedback collection, and email notifications for task updates.
+The PAU Maintenance System is a web application designed to manage maintenance tasks efficiently. This system allows users to create, assign, and track maintenance jobs within an organization. It allows the user to see their shifts. It also supports user roles and permissions, feedback collection, and email notifications for task updates.
 
 ## Table of Contents
 
@@ -21,6 +21,7 @@ The PAU Maintenance System is a web application designed to manage maintenance t
 
 - User Authentication and Role Management
 - Task Creation and Assignment
+- Shift view
 - Feedback Collection
 - Email Notifications
 - Role-Based Permissions
@@ -29,7 +30,7 @@ The PAU Maintenance System is a web application designed to manage maintenance t
 ## Technologies Used
 
 - Django
-- PostgreSQL
+- Sqlite - Local
 - Tailwind CSS
 - JavaScript
 - HTML/CSS
@@ -41,7 +42,7 @@ The PAU Maintenance System is a web application designed to manage maintenance t
 1. **Clone the repository:**
 
    ```bash
-   git clone https://github.com/yourusername/pau-maintenance-system.git
+   git clone git@github.com:Zio-n/pau_maintenance.git
    cd pau-maintenance-system
    ```
 
@@ -65,16 +66,6 @@ The PAU Maintenance System is a web application designed to manage maintenance t
 5. **Create a `.env` file in the root directory with the following content:**
 
    ```env
-   SECRET_KEY=your_secret_key
-   DEBUG=True
-   ALLOWED_HOSTS=localhost, 127.0.0.1
-
-   DATABASE_NAME=your_database_name
-   DATABASE_USER=your_database_user
-   DATABASE_PASSWORD=your_database_password
-   DATABASE_HOST=localhost
-   DATABASE_PORT=5432
-
    EMAIL_HOST=smtp.your_email_provider.com
    EMAIL_HOST_USER=your_email@example.com
    EMAIL_HOST_PASSWORD=your_email_password
@@ -94,7 +85,12 @@ The PAU Maintenance System is a web application designed to manage maintenance t
    python manage.py createsuperuser
    ```
 
-8. **Run the development server:**
+8. **Run Tailwind**
+   ```bash
+   python manage.py tailwind start
+   ```
+
+9. **Run the development server:**
 
    ```bash
    python manage.py runserver
@@ -105,7 +101,7 @@ The PAU Maintenance System is a web application designed to manage maintenance t
 1. **Clone the repository:**
 
    ```bash
-   git clone https://github.com/yourusername/pau-maintenance-system.git
+   git clone git@github.com:Zio-n/pau_maintenance.git
    cd pau-maintenance-system
    ```
 
@@ -151,20 +147,24 @@ The PAU Maintenance System is a web application designed to manage maintenance t
    ```bash
    python manage.py migrate
    ```
+7. Build Tailwind
+   ```bash
+   python manage.py tailwind build
+   ```
 
-7. **Collect static files:**
+8. **Collect static files:**
 
    ```bash
    python manage.py collectstatic
    ```
 
-8. **Create a superuser:**
+9. **Create a superuser:**
 
    ```bash
    python manage.py createsuperuser
    ```
 
-9. **Configure your web server (e.g., Gunicorn, Nginx) to serve the application.**
+10. **Configure your web server (e.g., Gunicorn, Nginx) to serve the application.**
 
 ## Environment Variables
 
@@ -198,43 +198,6 @@ python manage.py createsuperuser
 
 Follow the prompts to set up your superuser account.
 
-## Tailwind CSS Setup
-
-Tailwind CSS is used for styling the application. To spin up Tailwind CSS, follow these steps:
-
-1. **Install Tailwind CSS:**
-
-   ```bash
-   npm install tailwindcss
-   ```
-
-2. **Initialize Tailwind CSS:**
-
-   ```bash
-   npx tailwindcss init
-   ```
-
-3. **Configure Tailwind in `tailwind.config.js`:**
-
-   ```javascript
-   module.exports = {
-     purge: ['./templates/**/*.html', './static/js/**/*.js'],
-     darkMode: false, // or 'media' or 'class'
-     theme: {
-       extend: {},
-     },
-     variants: {
-       extend: {},
-     },
-     plugins: [],
-   }
-   ```
-
-4. **Run Tailwind CLI to build styles:**
-
-   ```bash
-   npx tailwindcss -i ./static/css/input.css -o ./static/css/output.css --watch
-   ```
 
 ## Email Configuration
 
