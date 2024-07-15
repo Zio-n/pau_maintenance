@@ -1,8 +1,8 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .forms import UserForm, SignUserForm
+from .forms import UserForm, SignUserForm, ForgotPasswordForm, ChngPasswordForm
 from django.views.decorators.csrf import csrf_protect
 from django.contrib import messages
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, update_session_auth_hash
 from .models import User, Staff
 from django.conf import settings
 from django.template.loader import render_to_string
@@ -13,18 +13,31 @@ from job_schedule.models import TaskFunnel
 from django.http import JsonResponse
 from django.db.models import Avg, F, Count, Case, When, IntegerField, Sum, Value
 import json
-from django.contrib.auth.decorators import login_required
+from django.utils.crypto import get_random_string
 from django.contrib.auth import logout
+from django.contrib.auth.decorators import login_required
+
+
+
+
 @login_required
-# Create your views here.
 def manage_accounts(request):
+    user = request.user
     inactive_users = User.objects.filter(is_active=False)
     active_users = User.objects.filter(is_active=True)
     roles = ['Admin', 'Team Lead Mech', 'Team Lead Elect', 'Team Lead HVAC', 'Ass Manager Mech', 'Manager Mech', 'Manager HVAC', 'Ass Manager HVAC', 'Manager Elect', 'Elect Technician', 'Mech Technician', 'HVAC Technician']
+     # Create a dictionary to map each user to their role
+    active_users_roles = {}
+    for active_user in active_users:
+        staff = Staff.objects.filter(user=active_user).first()
+        role = staff.role if staff else 'No Role Assigned'
+        active_users_roles[active_user.name] = role
+
     context = {
         'roles': roles,
-        'active_users': active_users,
+        'active_users': active_users_roles,
         'inactive_users': inactive_users,
+        'user': user
     }
 
     return render(request, 'manage_accounts/manage_account.html', context)
@@ -102,6 +115,7 @@ def activate_user(request, user_id):
             from_email = settings.EMAIL_HOST_USER  # Replace with your email address
             recipient_list = [user.email]
             send_mail(subject, '',from_email, recipient_list, html_message=email_html_message)
+            
 
             # Redirect to success page or login page after activation
             return redirect('manage_account')  # Replace with your login URL
@@ -169,17 +183,60 @@ def signin(request):
 
 
 def forgot_password(request):
-    return render(request,'forgot_password.html')
+    if request.method == 'POST':
+        forgotForm = ForgotPasswordForm(request.POST)
+        if forgotForm.is_valid():
+            email = forgotForm.cleaned_data['email']
+            try:
+                user = User.objects.get(email=email)
+                # Generate a new password
+                new_password = get_random_string(length=8)  # You can specify the length you want
 
-def reset_password(request):
-    return render(request,'reset_password.html')
+                # Set the new password for the user
+                user.set_password(new_password)
+                user.save()
+                # User exists, send password reset email
+                subject = 'PAU Maintenance: Password reset'
+                from_email = settings.EMAIL_HOST_USER  # Replace with your email address
+                recipient_list = [user.email]
+                email_context ={'new_password': new_password, 'user_name': user.name}
+                email_html_message = render_to_string('emails/password_reset_email.html', email_context)
+                send_mail(subject, '',from_email, recipient_list, html_message=email_html_message)
+                messages.success(request, 'A new password has been sent to your email address.')
+                return redirect('signin')
+            except User.DoesNotExist:
+                messages.error(request, 'This Email Address does not exist')
+                return redirect(request.path)
+    else:
+        forgotForm = ForgotPasswordForm()
+        context = {
+            'forgotForm': forgotForm,
+        }
+        return render(request,'forgot_password.html',context)
 
 @login_required
-def logout_view(request):
-    logout(request)
-    # Redirect to a specific page after logout
-    return redirect('signin') 
-
+def change_password(request):
+    user = request.user
+    if request.method == 'POST':
+        password_form = ChngPasswordForm(user, request.POST)
+        if password_form.is_valid():
+            user.set_password(password_form.cleaned_data['new_password'])
+            user.save()
+            update_session_auth_hash(request, user)  # Prevents user from being logged out
+            messages.success(request, "Password has been changed", extra_tags='password_success')
+            return redirect('dashboard')
+        else:
+            for error in password_form.errors:
+                messages.error(request, str(password_form.errors[error][0]), extra_tags='password_error')
+                return redirect(request.path)
+    else:
+        password_form = ChngPasswordForm(user)
+        context = {
+            'chngPasswordForm': password_form,
+            'user': user
+        }
+        return render(request, 'change_password.html', context)
+    
 @login_required
 def dashboard(request):
     postive_feedback = TaskFunnel.objects.filter(feedback_sentiment='POSITIVE').count()
@@ -190,6 +247,7 @@ def dashboard(request):
     assigned_jobs = TaskFunnel.objects.filter(job_status='assigned').count()
     unassigned_jobs = TaskFunnel.objects.filter(job_status='unassigned').count()
     total_jobs = completed_jobs.count()
+    user = request.user
     
     top_assigned_staff = TaskFunnel.objects.filter(job_status='completed').values('assigned_staff_id').annotate(total_completed_jobs=Count('id')).order_by('-total_completed_jobs')[:5]
     # print(f'asigne {top_assigned_staff}')
@@ -264,7 +322,11 @@ def dashboard(request):
         'job_trend_data': job_trend_data_populate,
         'job_trend_labels': job_trend_labels_populate,
         'feedback_sentiment': feedback_sentiment,
-        'average_satisfaction_score': average_satisfaction_score
+        'average_satisfaction_score': average_satisfaction_score,
+        'user': user
     }
     return render(request, 'dashboard/dashboard.html', context)
 
+@login_required
+def logout_view(request):
+    logout(request)

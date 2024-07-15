@@ -5,5 +5,3 @@ def get_sentiment(text):
     return sentiment_model(text)[0]['label']
 
 
-
-# print(get_sentiment('i hate this'))

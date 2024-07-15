@@ -22,4 +22,4 @@ manager_elect_group, created = Group.objects.get_or_create(name="Manager Elect")
 
 content_type = ContentType.objects.get_for_model(JobSchedule)
 job_schedule_permission = Permission.objects.filter(content_type=content_type)
-print([perm.codename for perm in post_permission])
+# print([perm.codename for perm in post_permission])

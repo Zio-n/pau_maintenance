@@ -2,6 +2,8 @@ from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, Permis
 from django.db import models
 from django.utils import timezone
 import uuid
+from django.db.models.signals import post_migrate
+from django.dispatch import receiver
 
 class UserManager(BaseUserManager):
 
@@ -70,3 +72,43 @@ class Staff(models.Model):
       ('HVAC Technician', 'HVAC Technician'),
   )
   role = models.CharField(max_length=254, choices=ROLE_CHOICES)
+  department = models.CharField(max_length=254, blank=True, null=True)
+
+  
+  
+  def save(self, *args, **kwargs):
+        department_shorthands = {
+            'Elect': 'Electrical',
+            'Mech': 'Mechanical',
+            'HVAC': 'HVAC',
+            'Admin': 'Admin',  # Add Admin department
+        }
+
+        # Check for department shorthands in role (case-insensitive)
+        for shorthand, department_name in department_shorthands.items():
+            if shorthand.lower() in self.role.lower():
+                self.department = department_name
+                break  # Exit loop after finding a match
+
+        super().save(*args, **kwargs)
+
+  def __str__(self):
+      return self.user.name
+    
+    
+    
+@receiver(post_migrate)
+def create_default_admin_user(sender, **kwargs):
+    if sender.name == 'accounts':
+        admin_role = Staff.objects.filter(role='Admin').first()
+        if not admin_role:
+            # Create a default user with the role 'Admin'
+            default_admin_user = get_user_model().objects.create(
+                email='admin@default.com',
+                password='admin123',
+                is_staff=True,  
+                is_superuser=False,  
+                is_active=True,
+               
+            )
+            Staff.objects.create(user=default_admin_user, role='Admin')

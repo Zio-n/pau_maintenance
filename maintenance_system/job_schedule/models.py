@@ -33,7 +33,7 @@ class TaskFunnel(models.Model):
     task_asset_with_fault = models.CharField(max_length=254)
     task_problem = models.CharField(max_length=254, blank=True)
     task_note = models.CharField(max_length=254, blank=True)
-    task_fault_image = models.FileField(upload_to='fault_images/', blank=True)
+    task_fault_image = models.BinaryField(blank=True, null=True)
     task_floor = models.CharField(max_length=254)
     task_dept = models.CharField(max_length=54, choices=(
         ('Electrical', 'Electrical'),

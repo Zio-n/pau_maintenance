@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .forms import UpdateJobScheduleForm, UpdateTaskForm, AddJobScheduleForm, AssignStaffForm, ViewJobScheduleForm
+from .forms import UpdateJobScheduleForm, UpdateTaskForm, AddJobScheduleForm, AssignStaffForm
 from .models import TaskFunnel
+from accounts.models import Staff
 from django.http import JsonResponse
 import uuid
 from django.contrib import messages
@@ -12,13 +13,13 @@ from django.conf import settings
 from django.template.loader import render_to_string
 from .sentiment_gen import get_sentiment
 from django.contrib.auth.decorators import login_required
-from accounts.models import Staff
+from django.urls import reverse
+from django.http import HttpResponse
 
 
-# the team leads, ass mangaer and managers view all the jobs in their dept 
-# normal staffs only see jobs that have been assigned to them
 @login_required
 def job_schedule(request):
+    user = request.user
     if request.method == 'POST':
         if request.POST.get('action_type') == 'update_task_schedule':
             return update_task_schedule(request)
@@ -30,40 +31,19 @@ def job_schedule(request):
             return redirect(request.path)
         form = ShiftScheduleForm(request.POST)
     else:
-        user = request.user
-        user_staff = get_object_or_404(Staff, user=user)
-        # Team leads, assistant managers, and managers view all jobs in their department
-        if user_staff.role in ['Team Lead Mech', 'Ass Manager Mech', 'Manager Mech']:
-            unassigned_jobs = TaskFunnel.objects.filter(task_dept='Mechanical', job_status='unassigned')
-            assigned_inprogres_jobs = TaskFunnel.objects.filter(task_dept='Mechanical', job_status__in=['assigned', 'in progress'])
-            completed_jobs = TaskFunnel.objects.filter(task_dept='Mechanical', job_status='completed')
-        elif user_staff.role in ['Team Lead Elect','Manager Elect']:
-            unassigned_jobs = TaskFunnel.objects.filter(task_dept='Electrical',job_status='unassigned')            
-            assigned_inprogres_jobs = TaskFunnel.objects.filter(task_dept='Electrical',job_status__in=['assigned', 'in progress'])
-            completed_jobs = TaskFunnel.objects.filter(task_dept='Electrical', job_status='completed')
-        elif user_staff.role in ['Team Lead HVAC', 'Manager HVAC', 'Ass Manager HVAC']:
-            unassigned_jobs = TaskFunnel.objects.filter(task_dept='HVAC',job_status='unassigned')            
-            assigned_inprogres_jobs = TaskFunnel.objects.filter(task_dept='HVAC',job_status__in=['assigned', 'in progress'])
-            completed_jobs = TaskFunnel.objects.filter(task_dept='HVAC', job_status='completed')
-        elif user_staff.role in ['Admin']:
-            unassigned_jobs = TaskFunnel.objects.filter(job_status='unassigned')            
+        users_dept = get_object_or_404(Staff, user=user).department
+        if users_dept == 'Admin':
+            unassigned_jobs = TaskFunnel.objects.filter(job_status='unassigned')
             assigned_inprogres_jobs = TaskFunnel.objects.filter(job_status__in=['assigned', 'in progress'])
             completed_jobs = TaskFunnel.objects.filter(job_status='completed')
-        # Normal staff only see jobs assigned to them
         else:
-            unassigned_jobs = TaskFunnel.objects.filter(assigned_staff_id=user,job_status='unassigned')            
-            assigned_inprogres_jobs = TaskFunnel.objects.filter(assigned_staff_id=user,job_status__in=['assigned', 'in progress'])
-            completed_jobs = TaskFunnel.objects.filter(assigned_staff_id=user, job_status='completed')
-
-        
-        # unassigned_jobs = TaskFunnel.objects.filter(job_status='unassigned')
-        # assigned_inprogres_jobs = TaskFunnel.objects.filter(job_status__in=['assigned', 'in progress'])
-        # completed_jobs = TaskFunnel.objects.filter(job_status='completed')
+            unassigned_jobs = TaskFunnel.objects.filter(job_status='unassigned', task_dept=users_dept)
+            assigned_inprogres_jobs = TaskFunnel.objects.filter(job_status__in=['assigned', 'in progress'], task_dept=users_dept)
+            completed_jobs = TaskFunnel.objects.filter(job_status='completed', task_dept=users_dept)
         
         editform = UpdateJobScheduleForm()
         edittaskform = UpdateTaskForm()
         assignStaffForm = AssignStaffForm()
-        viewtask = ViewJobScheduleForm()
         
         context = {
             'unassignedjobs': unassigned_jobs,
@@ -72,7 +52,7 @@ def job_schedule(request):
             'editform': editform,
             'edittaskform': edittaskform,
             'assignStaffForm': assignStaffForm,
-            'viewtask': viewtask
+            'user': user
         }
     return render(request,'job_schedule.html', context)
 
@@ -92,6 +72,32 @@ def fault_success(request):
 
 def feedback_success(request):
      return render(request,'customer_forms/feedback_success.html')
+
+# ask customer for feedback
+def send_feedback_email(request, job_id):
+    task = get_object_or_404(TaskFunnel, pk=job_id)
+    
+    # Construct the feedback form URL
+    feedback_form_url = request.build_absolute_uri(f'/feedback/?form_id={task.form_id}')
+    
+    # Prepare the context for the email
+    context = {
+        'customer_name': task.customer_name,
+        'feedback_form_url': feedback_form_url,
+    }
+    
+    # Render the HTML email template with context
+    email_html_message = render_to_string('emails/feedback_request.html', context)
+    
+    # Send feedback request email
+    subject = 'PAU Maintenance: Request for Feedback'
+    from_email = settings.EMAIL_HOST_USER  # Replace with your email address
+    recipient_list = [task.customer_email]
+    send_mail(subject, '', from_email, recipient_list, html_message=email_html_message)
+    
+    messages.success(request, 'Customer feedback email has been sent to the user')
+
+    return redirect('job_schedule')
 
 @csrf_exempt
 def feedback_form(request):
@@ -116,11 +122,14 @@ def feedback_form(request):
     else:
         return render(request,'customer_forms/feedback_inactive.html')
 
-@login_required
+
 def add_job_schedule(request):
     form = AddJobScheduleForm(request.POST, request.FILES)
     if form.is_valid():
-        form.save()
+        task_funnel = form.save(commit=False)
+        if request.FILES.get('fault_image'):
+            task_funnel.task_fault_image = request.FILES['fault_image'].read()
+        task_funnel.save()
         messages.success(request, 'Job added successfully.')
         return redirect('fault_success')  # Redirect to desired location
     else:
@@ -130,7 +139,7 @@ def add_job_schedule(request):
     return redirect(request.path)  # Fallback in case of non-POST requests
 
 
-
+# remove
 @login_required
 def job_schedule_detail(request):
     job_schedule_id = request.GET.get('job_id')
@@ -164,9 +173,17 @@ def job_schedule_detail(request):
     
     # Conditionally add image name to the data
     if job_schedule.task_fault_image:
-        image_filename = job_schedule.task_fault_image.name
-        job_schedule_data['task_fault_image'] = image_filename
+        image_url = reverse('show_image', args=[job_schedule.pk])
+        job_schedule_data['task_fault_image_url'] = image_url
     return JsonResponse(job_schedule_data)
+
+@login_required
+def show_image(request, task_id):
+    task = get_object_or_404(TaskFunnel, id=task_id)
+    if task.task_fault_image:
+        return HttpResponse(task.task_fault_image, content_type='image/jpeg')  # Adjust content_type as necessary
+    else:
+        return HttpResponse('No image found', status=404)
 
 @login_required
 def task_schedule_detail(request):
@@ -198,8 +215,8 @@ def task_schedule_detail(request):
     
     # Conditionally add image name to the data
     if job_schedule.task_fault_image:
-        image_filename = job_schedule.task_fault_image.name
-        job_schedule_data['task_fault_image'] = image_filename
+        image_url = reverse('show_image', args=[job_schedule.pk])
+        job_schedule_data['task_fault_image_url'] = image_url
     return JsonResponse(job_schedule_data)
 
 @login_required
@@ -214,8 +231,6 @@ def update_job_schedule(request):
         job_task_wing = editform.cleaned_data['task_wing']
         job_task_category = editform.cleaned_data['task_category']
         job_task_asset_with_fault = editform.cleaned_data['task_asset_with_fault']
-        # job_task_fault_image = editform.cleaned_data['task_fault_image']
-        # uploaded_image = request.FILES["task_fault_image"]
         job_task_problem = editform.cleaned_data['task_problem']
         job_task_note = editform.cleaned_data['task_note']
         job_task_floor = editform.cleaned_data['task_floor']
@@ -252,9 +267,7 @@ def update_job_schedule(request):
         job.customer_email = job_customer_email
         job.scheduled_datetime = job_scheduled_datetime
         job.priority_level = job_priority_level
-        # print(f'image is {uploaded_image}')
-        # if uploaded_image:
-        #     job.task_fault_image = uploaded_image
+        
         
         
         job.save()
@@ -324,7 +337,7 @@ def update_task_schedule(request):
             messages.error(request, editform.errors[error])
     return redirect(request.path)  # Fallback in case of non-POST requests
 
-
+@login_required
 def assign_staff(request):
     assignform = AssignStaffForm(request.POST)  # Pre-populate job ID
     if assignform.is_valid():

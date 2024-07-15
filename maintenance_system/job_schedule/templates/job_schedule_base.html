@@ -61,6 +61,8 @@
 
   
 <script>
+
+
      flatpickr("#id_scheduled_date", {
         dateFormat: "Y-m-d",
     });
@@ -107,17 +109,22 @@
           document.getElementById("id_edittask_task_floor").value=data.task_floor
           document.getElementById("id_edittask_task_category").value=data.task_category
           document.getElementById("id_edittask_task_problem").value=data.task_problem
-          console.log(data.task_fault_image)
-          if (data.task_fault_image) {
-            const downloadButton = document.getElementById("trigger-download");
-            const imageUrl = data.task_fault_image;
-            // Update the image element's src attribute with the URL
-            document.getElementById("id_edittask_fault_image_name").value = imageUrl;
-            downloadButton.download=imageUrl;
-            downloadButton.href = imageUrl;
-        }else{
-            document.getElementById("id_edit_task_fault_image_name").value = '';
-        }
+                    // Assuming this code is within a function that executes when the modal is opened or data is loaded
+            const imageContainer = document.getElementById('fault-image-container');
+
+            // Clear existing images before adding a new one
+            while (imageContainer.firstChild) {
+                imageContainer.removeChild(imageContainer.firstChild);
+            }
+
+            if (data.task_fault_image_url) {
+                const img = document.createElement('img');
+                img.src = data.task_fault_image_url;
+                img.alt = 'Task Fault Image';
+                img.style.width = '150px';  // Specify the width to be small
+                img.style.height = 'auto';  // Maintain aspect ratio
+                imageContainer.appendChild(img);  // Ensure you have a container with this ID
+            }
           document.getElementById("id_edittask_task_note").value=data.task_note
           document.getElementById("id_edittask_customer_name").value=data.customer_name
           document.getElementById("id_edittask_customer_email").value=data.customer_email
@@ -311,16 +318,22 @@ function get_view_job_schedule_detail(job_id){
           document.getElementById("id_edit_task_floor").value=data.task_floor
           document.getElementById("id_edit_task_category").value=data.task_category
           document.getElementById("id_edit_task_problem").value=data.task_problem
-          if (data.task_fault_image) {
-            const downloadButton = document.getElementById("trigger-download");
-            const imageUrl = data.task_fault_image;
-            // Update the image element's src attribute with the URL
-            document.getElementById("id_edit_task_fault_image_name").value = imageUrl;
-            downloadButton.download=imageUrl;
-            downloadButton.href = imageUrl;
-        }else{
-            document.getElementById("id_edit_task_fault_image_name").value = '';
-        }
+          // Assuming this code is within a function that executes when the modal is opened or data is loaded
+            const imageContainer = document.getElementById('fault-assigned-image-container');
+
+            // Clear existing images before adding a new one
+            while (imageContainer.firstChild) {
+                imageContainer.removeChild(imageContainer.firstChild);
+            }
+
+            if (data.task_fault_image_url) {
+                const img = document.createElement('img');
+                img.src = data.task_fault_image_url;
+                img.alt = 'Task Fault Image';
+                img.style.width = '150px';  // Specify the width to be small
+                img.style.height = 'auto';  // Maintain aspect ratio
+                imageContainer.appendChild(img);  // Ensure you have a container with this ID
+            }
 
           document.getElementById("id_edit_task_note").value=data.task_note
           document.getElementById("id_edit_customer_name").value=data.customer_name

@@ -78,6 +78,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'maintenance_system.context_processors.navbar_context'
             ],
         },
     },
@@ -150,7 +151,9 @@ STATICFILES_DIRS = [
     # Add more paths if needed
 ]
 
-
+LOGIN_URL = "/user/signin/"
+LOGIN_REDIRECT_URL = '/shifts'
+LOGOUT_REDIRECT_URL = "/user/signin/"
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 

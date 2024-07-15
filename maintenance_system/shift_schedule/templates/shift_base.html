@@ -60,29 +60,35 @@
 {% endblock shiftcontent %}
   
 <script>
-     flatpickr("#id_start_time", {
-        enableTime: true,
-        noCalendar: true,
-        dateFormat: "H:i",
+     flatpickr("#id_start_date", {
+        altInput: true,
+        altFormat: "F j, Y",
+        dateFormat: "Y-m-d",
     });
 
-    flatpickr("#id_end_time", {
-        enableTime: true,
-        noCalendar: true,
-        dateFormat: "H:i",
+    flatpickr("#id_end_date", {
+        altInput: true,
+        altFormat: "F j, Y",
+        dateFormat: "Y-m-d",
     });
 
-    flatpickr("#id_edit_start_time", {
-        enableTime: true,
-        noCalendar: true,
-        dateFormat: "H:i",
+    flatpickr("#id_shift_date", {
+        altInput: true,
+        altFormat: "F j, Y",
+        dateFormat: "Y-m-d",
     });
 
-    flatpickr("#id_edit_end_time", {
-        enableTime: true,
-        noCalendar: true,
-        dateFormat: "H:i",
+    flatpickr("#id_edit_shift_date", {
+        // altInput: true,
+        altFormat: "F j, Y",
+        dateFormat: "Y-m-d",
     });
+
+    // flatpickr("#id_edit_end_time", {
+    //     enableTime: true,
+    //     noCalendar: true,
+    //     dateFormat: "H:i",
+    // });
 
     function get_shift_schedule_detail(shift_id){
   // Get the lead ID from somewhere (e.g., data attribute on the modal element)
@@ -103,10 +109,9 @@
             return response.json();
         })
         .then(data => {
-          document.getElementById("id_edit_shift_day").value=data.shift_day
-          document.getElementById("id_edit_assigned_staff").value=data.assigned_staff_id
-          document.getElementById("id_edit_start_time").value=data.start_time
-          document.getElementById("id_edit_end_time").value=data.end_time
+          document.getElementById("id_edit_shift_date").value=data.shift_date
+          document.getElementById("id_edit_assigned_staff_name").value=data.assigned_staff_name
+          document.getElementById("id_edit_shift_type").value=data.shift_type
           document.getElementById("id_shift_id").value=data.shift_schedule_id
 
     })

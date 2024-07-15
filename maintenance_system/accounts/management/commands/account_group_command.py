@@ -4,12 +4,12 @@ from django.contrib.auth.models import Group, Permission
 from django.contrib.contenttypes.models import ContentType
 from django.shortcuts import get_object_or_404
 
-from job_schedule.models import TaskFunnel
+from job_schedule.models import JobSchedule, TaskFunnel
 from shift_schedule.models import ShiftSchedule
-from accounts.models import User, Staff
+
 
 class Command(BaseCommand):
-    help = 'Description of my custom command'
+    help = 'Gives permissions to different groups'
 
     def handle(self, *args, **options):
         # Workers
@@ -28,99 +28,84 @@ class Command(BaseCommand):
         manager_elect_group, created = Group.objects.get_or_create(name="Manager Elect")
         # Admin
         admin_group, created = Group.objects.get_or_create(name="Admin")
-        # print([perm.codename for perm in job_schedule_permission])
+        # Job Schedule
+        content_type = ContentType.objects.get_for_model(JobSchedule)
+        job_schedule_permission = Permission.objects.filter(content_type=content_type)
         # shift_schedule
         content_type = ContentType.objects.get_for_model(ShiftSchedule)
         shift_schedule_permission = Permission.objects.filter(content_type=content_type)
-        # print([perm.codename for perm in shift_schedule_permission])
         # task funnel
         content_type = ContentType.objects.get_for_model(TaskFunnel)
         taks_funnel_permission = Permission.objects.filter(content_type=content_type)
-        # print([perm.codename for perm in taks_funnel_permission])
         # Job Schedule permission
-        Staff
-        content_type = ContentType.objects.get_for_model(Staff)
-        staff_permission = Permission.objects.filter(content_type=content_type)
-        # user
-        content_type = ContentType.objects.get_for_model(User)
-        user_permission = Permission.objects.filter(content_type=content_type)
-        
         
         # admin permissions update
-        # for perm in job_schedule_permission:
-        #     admin_group.permissions.add(perm)
-        # for perm in shift_schedule_permission:
-        #     admin_group.permissions.add(perm)
-        # for perm in taks_funnel_permission:
-        #     admin_group.permissions.add(perm)
-        for perm in staff_permission:
+        for perm in job_schedule_permission:
             admin_group.permissions.add(perm)
-        for perm in user_permission:
+        for perm in shift_schedule_permission:
+            admin_group.permissions.add(perm)
+        for perm in taks_funnel_permission:
             admin_group.permissions.add(perm)
             
-        # for perm in job_schedule_permission:
-        #     if perm.codename == "view_jobschedule":
-        #         mech_tech_group.permissions.add(perm)
-        #         elect_tech_group.permissions.add(perm)
-        #         hvac_tech_group.permissions.add(perm)
-        #         team_lead_mech_group.permissions.add(perm)
-        #         team_lead_elect_group.permissions.add(perm)
-        #         team_lead_hvac_group.permissions.add(perm)        
-        #         ass_manager_mech_group.permissions.add(perm)
-        #         manager_mech_group.permissions.add(perm)
-        #         manager_hvac_group.permissions.add(perm)
-        #         ass_manager_hvac_group.permissions.add(perm)
-        #         manager_elect_group.permissions.add(perm)
-        #     else:
-        #         team_lead_mech_group.permissions.add(perm)
-        #         team_lead_elect_group.permissions.add(perm)
-        #         team_lead_hvac_group.permissions.add(perm)        
-        #         ass_manager_mech_group.permissions.add(perm)
-        #         manager_mech_group.permissions.add(perm)
-        #         manager_hvac_group.permissions.add(perm)
-        #         ass_manager_hvac_group.permissions.add(perm)
-        #         manager_elect_group.permissions.add(perm)
-        # # Shift Schedule permissions
-        # for perm in shift_schedule_permission:
-        #     if perm.codename == "view_shiftschedule":
-        #         mech_tech_group.permissions.add(perm)
-        #         elect_tech_group.permissions.add(perm)
-        #         hvac_tech_group.permissions.add(perm)
-        #         team_lead_mech_group.permissions.add(perm)
-        #         team_lead_elect_group.permissions.add(perm)
-        #         team_lead_hvac_group.permissions.add(perm)        
-        #         ass_manager_mech_group.permissions.add(perm)
-        #         manager_mech_group.permissions.add(perm)
-        #         manager_hvac_group.permissions.add(perm)
-        #         ass_manager_hvac_group.permissions.add(perm)
-        #         manager_elect_group.permissions.add(perm)
-        #     else:
-        #         team_lead_mech_group.permissions.add(perm)
-        #         team_lead_elect_group.permissions.add(perm)
-        #         team_lead_hvac_group.permissions.add(perm)        
-        #         ass_manager_mech_group.permissions.add(perm)
-        #         manager_mech_group.permissions.add(perm)
-        #         manager_hvac_group.permissions.add(perm)
-        #         ass_manager_hvac_group.permissions.add(perm)
-        #         manager_elect_group.permissions.add(perm)
+        for perm in job_schedule_permission:
+            if perm.codename == "view_jobschedule":
+                mech_tech_group.permissions.add(perm)
+                elect_tech_group.permissions.add(perm)
+                hvac_tech_group.permissions.add(perm)
+                team_lead_mech_group.permissions.add(perm)
+                team_lead_elect_group.permissions.add(perm)
+                team_lead_hvac_group.permissions.add(perm)        
+                ass_manager_mech_group.permissions.add(perm)
+                manager_mech_group.permissions.add(perm)
+                manager_hvac_group.permissions.add(perm)
+                ass_manager_hvac_group.permissions.add(perm)
+                manager_elect_group.permissions.add(perm)
+            else:
+                team_lead_mech_group.permissions.add(perm)
+                team_lead_elect_group.permissions.add(perm)
+                team_lead_hvac_group.permissions.add(perm)        
+                ass_manager_mech_group.permissions.add(perm)
+                manager_mech_group.permissions.add(perm)
+                manager_hvac_group.permissions.add(perm)
+                ass_manager_hvac_group.permissions.add(perm)
+                manager_elect_group.permissions.add(perm)
+        
+        # Shift Schedule permissions
+        for perm in shift_schedule_permission:
+            if perm.codename == "view_shiftschedule":
+                mech_tech_group.permissions.add(perm)
+                elect_tech_group.permissions.add(perm)
+                hvac_tech_group.permissions.add(perm)
+                team_lead_mech_group.permissions.add(perm)
+                team_lead_elect_group.permissions.add(perm)
+                team_lead_hvac_group.permissions.add(perm)        
+                ass_manager_mech_group.permissions.add(perm)
+                manager_mech_group.permissions.add(perm)
+                manager_hvac_group.permissions.add(perm)
+                ass_manager_hvac_group.permissions.add(perm)
+                manager_elect_group.permissions.add(perm)
+            else:
+                team_lead_mech_group.permissions.add(perm)
+                team_lead_elect_group.permissions.add(perm)
+                team_lead_hvac_group.permissions.add(perm)        
+                ass_manager_mech_group.permissions.add(perm)
+                manager_mech_group.permissions.add(perm)
+                manager_hvac_group.permissions.add(perm)
+                ass_manager_hvac_group.permissions.add(perm)
+                manager_elect_group.permissions.add(perm)
             
         
-        # # Task funnel permissions
-        # for perm in taks_funnel_permission:
-        #     team_lead_mech_group.permissions.add(perm)
-        #     team_lead_elect_group.permissions.add(perm)
-        #     team_lead_hvac_group.permissions.add(perm)        
-        #     ass_manager_mech_group.permissions.add(perm)
-        #     manager_mech_group.permissions.add(perm)
-        #     manager_hvac_group.permissions.add(perm)
-        #     ass_manager_hvac_group.permissions.add(perm)
-        #     manager_elect_group.permissions.add(perm)
+        # Task funnel permissions
+        for perm in taks_funnel_permission:
+            team_lead_mech_group.permissions.add(perm)
+            team_lead_elect_group.permissions.add(perm)
+            team_lead_hvac_group.permissions.add(perm)        
+            ass_manager_mech_group.permissions.add(perm)
+            manager_mech_group.permissions.add(perm)
+            manager_hvac_group.permissions.add(perm)
+            ass_manager_hvac_group.permissions.add(perm)
+            manager_elect_group.permissions.add(perm)
           
-        # user = User.objects.get(email="zionumoh8@gmail.com")
-        # user.groups.add(mech_tech_group)
         
-        # user = get_object_or_404(User, pk=user.id)
         
-        # print(user.has_perm("shift_schedule.view_shiftschedule"))
-        
-        # self.stdout.write('My custom command executed successfully')
+        self.stdout.write('My custom command executed successfully')
