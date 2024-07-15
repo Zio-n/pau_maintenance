@@ -155,7 +155,7 @@ def signin(request):
                         if staff.role:
                             # User has a role assigned, log in
                             login(request, user)
-                            return redirect('dashboard')
+                            return redirect('shift_schedule')
                         else:
                             # User is not associated with a role
                             messages.error(request, 'You do not have a role assigned. Please contact an administrator.')

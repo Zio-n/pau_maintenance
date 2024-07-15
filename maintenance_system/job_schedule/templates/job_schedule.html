@@ -14,10 +14,12 @@
   </div>
 </header>
 <nav class="relative z-0 flex border rounded-xl overflow-hidden dark:border-gray-700" aria-label="Tabs" role="tablist">
-    <button type="button" class="hs-tab-active:border-b-blue-600 hs-tab-active:text-gray-900 dark:hs-tab-active:text-white relative dark:hs-tab-active:border-b-blue-600 min-w-0 flex-1 bg-white first:border-s-0 border-s border-b-2 py-4 px-4 text-gray-500 hover:text-gray-700 text-sm font-medium text-center overflow-hidden hover:bg-gray-50 focus:z-10 focus:outline-none focus:text-blue-600 disabled:opacity-50 disabled:pointer-events-none dark:bg-gray-800 dark:border-l-gray-700 dark:border-b-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-400 active" id="tabs-with-unassigned-item-1" data-hs-tab="#tabs-with-unassigned" aria-controls="tabs-with-unassigned" role="tab">
+  {% if perms.job_schedule.change_jobschedule %}  
+  <button type="button" class="hs-tab-active:border-b-blue-600 hs-tab-active:text-gray-900 dark:hs-tab-active:text-white relative dark:hs-tab-active:border-b-blue-600 min-w-0 flex-1 bg-white first:border-s-0 border-s border-b-2 py-4 px-4 text-gray-500 hover:text-gray-700 text-sm font-medium text-center overflow-hidden hover:bg-gray-50 focus:z-10 focus:outline-none focus:text-blue-600 disabled:opacity-50 disabled:pointer-events-none dark:bg-gray-800 dark:border-l-gray-700 dark:border-b-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-400 {% if perms.job_schedule.edit_job_schedule %} active {% else %} {% endif %}" id="tabs-with-unassigned-item-1" data-hs-tab="#tabs-with-unassigned" aria-controls="tabs-with-unassigned" role="tab">
       Unassigned Jobs
     </button>
-    <button type="button" class="hs-tab-active:border-b-blue-600 hs-tab-active:text-gray-900 dark:hs-tab-active:text-white relative dark:hs-tab-active:border-b-blue-600 min-w-0 flex-1 bg-white first:border-s-0 border-s border-b-2 py-4 px-4 text-gray-500 hover:text-gray-700 text-sm font-medium text-center overflow-hidden hover:bg-gray-50 focus:z-10 focus:outline-none focus:text-blue-600 disabled:opacity-50 disabled:pointer-events-none dark:bg-gray-800 dark:border-l-gray-700 dark:border-b-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-400" id="bar-with-assigned-item-2" data-hs-tab="#tabs-with-assigned" aria-controls="tabs-with-assigned" role="tab">
+    {% endif %}
+    <button type="button" class="hs-tab-active:border-b-blue-600 hs-tab-active:text-gray-900 dark:hs-tab-active:text-white relative dark:hs-tab-active:border-b-blue-600 min-w-0 flex-1 bg-white first:border-s-0 border-s border-b-2 py-4 px-4 text-gray-500 hover:text-gray-700 text-sm font-medium text-center overflow-hidden hover:bg-gray-50 focus:z-10 focus:outline-none focus:text-blue-600 disabled:opacity-50 disabled:pointer-events-none dark:bg-gray-800 dark:border-l-gray-700 dark:border-b-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-400 {% if perms.job_schedule.edit_job_schedule %} {% else %} active {% endif %}" id="bar-with-assigned-item-2" data-hs-tab="#tabs-with-assigned" aria-controls="tabs-with-assigned" role="tab">
       Assigned Jobs
     </button>
     <button type="button" class="hs-tab-active:border-b-blue-600 hs-tab-active:text-gray-900 dark:hs-tab-active:text-white relative dark:hs-tab-active:border-b-blue-600 min-w-0 flex-1 bg-white first:border-s-0 border-s border-b-2 py-4 px-4 text-gray-500 hover:text-gray-700 text-sm font-medium text-center overflow-hidden hover:bg-gray-50 focus:z-10 focus:outline-none focus:text-blue-600 disabled:opacity-50 disabled:pointer-events-none dark:bg-gray-800 dark:border-l-gray-700 dark:border-b-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-400" id="tabs-with-completed-item-2" data-hs-tab="#tabs-with-completed" aria-controls="tabs-with-completed" role="tab">
@@ -26,6 +28,7 @@
   </nav>
   
   <div class="mt-3"x-data="{}">
+    {% if perms.job_schedule.change_jobschedule %} 
     <div id="tabs-with-unassigned" role="tabpanel" aria-labelledby="tabs-with-unassigned-item-1">
         <div class="flex flex-col">
             <div class="-m-1.5 overflow-x-auto">
@@ -86,7 +89,8 @@
             </div>
           </div>
     </div>
-    <div id="tabs-with-assigned" class="hidden" role="tabpanel" aria-labelledby="tabs-with-assigned-item-2">
+    {% endif %}
+    <div id="tabs-with-assigned" class="{% if perms.job_schedule.edit_job_schedule %} hidden {% else %}  {% endif %}" role="tabpanel" aria-labelledby="tabs-with-assigned-item-2">
         <header class="flex items-center justify-between border-b border-gray-200 px-6 py-2 lg:flex-none">
             <h1 class="invisible text-base font-semibold leading-6 text-gray-900 dark:text-gray-200">
               <time datetime="2022-01">Jobs</time>

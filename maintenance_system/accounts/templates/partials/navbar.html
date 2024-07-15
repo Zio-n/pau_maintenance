@@ -14,6 +14,7 @@
       </div>
       <div id="navbar-collapse-with-animation" class="hs-collapse hidden overflow-hidden transition-all duration-300 basis-full grow sm:block">
         <div class="flex flex-col gap-y-4 gap-x-0 mt-5 sm:flex-row sm:items-center sm:gap-y-0 sm:gap-x-7 sm:mt-0 sm:ps-7">
+          {% if staff_role == 'Admin' %}
           <a class="flex items-center gap-x-2 font-medium {% if request.path == '/dashboard/' %}text-blue-600{% else %}text-gray-500 hover:text-gray-400 dark:text-gray-400 dark:hover:text-gray-500{% endif %} sm:py-6" href="{% url 'dashboard' %}">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 6a7.5 7.5 0 1 0 7.5 7.5h-7.5V6Z" />
@@ -21,6 +22,7 @@
               </svg>                           
             Dashboard
           </a>
+          {% endif %}
           <a class="flex items-center gap-x-2 font-medium {% if request.path == '/shifts/' %}text-blue-600{% else %}text-gray-500 hover:text-gray-400 dark:text-gray-400 dark:hover:text-gray-500{% endif %} sm:py-6" href="{% url 'shift_schedule' %}">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M6 6.878V6a2.25 2.25 0 0 1 2.25-2.25h7.5A2.25 2.25 0 0 1 18 6v.878m-12 0c.235-.083.487-.128.75-.128h10.5c.263 0 .515.045.75.128m-12 0A2.25 2.25 0 0 0 4.5 9v.878m13.5-3A2.25 2.25 0 0 1 19.5 9v.878m0 0a2.246 2.246 0 0 0-.75-.128H5.25c-.263 0-.515.045-.75.128m15 0A2.25 2.25 0 0 1 21 12v6a2.25 2.25 0 0 1-2.25 2.25H5.25A2.25 2.25 0 0 1 3 18v-6c0-.98.626-1.813 1.5-2.122" />
@@ -62,7 +64,7 @@
             <button id="hs-dropdown-with-header" type="button"
               class="inline-flex flex-shrink-0 justify-center items-center gap-2 h-[2.375rem] w-[2.375rem] rounded-full font-medium bg-white text-gray-700 align-middle hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-offset-2 focus:ring-offset-white transition-all text-xs dark:bg-gray-800 dark:hover:bg-slate-800 dark:text-gray-400 dark:hover:text-white dark:focus:ring-gray-700 dark:focus:ring-offset-gray-800">
               <span class="inline-flex items-center justify-center h-[2.375rem] w-[2.375rem] rounded-full bg-gray-600">
-                <span class="text-sm font-medium text-white leading-none">Z</span>
+                <span class="text-lg font-medium text-white leading-none">{{ request.user.email|first|upper }}</span>
               </span>
             </button>
 
@@ -72,6 +74,7 @@
               <div class="py-3 px-5 -m-2 bg-gray-100 rounded-t-lg dark:bg-gray-700">
                 <p class="text-sm text-gray-500 dark:text-gray-400">Signed in as</p>
                 <p class="text-sm font-medium text-gray-800 dark:text-gray-300">{{ request.user.email }}</p>
+                <span class="inline-flex items-center mt-2 gap-x-1.5 py-1.5 px-3 rounded-full text-md font-medium bg-blue-100 text-blue-800 dark:bg-blue-800/30 dark:text-blue-500">{{ staff_role }}</span>
                 <!-- <p class="text-sm font-medium text-gray-800 dark:text-gray-300">{{ user.email }}</p> -->
               </div>
               <div class="mt-2 py-2 first:pt-0 last:pb-0">
@@ -84,6 +87,7 @@
                   </svg>
                   Profile
                 </a> -->
+                {% if staff_role == 'Admin' %}
                 <a class="flex items-center gap-x-3.5 py-2 px-3 rounded-md text-sm text-gray-800 hover:bg-gray-100 focus:ring-2 focus:ring-blue-500 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-300"
                   href="{% url 'manage_account' %}">
                   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
@@ -91,6 +95,7 @@
                   </svg>                                    
                   Manage accounts
                 </a>
+                {% endif %}
                 <a class="flex items-center gap-x-3.5 py-2 px-3 rounded-md text-sm text-gray-800 hover:bg-gray-100 focus:ring-2 focus:ring-blue-500 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-300"
                 href="{% url 'change_password' %}">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">

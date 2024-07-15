@@ -7020,6 +7020,10 @@ select {
   opacity: 0.5;
 }
 
+.disabled\:opacity-80:disabled {
+  opacity: 0.8;
+}
+
 .file\:disabled\:pointer-events-none:disabled::file-selector-button {
   pointer-events: none;
 }
