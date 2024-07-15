@@ -73,6 +73,32 @@ def fault_success(request):
 def feedback_success(request):
      return render(request,'customer_forms/feedback_success.html')
 
+# ask customer for feedback
+def send_feedback_email(request, job_id):
+    task = get_object_or_404(TaskFunnel, pk=job_id)
+    
+    # Construct the feedback form URL
+    feedback_form_url = request.build_absolute_uri(f'/feedback/?form_id={task.form_id}')
+    
+    # Prepare the context for the email
+    context = {
+        'customer_name': task.customer_name,
+        'feedback_form_url': feedback_form_url,
+    }
+    
+    # Render the HTML email template with context
+    email_html_message = render_to_string('emails/feedback_request.html', context)
+    
+    # Send feedback request email
+    subject = 'PAU Maintenance: Request for Feedback'
+    from_email = settings.EMAIL_HOST_USER  # Replace with your email address
+    recipient_list = [task.customer_email]
+    send_mail(subject, '', from_email, recipient_list, html_message=email_html_message)
+    
+    messages.success(request, 'Customer feedback email has been sent to the user')
+
+    return redirect('job_schedule')
+
 @csrf_exempt
 def feedback_form(request):
     form_id  = request.GET.get('form_id')
