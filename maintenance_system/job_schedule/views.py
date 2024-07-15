@@ -13,6 +13,9 @@ from django.conf import settings
 from django.template.loader import render_to_string
 from .sentiment_gen import get_sentiment
 from django.contrib.auth.decorators import login_required
+from django.urls import reverse
+from django.http import HttpResponse
+
 
 @login_required
 def job_schedule(request):
@@ -97,7 +100,10 @@ def feedback_form(request):
 def add_job_schedule(request):
     form = AddJobScheduleForm(request.POST, request.FILES)
     if form.is_valid():
-        form.save()
+        task_funnel = form.save(commit=False)
+        if request.FILES.get('fault_image'):
+            task_funnel.task_fault_image = request.FILES['fault_image'].read()
+        task_funnel.save()
         messages.success(request, 'Job added successfully.')
         return redirect('fault_success')  # Redirect to desired location
     else:
@@ -107,7 +113,7 @@ def add_job_schedule(request):
     return redirect(request.path)  # Fallback in case of non-POST requests
 
 
-
+# remove
 @login_required
 def job_schedule_detail(request):
     job_schedule_id = request.GET.get('job_id')
@@ -141,9 +147,17 @@ def job_schedule_detail(request):
     
     # Conditionally add image name to the data
     if job_schedule.task_fault_image:
-        image_filename = job_schedule.task_fault_image.name
-        job_schedule_data['task_fault_image'] = image_filename
+        image_url = reverse('show_image', args=[job_schedule.pk])
+        job_schedule_data['task_fault_image_url'] = image_url
     return JsonResponse(job_schedule_data)
+
+@login_required
+def show_image(request, task_id):
+    task = get_object_or_404(TaskFunnel, id=task_id)
+    if task.task_fault_image:
+        return HttpResponse(task.task_fault_image, content_type='image/jpeg')  # Adjust content_type as necessary
+    else:
+        return HttpResponse('No image found', status=404)
 
 @login_required
 def task_schedule_detail(request):
@@ -175,8 +189,8 @@ def task_schedule_detail(request):
     
     # Conditionally add image name to the data
     if job_schedule.task_fault_image:
-        image_filename = job_schedule.task_fault_image.name
-        job_schedule_data['task_fault_image'] = image_filename
+        image_url = reverse('show_image', args=[job_schedule.pk])
+        job_schedule_data['task_fault_image_url'] = image_url
     return JsonResponse(job_schedule_data)
 
 @login_required
@@ -191,8 +205,6 @@ def update_job_schedule(request):
         job_task_wing = editform.cleaned_data['task_wing']
         job_task_category = editform.cleaned_data['task_category']
         job_task_asset_with_fault = editform.cleaned_data['task_asset_with_fault']
-        # job_task_fault_image = editform.cleaned_data['task_fault_image']
-        # uploaded_image = request.FILES["task_fault_image"]
         job_task_problem = editform.cleaned_data['task_problem']
         job_task_note = editform.cleaned_data['task_note']
         job_task_floor = editform.cleaned_data['task_floor']
@@ -229,9 +241,7 @@ def update_job_schedule(request):
         job.customer_email = job_customer_email
         job.scheduled_datetime = job_scheduled_datetime
         job.priority_level = job_priority_level
-        # print(f'image is {uploaded_image}')
-        # if uploaded_image:
-        #     job.task_fault_image = uploaded_image
+        
         
         
         job.save()

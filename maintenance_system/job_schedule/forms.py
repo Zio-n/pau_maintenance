@@ -239,7 +239,7 @@ class AddJobScheduleForm(forms.ModelForm):
     customer_email = forms.CharField(required=True,)
     task_asset_with_fault = forms.CharField(required=True,)
     task_problem = forms.CharField(required=True,)
-    task_fault_image = forms.FileField(required=False,)
+    fault_image = forms.FileField(required=False,)
     task_upload_date = forms.DateTimeField(widget=forms.HiddenInput(), initial=timezone.now())
     
     def __init__(self, *args, **kwargs):
@@ -255,7 +255,7 @@ class AddJobScheduleForm(forms.ModelForm):
         self.fields['task_asset_with_fault'].widget.attrs.update({'id': 'id_add_task_asset_with_fault'})
         self.fields['task_problem'].widget.attrs.update({'id': 'id_add_task_problem'})
         self.fields['task_note'].widget.attrs.update({'id': 'id_add_task_note'})
-        self.fields['task_fault_image'].widget.attrs.update({'id': 'id_add_task_fault_image'})
+        self.fields['fault_image'].widget.attrs.update({'id': 'id_add_task_fault_image'})
         self.fields['task_floor'].widget.attrs.update({'id': 'id_add_task_floor'})
         self.fields['other_task_floor'].widget.attrs.update({'id': 'id_add_other_task_floor'})        
         self.fields['task_dept'].widget.attrs.update({'id': 'id_add_task_dept'})
@@ -270,7 +270,7 @@ class AddJobScheduleForm(forms.ModelForm):
     
     class Meta:
         model = TaskFunnel
-        fields = ('task_upload_date', 'task_dept', 'task_building', 'task_location', 'task_wing', 'task_category', 'task_asset_with_fault', 'task_problem', 'task_note', 'task_fault_image', 'task_floor', 'customer_name', 'customer_email', 'scheduled_datetime',)
+        fields = ('task_upload_date', 'task_dept', 'task_building', 'task_location', 'task_wing', 'task_category', 'task_asset_with_fault', 'task_problem', 'task_note', 'task_floor', 'customer_name', 'customer_email', 'scheduled_datetime',)
         widgets = {
             'task_problem': forms.Textarea(attrs={'rows':'3'}),
             'task_note': forms.Textarea(attrs={'rows':'3'})
@@ -288,23 +288,23 @@ class AddJobScheduleForm(forms.ModelForm):
                 self.add_error('other_task_category', "Please specify the other category.")
             return cleaned_data
     
-    def clean_task_fault_image(self):
-        fault_image = self.cleaned_data['task_fault_image']
-        if fault_image:
-            # Validate file type
-            allowed_types = ['application/msword', 'application/vnd.ms-excel', 'application/vnd.ms-powerpoint', 'application/pdf', 'image/jpeg', 'image/png', 'image/gif', 'video/mp4', 'audio/mpeg']
-            if fault_image.content_type not in allowed_types:
-                raise forms.ValidationError("Unsupported file type.")
+    # def clean_task_fault_image(self):
+    #     fault_image = self.cleaned_data['task_fault_image']
+    #     if fault_image:
+    #         # Validate file type
+    #         allowed_types = ['application/msword', 'application/vnd.ms-excel', 'application/vnd.ms-powerpoint', 'application/pdf', 'image/jpeg', 'image/png', 'image/gif', 'video/mp4', 'audio/mpeg']
+    #         if fault_image.content_type not in allowed_types:
+    #             raise forms.ValidationError("Unsupported file type.")
             
-            # Validate file size
-            max_size = 10 * 1024 * 1024  # 10MB
-            if fault_image.size > max_size:
-                raise forms.ValidationError("File size exceeds the limit.")
+    #         # Validate file size
+    #         max_size = 10 * 1024 * 1024  # 10MB
+    #         if fault_image.size > max_size:
+    #             raise forms.ValidationError("File size exceeds the limit.")
             
-            # Validate number of files
-            if len(self.files.getlist('task_fault_image')) > 1:
-                raise forms.ValidationError("Only one file is allowed.")
-        return fault_image
+    #         # Validate number of files
+    #         if len(self.files.getlist('task_fault_image')) > 1:
+    #             raise forms.ValidationError("Only one file is allowed.")
+    #     return fault_image
     
     def save(self, commit=True):
         instance = super().save(commit=False)

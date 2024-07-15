@@ -18,7 +18,7 @@ from django.contrib import admin
 from django.urls import include, path
 from accounts.views import dashboard, activate_user
 from shift_schedule.views import shift_schedule, get_shift_schedule_item, delete_shift_schedule, shift_csv_template
-from job_schedule.views import job_schedule, job_schedule_detail, task_schedule_detail, delete_job_schedule, fault_form, fault_success, feedback_form, feedback_success
+from job_schedule.views import job_schedule, show_image, job_schedule_detail, task_schedule_detail, delete_job_schedule, fault_form, fault_success, feedback_form, feedback_success
 from maintenance_system.api import api as maintenance_system_api
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -38,6 +38,7 @@ urlpatterns = [
     path('job_delete/<uuid:job_id>/', delete_job_schedule, name="delete_job"),
     path('feedback/', feedback_form, name="feedback_form"),
     path('activate_account/<int:user_id>/', activate_user, name="activate_account"),
+    path('show_image/<uuid:task_id>/', show_image, name='show_image'),
     path('dashboard/', dashboard, name='dashboard'),
     path("api/", maintenance_system_api.urls),
 ]

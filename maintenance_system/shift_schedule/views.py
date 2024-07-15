@@ -63,13 +63,12 @@ def shift_csv_template(request):
         end_date = genform.cleaned_data['end_date']
         date_length = len(pd.date_range(start_date, end_date))
         
-        # get all staff memebers in signed in users department
-        # Get the signed-in user
+        
         user = request.user
         
         users_dept = get_object_or_404(Staff, user=user).department
         departments = Staff.objects.filter(department=users_dept)
-        
+        # get all staff memebers in signed in users department
         user_names = [user.user.name for user in departments]
         
         shift_days = ['Morning', 'Afternoon', 'Evening']
@@ -113,7 +112,7 @@ def shift_csv_template(request):
     return response
 
 
-# Uploa shift template
+# Upload shift template
 @login_required
 def upload_shift(request):
     uploadform = UploadCSVForm(request.POST, request.FILES)
@@ -121,11 +120,12 @@ def upload_shift(request):
         csv_file = request.FILES['csv_file']
         user = request.user 
         users_dept = get_object_or_404(Staff, user=user).department
-        # Use python-magic to check the MIME type
+        
         mime = magic.Magic(mime=True)
         file_mime_type = mime.from_buffer(csv_file.read(1024))
-        csv_file.seek(0)  # Reset the file pointer to the beginning
-
+        csv_file.seek(0) 
+        
+        # Validate the file type is csv
         valid_mime_types = ['text/csv', 'application/csv', 'text/plain', 'application/vnd.ms-excel']
         if file_mime_type not in valid_mime_types or not csv_file.name.endswith('.csv'):
             messages.error(request, 'File is not CSV type')
@@ -205,6 +205,7 @@ def add_shift_schedule(request):
 def edit_shift_schedule(request):
     editform = UpdateShiftScheduleForm(request.POST)
     if editform.is_valid():
+        # Get shift details
         shift_id = editform.cleaned_data['update_shift_id']
         shift_date = editform.cleaned_data['shift_date']
         shift_assigned_staff_name = editform.cleaned_data['assigned_staff_name']
@@ -215,21 +216,21 @@ def edit_shift_schedule(request):
         except ShiftSchedule.DoesNotExist:
             messages.error(request, 'Shift not found.')
             return redirect('shift_schedule')
-        # shift_date = datetime.strptime(shift_date, '%Y-%m-%d').date()
         shift_day = shift_date.strftime('%a')
         
+        # Save shift
         shift.shift_date = shift_date
-        shift.assigned_staff_name = shift_assigned_staff_name  # Assuming foreign key field name
+        shift.assigned_staff_name = shift_assigned_staff_name 
         shift.shift_type = shift_type
         shift.shift_day = shift_day
         shift.save()
         
         messages.success(request, 'Shift update successfully.')
-        return redirect('shift_schedule')  # Redirect to desired location
+        return redirect('shift_schedule')
     else:
         for error in editform.errors:
             messages.error(request, editform.errors[error])
-    return redirect(request.path)  # Fallback in case of non-POST requests
+    return redirect(request.path)
 
 @login_required
 def delete_shift_schedule(request, shift_id):

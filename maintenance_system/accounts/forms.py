@@ -9,8 +9,7 @@ class UserForm(forms.ModelForm):
     class Meta:
         model = User
         fields = ('email', 'name', 'password',)
-        # labels = {}
-        # widgets = {}
+    
     
     def clean(self):
         cleaned_data = super(UserForm, self).clean()
@@ -36,19 +35,11 @@ class UserForm(forms.ModelForm):
 class SignUserForm(forms.Form):
     email = forms.EmailField()
     password = forms.CharField(widget=forms.PasswordInput())
-    # class Meta:
-        # model = User
-        # fields = ('email', 'password')
-        # labels = {}
-        # widgets = {}
+    
         
 class ForgotPasswordForm(forms.Form):
     email = forms.EmailField()
-    # class Meta:
-        # model = User
-        # fields = ('email', 'password')
-        # labels = {}
-        # widgets = {}
+    
         
 class ChngPasswordForm(forms.Form):
     current_password = forms.CharField(

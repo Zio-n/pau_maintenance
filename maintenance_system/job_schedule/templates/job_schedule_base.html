@@ -61,6 +61,8 @@
 
   
 <script>
+
+
      flatpickr("#id_scheduled_date", {
         dateFormat: "Y-m-d",
     });
@@ -107,17 +109,14 @@
           document.getElementById("id_edittask_task_floor").value=data.task_floor
           document.getElementById("id_edittask_task_category").value=data.task_category
           document.getElementById("id_edittask_task_problem").value=data.task_problem
-          console.log(data.task_fault_image)
-          if (data.task_fault_image) {
-            const downloadButton = document.getElementById("trigger-download");
-            const imageUrl = data.task_fault_image;
-            // Update the image element's src attribute with the URL
-            document.getElementById("id_edittask_fault_image_name").value = imageUrl;
-            downloadButton.download=imageUrl;
-            downloadButton.href = imageUrl;
-        }else{
-            document.getElementById("id_edit_task_fault_image_name").value = '';
-        }
+          if (data.task_fault_image_url) {
+            const img = document.createElement('img');
+            img.src = data.task_fault_image_url;
+            img.alt = 'Task Fault Image';
+            img.style.width = '150px';  // Specify the width to be small
+            img.style.height = 'auto';  // Maintain aspect ratio
+            document.getElementById('fault-image-container').appendChild(img);  // Ensure you have a container with this ID
+          }
           document.getElementById("id_edittask_task_note").value=data.task_note
           document.getElementById("id_edittask_customer_name").value=data.customer_name
           document.getElementById("id_edittask_customer_email").value=data.customer_email
@@ -200,7 +199,7 @@
             const imageUrl = data.task_fault_image;
             // Update the image element's src attribute with the URL
             document.getElementById("id_edit_task_fault_image_name").value = imageUrl;
-            downloadButton.download=imageUrl;
+            // downloadButton.download=imageUrl;
             downloadButton.href = imageUrl;
         }else{
             document.getElementById("id_edit_task_fault_image_name").value = '';
