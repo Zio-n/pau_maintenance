@@ -13,9 +13,8 @@ The PAU Maintenance System is a web application designed to manage maintenance t
    - [Production](#production)
 4. [Environment Variables](#environment-variables)
 5. [Creating Superuser](#creating-superuser)
-6. [Tailwind CSS Setup](#tailwind-css-setup)
-7. [Email Configuration](#email-configuration)
-8. [Important Notes](#important-notes)
+6. [Email Configuration](#email-configuration)
+7. [Important Notes](#important-notes)
 
 ## Features
 
