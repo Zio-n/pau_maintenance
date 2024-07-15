@@ -83,13 +83,21 @@ The PAU Maintenance System is a web application designed to manage maintenance t
    ```bash
    python manage.py createsuperuser
    ```
+8. **Create the groups & permissions**
+    ```bash
+   python manage.py account_group_command
+   ```
+9. **Create the default Platform Admin user**
+    ```bash
+   python manage.py create_admin_user
+   ```
 
-8. **Run Tailwind**
+10. **Run Tailwind**
    ```bash
    python manage.py tailwind start
    ```
 
-9. **Run the development server:**
+11. **Run the development server:**
 
    ```bash
    python manage.py runserver
@@ -162,8 +170,17 @@ The PAU Maintenance System is a web application designed to manage maintenance t
    ```bash
    python manage.py createsuperuser
    ```
+10. **Create the groups & permissions**
+    ```bash
+   python manage.py account_group_command
+   ```
+11. **Create the default Platform Admin user**
+    ```bash
+   python manage.py create_admin_user
+   ```
 
-10. **Configure your web server (e.g., Gunicorn, Nginx) to serve the application.**
+
+12. **Configure your web server (e.g., Gunicorn, Nginx) to serve the application.**
 
 ## Environment Variables
 
