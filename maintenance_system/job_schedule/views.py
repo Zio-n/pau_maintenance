@@ -275,8 +275,9 @@ def update_job_schedule(request):
         messages.success(request, 'Job update successfully.')
         return redirect('job_schedule')  # Redirect to desired location
     else:
-        for error in editform.errors:
-            messages.error(request, editform.errors[error])
+        for field, errors in editform.errors.items():
+            for error in errors:
+                messages.error(request, f"{field.capitalize()}: {error}")
     return redirect(request.path)  # Fallback in case of non-POST requests
 
 

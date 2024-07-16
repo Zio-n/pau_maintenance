@@ -429,8 +429,8 @@ class UpdateJobScheduleForm(forms.ModelForm):
     priority_level = forms.ChoiceField(choices=PRIORITY, required=True,)
     update_job_id = forms.CharField(widget=forms.HiddenInput())
     fault_image_name = forms.CharField(required=False,)
-    customer_name = forms.CharField(required=True,)
-    customer_email = forms.CharField(required=True,)
+    customer_name = forms.CharField(required=False,)
+    customer_email = forms.CharField(required=False,)
     
     
     def __init__(self, *args, **kwargs):
