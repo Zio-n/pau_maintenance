@@ -235,8 +235,8 @@ class AddJobScheduleForm(forms.ModelForm):
     other_task_location = forms.CharField(required=False,)
     task_category = forms.ChoiceField(choices=SERVICES, required=True,)
     other_task_category = forms.CharField(required=False,)
-    customer_name = forms.CharField(required=True,)
-    customer_email = forms.CharField(required=True,)
+    customer_name = forms.CharField(required=False,)
+    customer_email = forms.CharField(required=False,)
     task_asset_with_fault = forms.CharField(required=True,)
     task_problem = forms.CharField(required=True,)
     fault_image = forms.FileField(required=False,)
@@ -332,8 +332,8 @@ class UpdateTaskForm(forms.ModelForm):
     priority_level = forms.ChoiceField(choices=PRIORITY, required=True,)
     update_task_id = forms.CharField(widget=forms.HiddenInput())
     fault_image_name = forms.CharField(required=False,)
-    customer_name = forms.CharField(required=True,)
-    customer_email = forms.CharField(required=True,)
+    customer_name = forms.CharField(required=False,)
+    customer_email = forms.CharField(required=False,)
     
     
     def __init__(self, *args, **kwargs):
@@ -382,8 +382,8 @@ class ViewJobScheduleForm(forms.ModelForm):
     priority_level = forms.ChoiceField(choices=PRIORITY, required=True,)
     update_job_id = forms.CharField(widget=forms.HiddenInput())
     fault_image_name = forms.CharField(required=False,)
-    customer_name = forms.CharField(required=True,)
-    customer_email = forms.CharField(required=True,)
+    customer_name = forms.CharField(required=False,)
+    customer_email = forms.CharField(required=False,)
     
     
     def __init__(self, *args, **kwargs):
